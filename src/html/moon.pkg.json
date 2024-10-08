@@ -1,0 +1,17 @@
+{
+    "import": [
+        {
+            "path": "Yoorkin/rabbit-tea/html/vdom",
+            "alias": "vdom"
+        },
+        {
+            "path": "Yoorkin/rabbit-tea/adapter",
+            "alias": "adapter"
+        }
+    ],
+    "link": {
+        "js": {
+            "format": "iife"
+        }
+    }
+}

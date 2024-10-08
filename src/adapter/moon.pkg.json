@@ -1,0 +1,7 @@
+{
+    "link": {
+        "js": {
+            "format": "iife"
+        }
+    }
+}

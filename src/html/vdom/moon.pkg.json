@@ -1,0 +1,11 @@
+{
+    "import": [
+        { "path" : "Yoorkin/prettyprinter", "alias": "pp" },
+        { "path" : "Yoorkin/rabbit-tea/adapter", "alias": "adapter" }
+    ],
+    "link": {
+        "js": {
+            "format": "iife"
+        }
+    }
+}
