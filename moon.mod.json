@@ -5,9 +5,9 @@
     "Yoorkin/prettyprinter": "0.3.5"
   },
   "readme": "README.md",
-  "repository": "",
+  "repository": "https://github.com/Yoorkin/rabbit-tea",
   "license": "Apache-2.0",
-  "keywords": [],
-  "description": "",
+  "keywords": ["TEA", "html", "UI", "web"],
+  "description": "TEA web UI framework for MoonBit",
   "source": "src"
 }
