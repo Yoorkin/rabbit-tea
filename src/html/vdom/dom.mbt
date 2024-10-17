@@ -25,29 +25,32 @@ pub struct Node {
   events : Map[String, () -> Unit]
 }
 
-fn to_element(self : Node) -> @adapter.Element {
+fn to_element[Msg, Model, View](
+  self : Node,
+  sandbox : @adapter.Sandbox[Msg, Model, View]
+) -> @adapter.Element {
   if self.tag == "plain-text" {
     @adapter.create_text_node(self.attrs["value"].unwrap())
   } else {
     let element = @adapter.create_element(self.tag)
     self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
-    self.childrens.each(fn(child) { element.append_child(to_element(child)) })
-    self.events.each(fn(k, v) { 
-      @adapter.listen(element, k, fn() { 
-        println("event triggered at element \{self.tag}")
-        v() 
-      }) 
-    })
+    self.childrens.each(
+      fn(child) { element.append_child(to_element(child, sandbox)) },
+    )
+    self.events.each(fn(k, v) { @adapter.listen(element, k, fn() { v() }) })
     element
   }
 }
 
-pub fn patch(self : Node) -> Unit {
-  let element = to_element(self)
+pub fn patch[Msg, Model, View](
+  self : Node,
+  sandbox : @adapter.Sandbox[Msg, Model, View]
+) -> Unit {
+  let element = to_element(self, sandbox)
   @adapter.patch(element)
 }
 
-pub enum Patch {
+pub enum Patch[Msg, Model, View] {
   Remove(Int)
   InsertAfter(Int, Node)
   Replace(Int, Node)
@@ -57,7 +60,10 @@ pub enum Patch {
 
 // impl @pp.Pretty for Patch with pretty(p) { @pp.text(p.to_string()) }
 
-pub fn diff(self : Node, other : Node) -> Array[Patch] {
+pub fn diff[Msg, Model, View](
+  self : Node,
+  other : Node
+) -> Array[Patch[Msg, Model, View]] {
   let patches = []
   fn aux(xs : ArrayView[Node], ys : ArrayView[Node], index) -> Int {
     match (xs, ys) {

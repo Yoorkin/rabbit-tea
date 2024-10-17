@@ -7,14 +7,14 @@ struct Html[M] {
   events : Map[String, M]
 } derive(Show)
 
-pub fn to_virtual_dom[M](self : Html[M]) -> @vdom.Node {
+pub fn to_virtual_dom[Msg,Model,View](self : Html[Msg], sandbox : @adapter.Sandbox[Msg,Model,View]) -> @vdom.Node {
   {
     tag: self.tag,
     attrs: self.attrs,
-    childrens: self.childerns.map(to_virtual_dom),
+    childrens: self.childerns.map(fn(x){ x.to_virtual_dom(sandbox)}),
     events: self.events
     .iter()
-    .map(fn { (k, v) => (k, fn() { @adapter.get_sandbox().update(v) }) })
+    .map(fn { (k, v) => (k, fn() { sandbox.update(v) }) })
     .collect()
     |> Map::from_array,
   }

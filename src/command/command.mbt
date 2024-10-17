@@ -1,7 +1,5 @@
-
 enum T[M] {
-  HttpGet(String)
-  HttpPost(String, String)
+  HttpGet(M, String)
+  HttpPost(M, String, String)
+  Nothing
 }
-
-

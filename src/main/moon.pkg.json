@@ -1,9 +1,13 @@
 {
     "is-main": true,
     "import": [
-        { "path": "Yoorkin/rabbit-tea", "alias": "tea" },
-        "Yoorkin/rabbit-tea/html",
-        "Yoorkin/rabbit-tea/html/vdom",
-        "Yoorkin/rabbit-tea/css"
+      {
+        "path": "Yoorkin/rabbit-tea",
+        "alias": "tea"
+      },
+      "Yoorkin/rabbit-tea/html",
+      "Yoorkin/rabbit-tea/html/vdom",
+      "Yoorkin/rabbit-tea/css",
+      "Yoorkin/rabbit-tea/command"
     ]
 }
