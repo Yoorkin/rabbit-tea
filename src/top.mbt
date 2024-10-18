@@ -1,6 +1,16 @@
+pub typealias Command[M] = @adapter.Command[M]
+
+pub fn none[M]() -> Command[M] {
+  @adapter.None
+}
+
+pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
+  @adapter.Batch(xs)
+}
+
 pub fn startup[Model, Message](
   ~model : Model,
-  ~update : (Message, Model) -> Model,
+  ~update : (Message, Model) -> (Command[Message], Model),
   ~view : (Model) -> @html.Html[Message]
 ) -> Unit {
   let mut sandbox = None

@@ -1,69 +1,119 @@
 enum Message {
-  Increment
-  Decrement
-  Reset
-  Mark
+  DeleteAll
+  Refresh
+  GotCards(Result[Json, String])
+  NewCard
+  EditCard(Int)
+  CloseEdit
+  OpResult(Result[Json, String])
 } derive(Show)
 
 enum CardModel {
-  PictureCard(~title : String, ~content : String, ~img_url : String)
-  CardWithTitle(~title : String, ~content : String)
-  Card(String)
+  TitleCard(~title : String, ~content : String, ~id : Int)
+  Card(String, ~id : Int)
 }
 
-struct Model {
-  cards : Array[CardModel]
-  count : Int
+fn id(self : CardModel) -> Int {
+  match self {
+    TitleCard(~title, ~content, ~id) => id
+    Card(_, ~id) => id
+  }
 }
 
-fn update(msg : Message, model : Model) -> Model {
-  match msg {
-    Increment => { ..model, count: model.count + 1 }
-    Decrement => { ..model, count: model.count - 1 }
-    Reset => { ..model, count: 0, cards: [] }
-    Mark =>
-      {
-        ..model,
-        cards: [
-          ..model.cards,
-          CardWithTitle(
-            title="Mark",
-            content="You have clicked \{model.count} times",
-          ),
-        ],
+enum Model {
+  Edit(~title : String, ~content : String, ~id : Int?)
+  Home(~cards : Array[CardModel])
+}
+
+extern "js" fn console_log(msg : String) =
+  #| (msg) => console.log(msg)
+
+fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
+  match model {
+    Edit(~title, ~content, ~id) => match msg {
+      CloseEdit => {
+        let json = {
+          "title": title,
+          "content": content
+        }
+        match id {
+          Some(id) => (@http, Home(~cards))
+        }
+      }
+      msg => {
+        console_log("unhandled message \{msg}")
+        panic()
+      }
+    }
+    Home(~cards) =>
+      match msg {
+        DeleteAll => {
+          let cmds = @tea.batch(
+            cards.map(
+              fn(card) {
+                @http.delete(
+                  "/api/cards/\{card.id()}",
+                  expect=Json(Message::OpResult),
+                )
+              },
+            ),
+          )
+          (cmds, Home(cards=[]))
+        }
+        Refresh =>
+          (@http.get("/api/cards", expect=Json(Message::GotCards)), model)
+        GotCards(Ok(json)) => {
+          let cards = match json {
+            { "cards": Array(elems) } =>
+              elems.map_option(
+                fn {
+                  {
+                    "title"? : Some(String("")) | None,
+                    "content": String(content),
+                    "id": Number(id),
+                  } => Some(Card(content, id=id.to_int()))
+                  {
+                    "title": String(title),
+                    "content": String(content),
+                    "id": Number(id),
+                  } => Some(TitleCard(~title, ~content, id=id.to_int()))
+                  _ => None
+                },
+              )
+          }
+          
+          (@tea.none(), Home(~cards))
+        }
+        GotCards(Err(str)) => {
+          console_log("failed: \{str}")
+          (@tea.none(), model)
+        }
+        NewCard => (@tea.none(), Edit(title="", content="", id=None))
+        EditCard(id) => {
+          let model = match cards.filter(fn(card) { card.id() == id }) {
+            [Card(content, ~id)] => Edit(title="", ~content, id=Some(id))
+            [TitleCard(~title, ~content, ~id)] =>
+              Edit(~title, ~content, id=Some(id))
+          }
+          (@tea.none(), model)
+        }
+        msg => {
+          console_log("unhandled message \{msg}")
+          panic()
+        }
       }
   }
 }
 
 let button_style = [
-  "background: pink", "border-radius: 10px", "width:100px", "height:40px", "padding:20px",
-  "margin:10px",
+  "background: pink", "border-radius: 10px", "width:80px", "padding:20px", "margin:10px",
 ]
 
-fn main {
-  @tea.startup(
-    model={
-      count: 0,
-      cards: [
-        Card("hello note"),
-        CardWithTitle(
-          title="Programming in MoonBit",
-          content="things to do 1. blablabla 2.blablabla 3.blabla ....",
-        ),
-        Card("42"),
-      ],
-    },
-    ~update,
-    ~view,
-  )
-}
-
 fn card_view(card : CardModel) -> @html.Html[Message] {
-  let elements = match card {
-    PictureCard(~title, ~content, ~img_url) => ...
-    CardWithTitle(~title, ~content) =>
-      [@html.h1([@html.text(title)]), @html.p([@html.text(content)])]
-    Card(content) => [@html.p([@html.text(content)])]
+  let (elements, id) = match card {
+    TitleCard(~title, ~content, ~id) =>
+      ([@html.h1([@html.text(title)]), @html.p([@html.text(content)])], id)
+    Card(content, ~id) => ([@html.p([@html.text(content)])], id)
   }
   @html.div(
     style=[
@@ -71,33 +121,77 @@ fn card_view(card : CardModel) -> @html.Html[Message] {
       @css.rounded_lg, @css.m_2, @css.bg_white,
     ],
     elements,
+    click=EditCard(id),
   )
 }
 
-fn view(model : Model) -> @html.Html[Message] {
-  let { cards, .. } = model
+fn home_view(cards : Array[CardModel]) -> @html.Html[Message] {
   @html.div(
     style=["display:flex", "flex-direction:column"],
     [
-      @html.h1([@html.text("You have clicked \{model.count} times")]),
+      @html.h1([@html.text("MoonBit TodoMVC")]),
       @html.div(
-        style=[
-          "display: flex", "width: 500px", "height: 100%",
-        ],
+        style=["display: flex", "width: 500px", "height: 100%"],
         [
-          @html.div(style=button_style, [@html.text("+ 1")], click=Increment),
-          @html.div(style=button_style, [@html.text("- 1")], click=Decrement),
-          @html.div(style=button_style, [@html.text("reset")], click=Reset),
-          @html.div(style=button_style, [@html.text("mark")], click=Mark),
+          @html.div(style=button_style, [@html.text("clear")], click=DeleteAll),
+          @html.div(style=button_style, [@html.text("refresh")], click=Refresh),
+          @html.div(style=button_style, [@html.text("+")], click=NewCard),
         ],
       ),
       @html.div(
         style=[
-          "display: flex", "flex-direction: column", "width: 500px",
-          "height: 100%",
+          "display: flex", "flex-direction: column", "width: 500px", "height: 100%",
         ],
         cards.map(card_view),
       ),
     ],
   )
+}
+
+fn editor_view(
+  ~title : String,
+  ~content : String,
+  ~id : Int?
+) -> @html.Html[Message] {
+  let title_text = match id {
+    Some(_) => @html.text("Edit Todo")
+    None => @html.text("New Todo")
+  }
+  @html.div(
+    style=[
+      "display: flex", "flex-direction: column", "width: 500px", "height: 100%",
+    ],
+    [
+      @html.h1([title_text]),
+      @html.label(for_="title", [@html.text("Title")]),
+      @html.input(
+        style=["border: 1px solid #ccc", "border-radius: 5px", "padding: 5px"],
+        id="title",
+        value=title,
+        input_type=Text,
+      ),
+      @html.label(for_="content", [@html.text("content")]),
+      @html.input(
+        style=["border: 1px solid #ccc", "border-radius: 5px", "padding: 5px"],
+        id="content",
+        value=content,
+        input_type=Text,
+      ),
+      @html.div(style=button_style, [@html.text("close")], click=CloseEdit),
+    ],
+  )
+}
+
+fn view(model : Model) -> @html.Html[Message] {
+  match model {
+    Home(~cards) => home_view(cards)
+    Edit(~title, ~content, ~id) => editor_view(~title, ~content, ~id)
+  }
+}
+
+fn main {
+  let model = Home(
+    cards=[Card("click refersh to request data from server", id=0)],
+  )
+  @tea.startup(~model, ~update, ~view)
 }

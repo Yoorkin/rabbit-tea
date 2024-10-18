@@ -1,7 +1,7 @@
 type Element
 
 pub extern "js" fn create_element(tag : String) -> Element =
-  #| (tag) => { var d = document.createElement(tag); console.log(d); return d; }
+  #| (tag) => document.createElement(tag) 
   #|
 
 pub extern "js" fn create_text_node(str : String) -> Element =
@@ -13,7 +13,6 @@ pub extern "js" fn set_attribute(
   value : String
 ) -> Unit =
   #| (self,attr,value) => {
-  #|  console.log("set_attr",self);
   #|  self.setAttribute(attr, value);
   #| }
 
