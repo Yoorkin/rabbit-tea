@@ -11,6 +11,11 @@ run launch.sh in the project root:
 bash ./launch.sh
 ``` 
 
-This scripit will build the project with js backend, and launch the server with python3.
+This scripit will build the project with js backend, and launch the server with node.
 
-Visit http://localhost:8000/index.html in your browser.
+Visit http://localhost:3000 in your browser.
+
+# How to use this framework
+
+For how to handle events, update view and model, communication with server, see `src/main` for example.
+
