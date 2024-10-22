@@ -17,5 +17,5 @@ Visit http://localhost:3000 in your browser.
 
 # How to use this framework
 
-For how to handle events, update view and model, communication with server, see `src/main` for example.
+For how to handle events, update the view and model, and communicate with the server, see `src/main` for examples.
 
