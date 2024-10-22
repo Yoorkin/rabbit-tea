@@ -4,17 +4,31 @@ struct Html[M] {
   attrs : Map[String, String]
   tag : String
   childerns : Array[Html[M]]
-  events : Map[String, M]
-} derive(Show)
+  events : Map[String, (@adapter.Event) -> M]
+}
 
-pub fn to_virtual_dom[Msg,Model,View](self : Html[Msg], sandbox : @adapter.Sandbox[Msg,Model,View]) -> @vdom.Node {
+pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
+  let { attrs, tag, childerns, events } = self
+  let childerns = childerns.map(fn(x) { x.map(f) })
+  let events = events
+    .iter()
+    .map(fn { (name, callback) => (name, fn(e) { f(callback(e)) }) })
+    .collect()
+    |> Map::from_array
+  { attrs, tag, childerns, events }
+}
+
+pub fn to_virtual_dom[Msg, Model, View](
+  self : Html[Msg],
+  sandbox : @adapter.Sandbox[Msg, Model, View]
+) -> @vdom.Node {
   {
     tag: self.tag,
     attrs: self.attrs,
-    childrens: self.childerns.map(fn(x){ x.to_virtual_dom(sandbox)}),
+    childrens: self.childerns.map(fn(x) { x.to_virtual_dom(sandbox) }),
     events: self.events
     .iter()
-    .map(fn { (k, v) => (k, fn() { sandbox.update(v) }) })
+    .map(fn { (k, v) => (k, fn(event) { sandbox.update(v(event)) }) })
     .collect()
     |> Map::from_array,
   }
@@ -27,7 +41,7 @@ fn Html::new[M](
   ~class? : Array[String],
   ~id? : String,
   ~optional_attrs : Map[String, String?] = {},
-  ~events : Map[String, M?] = {},
+  ~events : Map[String, ((@adapter.Event) -> M)?] = {},
   childerns : Array[Html[M]]
 ) -> Html[M] {
   optional_attrs["style"] = style.map(fn(x) { concat(x, separator=";") })
@@ -88,7 +102,15 @@ pub fn button[M](
   ~click? : M,
   childerns : Array[Html[M]]
 ) -> Html[M] {
-  new("button", {}, ~style, ~class?, ~id?, events={ "click": click }, childerns)
+  new(
+    "button",
+    {},
+    ~style,
+    ~class?,
+    ~id?,
+    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+    childerns,
+  )
 }
 
 pub fn h1[M](
@@ -211,7 +233,15 @@ pub fn div[M](
   ~click? : M,
   childerns : Array[Html[M]]
 ) -> Html[M] {
-  new("div", {}, ~style, ~class?, ~id?, events={ "click": click }, childerns)
+  new(
+    "div",
+    {},
+    ~style,
+    ~class?,
+    ~id?,
+    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+    childerns,
+  )
 }
 
 pub fn ul[M](
@@ -322,7 +352,8 @@ pub fn input[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : Array[String],
-  ~childerns : Array[Html[M]] = []
+  ~childerns : Array[Html[M]] = [],
+  ~change? : (String) -> M
 ) -> Html[M] {
   let input_type = match input_type {
     Button => "button"
@@ -361,6 +392,9 @@ pub fn input[M](
       "readonly": read_only.map(Bool::to_string),
       "multiple": multiple.map(Bool::to_string),
       "accept": accept,
+    },
+    events={
+      "change": change.map(fn(m) { fn(event) { m(event.target().value()) } }),
     },
     ~style,
     ~class?,

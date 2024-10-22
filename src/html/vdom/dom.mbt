@@ -22,7 +22,7 @@ pub struct Node {
   tag : String
   attrs : Map[String, String]
   childrens : Array[Node]
-  events : Map[String, () -> Unit]
+  events : Map[String, (@adapter.Event) -> Unit]
 }
 
 fn to_element[Msg, Model, View](
@@ -37,7 +37,7 @@ fn to_element[Msg, Model, View](
     self.childrens.each(
       fn(child) { element.append_child(to_element(child, sandbox)) },
     )
-    self.events.each(fn(k, v) { @adapter.listen(element, k, fn() { v() }) })
+    self.events.each(fn(k, v) { @adapter.listen(element, k, v) })
     element
   }
 }
@@ -50,46 +50,46 @@ pub fn patch[Msg, Model, View](
   @adapter.patch(element)
 }
 
-pub enum Patch[Msg, Model, View] {
-  Remove(Int)
-  InsertAfter(Int, Node)
-  Replace(Int, Node)
-  MutateAttrs(Int, Map[String, String])
-  MutateEvents(Int, Map[String, () -> Unit])
-}
+// pub enum Patch[Msg, Model, View] {
+//   Remove(Int)
+//   InsertAfter(Int, Node)
+//   Replace(Int, Node)
+//   MutateAttrs(Int, Map[String, String])
+//   MutateEvents(Int, Map[String, () -> Unit])
+// }
 
-// impl @pp.Pretty for Patch with pretty(p) { @pp.text(p.to_string()) }
+// // impl @pp.Pretty for Patch with pretty(p) { @pp.text(p.to_string()) }
 
-pub fn diff[Msg, Model, View](
-  self : Node,
-  other : Node
-) -> Array[Patch[Msg, Model, View]] {
-  let patches = []
-  fn aux(xs : ArrayView[Node], ys : ArrayView[Node], index) -> Int {
-    match (xs, ys) {
-      ([], []) => index - 1
-      ([], [new, .. as tl]) => {
-        patches.push(InsertAfter(index, new))
-        aux(xs, tl, index + 1)
-      }
-      ([_, .. as tl], []) => {
-        patches.push(Remove(index))
-        aux(tl, ys, index + 1)
-      }
-      ([old, .. as tl1], [new, .. as tl2]) => {
-        if old.tag != new.tag {
-          patches.push(Replace(index, new))
-        } else if old.attrs != new.attrs {
-          patches.push(MutateAttrs(index, new.attrs))
-        } else if old.attrs != new.attrs {
-          patches.push(MutateEvents(index, new.events))
-        }
-        let index = aux(old.childrens[:], new.childrens[:], index + 1)
-        aux(tl1, tl2, index + 1)
-      }
-    }
-  }
+// pub fn diff[Msg, Model, View](
+//   self : Node,
+//   other : Node
+// ) -> Array[Patch[Msg, Model, View]] {
+//   let patches = []
+//   fn aux(xs : ArrayView[Node], ys : ArrayView[Node], index) -> Int {
+//     match (xs, ys) {
+//       ([], []) => index - 1
+//       ([], [new, .. as tl]) => {
+//         patches.push(InsertAfter(index, new))
+//         aux(xs, tl, index + 1)
+//       }
+//       ([_, .. as tl], []) => {
+//         patches.push(Remove(index))
+//         aux(tl, ys, index + 1)
+//       }
+//       ([old, .. as tl1], [new, .. as tl2]) => {
+//         if old.tag != new.tag {
+//           patches.push(Replace(index, new))
+//         } else if old.attrs != new.attrs {
+//           patches.push(MutateAttrs(index, new.attrs))
+//         } else if old.attrs != new.attrs {
+//           patches.push(MutateEvents(index, new.events))
+//         }
+//         let index = aux(old.childrens[:], new.childrens[:], index + 1)
+//         aux(tl1, tl2, index + 1)
+//       }
+//     }
+//   }
 
-  aux([self][:], [other][:], 0) |> ignore()
-  patches
-}
+//   aux([self][:], [other][:], 0) |> ignore()
+//   patches
+// }

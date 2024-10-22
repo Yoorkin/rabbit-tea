@@ -3,36 +3,71 @@ pub enum Expecting[Msg] {
   Text((Result[String, String]) -> Msg)
 }
 
+pub enum Body {
+  Json(Json)
+  Text(String)
+  Empty
+}
+
+fn content_type(self : Body) -> String {
+  match self {
+    Json(_) => "application/json"
+    Text(_) => "text/plain"
+    Empty(_) => "text/plain"
+  }
+} 
+
+fn stringfiy(self : Body) -> String {
+  match self {
+    Json(json) => json.stringify()
+    Text(text) => text
+    Empty => "" 
+  }
+}
+
 extern "js" fn js_request(
   url : String,
   method : String,
+  ~content_type : String,
   ~body : String,
+  ~has_body : Bool, 
   ~succeed : (String) -> Unit,
   ~failed : (String) -> Unit
 ) =
-  #| (url,method,body,succeed,failed) => 
-  #|   fetch(url, (body === "" ? { method: method } : { method: method, body: body }))
-  #|   .then(response => response.text())
-  #|   .then(json => succeed(json))
-  #|   .catch(error => {
-  #|     console.log(error);
-  #|     failed(error.toString())
-  #|   })
-  #|
+  #| (url,method,contentType,body,hasBody,succeed,failed) => {
+  #|   var config = { method: method, headers: { 'Content-Type': contentType } }; 
+  #|   if (hasBody) { config.body = body };
+  #|   console.log("Requesting: ",url,config);
+  #|   fetch(url, config)
+  #|     .then(response => response.text())
+  #|     .then(json => succeed(json))
+  #|     .catch(error => {
+  #|       console.log(error);
+  #|       failed(error.toString())
+  #|     })
+  #| }
 
 fn request[M](
   url : String,
   method : String,
   ~expect : Expecting[M],
-  ~body : String = ""
+  ~body : Body
 ) -> @adapter.Command[M] {
   let launch = fn(fulfill) {
+    let has_body = match body {
+      Empty => false
+      _ => true
+    }
+    let content_type = body.content_type()
+    let body = body.stringfiy()
     match expect {
       Json(f) =>
         js_request(
           url,
           method,
+          ~has_body,
           ~body,
+          ~content_type,
           succeed=fn(str) {
             let result = try {
               Ok(@json.parse!(str))
@@ -47,7 +82,9 @@ fn request[M](
         js_request(
           url,
           method,
+          ~has_body,
           ~body,
+          ~content_type,
           succeed=fn(str) { fulfill(f(Ok(str))) },
           failed=fn(msg) { fulfill(f(Err("Http request failed:\{msg}"))) },
         )
@@ -57,16 +94,16 @@ fn request[M](
 }
 
 pub fn get[M](url : String, ~expect : Expecting[M]) -> @adapter.Command[M] {
-  request(url, "GET", ~expect)
+  request(url, "GET", ~expect, body=Empty)
 }
 
 pub fn delete[M](url : String, ~expect : Expecting[M]) -> @adapter.Command[M] {
-  request(url, "DELETE", ~expect)
+  request(url, "DELETE", ~expect, body=Empty)
 }
 
 pub fn post[M](
   url : String,
-  body : String,
+  body : Body,
   ~expect : Expecting[M]
 ) -> @adapter.Command[M] {
   request(url, "POST", ~body, ~expect)
@@ -74,7 +111,7 @@ pub fn post[M](
 
 pub fn patch[M](
   url : String,
-  body : String,
+  body : Body,
   ~expect : Expecting[M]
 ) -> @adapter.Command[M] {
   request(url, "PATCH", ~body, ~expect)
