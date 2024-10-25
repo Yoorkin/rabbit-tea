@@ -15,13 +15,13 @@ fn content_type(self : Body) -> String {
     Text(_) => "text/plain"
     Empty(_) => "text/plain"
   }
-} 
+}
 
 fn stringfiy(self : Body) -> String {
   match self {
     Json(json) => json.stringify()
     Text(text) => text
-    Empty => "" 
+    Empty => ""
   }
 }
 
@@ -30,7 +30,7 @@ extern "js" fn js_request(
   method : String,
   ~content_type : String,
   ~body : String,
-  ~has_body : Bool, 
+  ~has_body : Bool,
   ~succeed : (String) -> Unit,
   ~failed : (String) -> Unit
 ) =

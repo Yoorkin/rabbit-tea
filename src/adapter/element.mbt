@@ -1,6 +1,5 @@
 type Element
 
-
 pub extern "js" fn create_element(tag : String) -> Element =
   #| (tag) => document.createElement(tag) 
   #|
@@ -28,6 +27,7 @@ pub extern "js" fn patch(element : Element) -> Unit =
   #| }
   #| 
   #|
+
 pub extern "js" fn listen(
   self : Element,
   event : String,
@@ -36,6 +36,7 @@ pub extern "js" fn listen(
   #| (self,event,callback) => self.addEventListener(event, callback)
 
 type Event
+
 type EventTarget
 
 pub extern "js" fn target(self : Event) -> EventTarget =

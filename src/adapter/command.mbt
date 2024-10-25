@@ -17,7 +17,7 @@ fn launch[M](self : Command[M], update : (M) -> Unit) -> Unit {
   }
 }
 
-pub fn map[A,B](self : Command[A], f : (A) -> B) -> Command[B] {
+pub fn map[A, B](self : Command[A], f : (A) -> B) -> Command[B] {
   match self {
     Custom(g) => Custom(fn(h) { g(fn(x) { h(f(x)) }) })
     Message(msg) => Message(f(msg))

@@ -7,9 +7,10 @@ pub fn none[M]() -> Command[M] {
 pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
   @adapter.Batch(xs)
 }
+
 pub fn task[M](message : M) -> @adapter.Command[M] {
   @adapter.Message(message)
-} 
+}
 
 pub fn startup[Model, Message](
   ~model : Model,

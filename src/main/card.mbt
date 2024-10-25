@@ -18,8 +18,9 @@ fn view_card(model : CardModel) -> @html.Html[Message] {
   }
   @html.div(
     style=[
-      @css.shadow, @css.border_solid, @css.border_1, @css.border_gray_200, @css.p_5,
-      @css.rounded_lg, @css.m_2, @css.bg_white,
+      "box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05)", "border-style: solid", "border-width: 1px",
+      "border-color: #e5e7eb", "padding: 1.25rem", "border-radius: 0.5rem", "margin: 0.5rem",
+      "background-color: #fff",
     ],
     elements,
     click=EditCard(id),
