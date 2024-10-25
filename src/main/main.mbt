@@ -103,7 +103,7 @@ fn view(model : Model) -> @html.Html[Message] {
   match model {
     Home(model) =>
       @html.div(
-        style=["display:flex", "flex-direction:column"],
+        style=["p-0", "display:flex", "flex-direction:column"],
         [
           @html.h1([@html.text("MoonBit TodoMVC")]),
           @html.div(

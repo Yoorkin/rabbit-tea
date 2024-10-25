@@ -38,14 +38,14 @@ fn Html::new[M](
   tag : String,
   attrs : Map[String, String],
   ~style? : Array[String],
-  ~class? : Array[String],
+  ~class? : String,
   ~id? : String,
   ~optional_attrs : Map[String, String?] = {},
   ~events : Map[String, ((@adapter.Event) -> M)?] = {},
   childerns : Array[Html[M]]
 ) -> Html[M] {
   optional_attrs["style"] = style.map(fn(x) { concat(x, separator=";") })
-  optional_attrs["class"] = class.map(fn(x) { concat(x, separator=" ") })
+  optional_attrs["class"] = class
   optional_attrs.each(
     fn(k, v) {
       match v {
@@ -98,7 +98,7 @@ fn concat(strings : Array[String], ~separator : String = "") -> String {
 pub fn button[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~click? : M,
   childerns : Array[Html[M]]
 ) -> Html[M] {
@@ -116,7 +116,7 @@ pub fn button[M](
 pub fn h1[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h1", {}, ~style, ~class?, ~id?, childrens)
@@ -125,7 +125,7 @@ pub fn h1[M](
 pub fn h2[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h2", {}, ~style, ~class?, ~id?, childrens)
@@ -134,7 +134,7 @@ pub fn h2[M](
 pub fn h3[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h3", {}, ~style, ~class?, ~id?, childrens)
@@ -143,7 +143,7 @@ pub fn h3[M](
 pub fn h4[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h4", {}, ~style, ~class?, ~id?, childrens)
@@ -152,7 +152,7 @@ pub fn h4[M](
 pub fn h5[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h5", {}, ~style, ~class?, ~id?, childrens)
@@ -161,7 +161,7 @@ pub fn h5[M](
 pub fn h6[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("h6", {}, ~style, ~class?, ~id?, childrens)
@@ -170,7 +170,7 @@ pub fn h6[M](
 pub fn p[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("p", {}, ~style, ~class?, ~id?, childrens)
@@ -184,7 +184,7 @@ pub enum Target {
 pub fn a[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~href : String,
   ~target : Target = Self,
   childrens : Array[Html[M]]
@@ -199,7 +199,7 @@ pub fn a[M](
 pub fn img[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~src? : String,
   ~alt? : String,
   ~title? : String,
@@ -229,7 +229,7 @@ pub fn img[M](
 pub fn div[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~click? : M,
   childerns : Array[Html[M]]
 ) -> Html[M] {
@@ -247,7 +247,7 @@ pub fn div[M](
 pub fn ul[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childerns : Array[Html[M]]
 ) -> Html[M] {
   new("ul", {}, ~style, ~class?, ~id?, childerns)
@@ -256,7 +256,7 @@ pub fn ul[M](
 pub fn ol[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childerns : Array[Html[M]]
 ) -> Html[M] {
   new("ol", {}, ~style, ~class?, ~id?, childerns)
@@ -265,7 +265,7 @@ pub fn ol[M](
 pub fn li[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   childerns : Array[Html[M]]
 ) -> Html[M] {
   new("ol", {}, ~style, ~class?, ~id?, childerns)
@@ -308,7 +308,7 @@ pub enum AutoComplete {
 pub fn form[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~action? : String,
   childern : Array[Html[M]]
 ) -> Html[M] {
@@ -326,7 +326,7 @@ pub fn form[M](
 pub fn label[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~for_? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
@@ -351,7 +351,7 @@ pub fn input[M](
   ~auto_complete? : AutoComplete,
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : Array[String],
+  ~class? : String,
   ~childerns : Array[Html[M]] = [],
   ~change? : (String) -> M
 ) -> Html[M] {

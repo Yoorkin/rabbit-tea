@@ -1,6 +1,6 @@
 {
   "name": "Yoorkin/rabbit-tea",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "deps": {
     "Yoorkin/prettyprinter": "0.3.5"
   },
