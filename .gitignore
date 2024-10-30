@@ -1,3 +1,4 @@
 target/
 .mooncakes/
 node_modules/
+**.mbti

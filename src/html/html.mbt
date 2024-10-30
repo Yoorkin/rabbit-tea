@@ -3,19 +3,19 @@
 struct Html[M] {
   attrs : Map[String, String]
   tag : String
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
   events : Map[String, (@adapter.Event) -> M]
 }
 
 pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
-  let { attrs, tag, childerns, events } = self
-  let childerns = childerns.map(fn(x) { x.map(f) })
+  let { attrs, tag, childrens, events } = self
+  let childrens = childrens.map(fn(x) { x.map(f) })
   let events = events
     .iter()
     .map(fn { (name, callback) => (name, fn(e) { f(callback(e)) }) })
     .collect()
     |> Map::from_array
-  { attrs, tag, childerns, events }
+  { attrs, tag, childrens, events }
 }
 
 pub fn to_virtual_dom[Msg, Model, View](
@@ -25,7 +25,7 @@ pub fn to_virtual_dom[Msg, Model, View](
   {
     tag: self.tag,
     attrs: self.attrs,
-    childrens: self.childerns.map(fn(x) { x.to_virtual_dom(sandbox) }),
+    childrens: self.childrens.map(fn(x) { x.to_virtual_dom(sandbox) }),
     events: self.events
     .iter()
     .map(fn { (k, v) => (k, fn(event) { sandbox.update(v(event)) }) })
@@ -42,9 +42,11 @@ fn Html::new[M](
   ~id? : String,
   ~optional_attrs : Map[String, String?] = {},
   ~events : Map[String, ((@adapter.Event) -> M)?] = {},
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  optional_attrs["style"] = style.map(fn(x) { concat(x, separator=";") })
+  optional_attrs["style"] = style.map(
+    fn(x) { String::concat(x, separator=";") },
+  )
   optional_attrs["class"] = class
   optional_attrs.each(
     fn(k, v) {
@@ -67,32 +69,7 @@ fn Html::new[M](
         acc, (_, None) => acc
       },
     )
-  { attrs, tag, childerns, events }
-}
-
-pub fn br[M]() -> Html[M] {
-  new("br", {}, [])
-}
-
-fn concat(strings : Array[String], ~separator : String = "") -> String {
-  let buf = Buffer::new()
-  if separator == "" {
-    for s in strings {
-      buf.write_string(s)
-    }
-  } else {
-    match strings {
-      [] => ()
-      [hd, .. as tl] => {
-        buf.write_string(hd)
-        for s in tl {
-          buf.write_string(separator)
-          buf.write_string(s)
-        }
-      }
-    }
-  }
-  buf.to_string()
+  { attrs, tag, childrens, events }
 }
 
 pub fn button[M](
@@ -100,7 +77,7 @@ pub fn button[M](
   ~id? : String,
   ~class? : String,
   ~click? : M,
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "button",
@@ -109,7 +86,7 @@ pub fn button[M](
     ~class?,
     ~id?,
     events={ "click": click.map(fn(m) { fn(_event) { m } }) },
-    childerns,
+    childrens,
   )
 }
 
@@ -167,6 +144,25 @@ pub fn h6[M](
   new("h6", {}, ~style, ~class?, ~id?, childrens)
 }
 
+// ------ grouping content ------
+pub fn div[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  ~click? : M,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new(
+    "div",
+    {},
+    ~style,
+    ~class?,
+    ~id?,
+    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+    childrens,
+  )
+}
+
 pub fn p[M](
   ~style : Array[String] = [],
   ~id? : String,
@@ -174,6 +170,124 @@ pub fn p[M](
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("p", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn hr[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  ~childrens : Array[Html[M]] = []
+) -> Html[M] {
+  new("hr", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn pre[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("pre", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn blockquote[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("blockquote", {}, ~style, ~class?, ~id?, childrens)
+}
+
+// ---- text ----
+
+pub fn span[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("span", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn code[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("code", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn em[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("em", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn strong[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("strong", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn i[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("i", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn b[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("b", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn u[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("u", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn sub[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("sub", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn sup[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("sup", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn br[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String
+) -> Html[M] {
+  new("br", {}, ~style, ~class?, ~id?, [])
 }
 
 pub enum Target {
@@ -206,7 +320,7 @@ pub fn img[M](
   ~width? : Int,
   ~height? : Int,
   ~border? : Int,
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "img",
@@ -222,25 +336,7 @@ pub fn img[M](
       "height": height.map(Int::to_string),
       "border": border.map(Int::to_string),
     },
-    childerns,
-  )
-}
-
-pub fn div[M](
-  ~style : Array[String] = [],
-  ~id? : String,
-  ~class? : String,
-  ~click? : M,
-  childerns : Array[Html[M]]
-) -> Html[M] {
-  new(
-    "div",
-    {},
-    ~style,
-    ~class?,
-    ~id?,
-    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
-    childerns,
+    childrens,
   )
 }
 
@@ -248,27 +344,27 @@ pub fn ul[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ul", {}, ~style, ~class?, ~id?, childerns)
+  new("ul", {}, ~style, ~class?, ~id?, childrens)
 }
 
 pub fn ol[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ol", {}, ~style, ~class?, ~id?, childerns)
+  new("ol", {}, ~style, ~class?, ~id?, childrens)
 }
 
 pub fn li[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  childerns : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ol", {}, ~style, ~class?, ~id?, childerns)
+  new("ol", {}, ~style, ~class?, ~id?, childrens)
 }
 
 pub fn text[M](str : String) -> Html[M] {
@@ -352,7 +448,7 @@ pub fn input[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  ~childerns : Array[Html[M]] = [],
+  ~childrens : Array[Html[M]] = [],
   ~change? : (String) -> M
 ) -> Html[M] {
   let input_type = match input_type {
@@ -398,6 +494,6 @@ pub fn input[M](
     },
     ~style,
     ~class?,
-    childerns,
+    childrens,
   )
 }
