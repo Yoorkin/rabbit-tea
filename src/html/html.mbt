@@ -210,6 +210,26 @@ pub fn span[M](
   new("span", {}, ~style, ~class?, ~id?, childrens)
 }
 
+pub enum Target {
+  Self
+  Blank
+}
+
+pub fn a[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  ~href : String,
+  ~target : Target = Self,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  let target = match target {
+    Self => "_self"
+    Blank => "_blank"
+  }
+  new("a", { "target": target, "href": href }, ~style, ~class?, ~id?, childrens)
+}
+
 pub fn code[M](
   ~style : Array[String] = [],
   ~id? : String,
@@ -282,33 +302,67 @@ pub fn sup[M](
   new("sup", {}, ~style, ~class?, ~id?, childrens)
 }
 
-pub fn br[M](
-  ~style : Array[String] = [],
-  ~id? : String,
-  ~class? : String
-) -> Html[M] {
-  new("br", {}, ~style, ~class?, ~id?, [])
+pub fn text[M](str : String) -> Html[M] {
+  new("plain-text", { "value": str }, [])
 }
 
-pub enum Target {
-  Self
-  Blank
-}
+// ---- lists ----
 
-pub fn a[M](
+pub fn ul[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  ~href : String,
-  ~target : Target = Self,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  let target = match target {
-    Self => "_self"
-    Blank => "_blank"
-  }
-  new("a", { "target": target, "href": href }, ~style, ~class?, ~id?, childrens)
+  new("ul", {}, ~style, ~class?, ~id?, childrens)
 }
+
+pub fn ol[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("ol", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn li[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("ol", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn dl[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("dl", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn dt[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("dt", {}, ~style, ~class?, ~id?, childrens)
+}
+
+pub fn dd[M](
+  ~style : Array[String] = [],
+  ~id? : String,
+  ~class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("dd", {}, ~style, ~class?, ~id?, childrens)
+}
+
+// ---- embbded content ----
 
 pub fn img[M](
   ~style : Array[String] = [],
@@ -340,35 +394,60 @@ pub fn img[M](
   )
 }
 
-pub fn ul[M](
+pub fn iframe[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  childrens : Array[Html[M]]
+  ~src? : String,
+  ~title? : String,
+  ~width? : Int,
+  ~height? : Int
 ) -> Html[M] {
-  new("ul", {}, ~style, ~class?, ~id?, childrens)
+  new(
+    "iframe",
+    {},
+    ~style,
+    ~class?,
+    ~id?,
+    optional_attrs={
+      "src": src,
+      "title": title,
+      "width": width.map(Int::to_string),
+      "height": height.map(Int::to_string),
+    },
+    [],
+  )
 }
 
-pub fn ol[M](
+pub fn canvas[M](
   ~style : Array[String] = [],
   ~id? : String,
   ~class? : String,
-  childrens : Array[Html[M]]
+  ~width? : Int,
+  ~height? : Int
 ) -> Html[M] {
-  new("ol", {}, ~style, ~class?, ~id?, childrens)
+  new(
+    "canvas",
+    {},
+    ~style,
+    ~class?,
+    ~id?,
+    optional_attrs={
+      "width": width.map(Int::to_string),
+      "height": height.map(Int::to_string),
+    },
+    [],
+  )
 }
 
-pub fn li[M](
+// ---- inputs ----
+
+pub fn br[M](
   ~style : Array[String] = [],
   ~id? : String,
-  ~class? : String,
-  childrens : Array[Html[M]]
+  ~class? : String
 ) -> Html[M] {
-  new("ol", {}, ~style, ~class?, ~id?, childrens)
-}
-
-pub fn text[M](str : String) -> Html[M] {
-  new("plain-text", { "value": str }, [])
+  new("br", {}, ~style, ~class?, ~id?, [])
 }
 
 pub enum InputType {
