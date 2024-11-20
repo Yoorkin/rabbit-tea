@@ -1,9 +1,6 @@
 {
   "name": "Yoorkin/rabbit-tea",
-  "version": "0.2.4",
-  "deps": {
-    "Yoorkin/prettyprinter": "0.3.5"
-  },
+  "version": "0.2.5",
   "readme": "README.md",
   "repository": "https://github.com/Yoorkin/rabbit-tea",
   "license": "Apache-2.0",

@@ -18,7 +18,7 @@
 /// - Need Iter::filter_map
 /// - Type of Map::iter() is not Iter2
 
-pub struct Node {
+pub(all) struct Node {
   tag : String
   attrs : Map[String, String]
   childrens : Array[Node]

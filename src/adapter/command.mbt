@@ -1,4 +1,4 @@
-pub enum Command[M] {
+pub(all) enum Command[M] {
   Custom(((M) -> Unit) -> Unit)
   Message(M)
   Batch(Array[Command[M]])

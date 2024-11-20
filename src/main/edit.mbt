@@ -1,6 +1,6 @@
 enum EditModel {
   Closed
-  Editing(~title : String, ~content : String, ~id : Int?)
+  Editing(title~ : String, content~ : String, id~ : Int?)
 }
 
 enum EditMsg {
@@ -15,17 +15,17 @@ fn update_edit(
   model : EditModel
 ) -> (@tea.Command[EditMsg], EditModel) {
   match (msg, model) {
-    (TitleChanged(title), Editing(~content, ~id, ..)) =>
-      (@tea.none(), Editing(~title, ~content, ~id))
-    (ContentChanged(content), Editing(~title, ~id, ..)) =>
-      (@tea.none(), Editing(~title, ~content, ~id))
+    (TitleChanged(title), Editing(content~, id~, ..)) =>
+      (@tea.none(), Editing(title~, content~, id~))
+    (ContentChanged(content), Editing(title~, id~, ..)) =>
+      (@tea.none(), Editing(title~, content~, id~))
     (Close, Editing(title="", content="", id=None)) => (@tea.none(), Closed)
     (Close, Editing(title="", content="", id=Some(id))) =>
       (
         @http.delete("/api/cards/\{id}", expect=Json(EditMsg::ReqResult)),
         Closed,
       )
-    (Close, Editing(~id, ~title, ~content)) => {
+    (Close, Editing(id~, title~, content~)) => {
       let cmd = match id {
         Some(id) =>
           @http.patch(
@@ -55,7 +55,7 @@ fn update_edit(
 fn view_text_input[M](
   label : String,
   value : String,
-  ~change : (String) -> M
+  change~ : (String) -> M
 ) -> @html.Html[M] {
   @html.div(
     [
@@ -67,9 +67,9 @@ fn view_text_input[M](
               "border: 1px solid #ccc", "border-radius: 5px", "padding: 5px", "margin: 10px",
               "width: 500px",
             ],
-            ~value,
+            value~,
             input_type=Text,
-            ~change,
+            change~,
           ),
         ],
       ),
@@ -80,7 +80,7 @@ fn view_text_input[M](
 fn view_edit(model : EditModel) -> @html.Html[EditMsg] {
   match model {
     Closed => @html.div(style=["display: none"], [])
-    Editing(~title, ~content, ~id) => {
+    Editing(title~, content~, id~) => {
       let title_text = match id {
         Some(_) => @html.text("Edit Todo")
         None => @html.text("New Todo")

@@ -26,8 +26,8 @@ pub fn Sandbox::new[Model, Msg, View](
   model : Model,
   update : (Msg, Model) -> (Command[Msg], Model),
   view : (Model) -> View,
-  ~after_update : (View) -> Unit,
-  ~attach_to : String = "app"
+  after_update~ : (View) -> Unit,
+  attach_to~ : String = "app"
 ) -> Sandbox[Msg, Model, View] {
   { model, update, view, after_update, attach_to }
 }

@@ -41,9 +41,9 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
     }
     (EditCard(id), Home(cards)) => {
       let edit = match cards.filter(fn(card) { card.id() == id }) {
-        [Card(content, ~id)] => Editing(title="", ~content, id=Some(id))
-        [TitleCard(~title, ~content, ~id)] =>
-          Editing(~title, ~content, id=Some(id))
+        [Card(content, id~)] => Editing(title="", content~, id=Some(id))
+        [TitleCard(title~, content~, id~)] =>
+          Editing(title~, content~, id=Some(id))
       }
       (@tea.none(), Edit(edit))
     }
@@ -76,7 +76,7 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
                 "title": String(title),
                 "content": String(content),
                 "id": Number(id),
-              } => Some(TitleCard(~title, ~content, id=id.to_int()))
+              } => Some(TitleCard(title~, content~, id=id.to_int()))
               _ => None
             },
           )
@@ -95,8 +95,8 @@ let button_style = [
   "background: pink", "border-radius: 10px", "width:80px", "padding:20px", "margin:10px",
 ]
 
-fn view_button[M](text : String, ~click : M) -> @html.Html[M] {
-  @html.div(style=button_style, [@html.text(text)], ~click)
+fn view_button[M](text : String, click~ : M) -> @html.Html[M] {
+  @html.div(style=button_style, [@html.text(text)], click~)
 }
 
 fn view(model : Model) -> @html.Html[Message] {
@@ -126,5 +126,5 @@ fn view(model : Model) -> @html.Html[Message] {
 
 fn main {
   let model = Home([Card("click refersh to request data from server", id=0)])
-  @tea.startup(~model, ~update, ~view)
+  @tea.startup(model~, update~, view~)
 }
