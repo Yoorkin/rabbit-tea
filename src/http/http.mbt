@@ -27,7 +27,7 @@ fn stringfiy(self : Body) -> String {
 
 extern "js" fn js_request(
   url : String,
-  method : String,
+  http_method : String,
   content_type~ : String,
   body~ : String,
   has_body~ : Bool,
@@ -49,7 +49,7 @@ extern "js" fn js_request(
 
 fn request[M](
   url : String,
-  method : String,
+  http_method : String,
   expect~ : Expecting[M],
   body~ : Body
 ) -> @adapter.Command[M] {
@@ -64,7 +64,7 @@ fn request[M](
       Json(f) =>
         js_request(
           url,
-          method,
+          http_method,
           has_body~,
           body~,
           content_type~,
@@ -81,7 +81,7 @@ fn request[M](
       Text(f) =>
         js_request(
           url,
-          method,
+          http_method,
           has_body~,
           body~,
           content_type~,
