@@ -1,3 +1,4 @@
+///|
 enum Message {
   EditCard(Int)
   DeleteAll
@@ -8,14 +9,17 @@ enum Message {
   GotCardsData(Result[Json, String])
 } derive(Show)
 
+///|
 enum Model {
   Home(Array[CardModel])
   Edit(EditModel)
 }
 
+///|
 extern "js" fn console_log(msg : String) =
   #| (msg) => console.log(msg)
 
+///|
 fn update_with[SubModel, Model, SubMsg, Msg](
   data : (@tea.Command[SubMsg], SubModel),
   map_model : (SubModel) -> Model,
@@ -25,6 +29,7 @@ fn update_with[SubModel, Model, SubMsg, Msg](
   (cmd.map(map_msg), map_model(sub_model))
 }
 
+///|
 fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
   match (msg, model) {
     (NewCard, _) => (@tea.none(), Edit(Editing(title="", content="", id=None)))
@@ -91,14 +96,17 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
   }
 }
 
+///|
 let button_style = [
   "background: pink", "border-radius: 10px", "width:80px", "padding:20px", "margin:10px",
 ]
 
+///|
 fn view_button[M](text : String, click~ : M) -> @html.Html[M] {
   @html.div(style=button_style, [@html.text(text)], click~)
 }
 
+///|
 fn view(model : Model) -> @html.Html[Message] {
   match model {
     Home(model) =>
@@ -124,6 +132,7 @@ fn view(model : Model) -> @html.Html[Message] {
   }
 }
 
+///|
 fn main {
   let model = Home([Card("click refersh to request data from server", id=0)])
   @tea.startup(model~, update~, view~)

@@ -1,5 +1,7 @@
+///|
 typealias ListModel = Array[CardModel]
 
+///|
 fn view_list(model : ListModel) -> @html.Html[Message] {
   @html.div(
     style=[

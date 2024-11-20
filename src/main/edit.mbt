@@ -1,8 +1,10 @@
+///|
 enum EditModel {
   Closed
   Editing(title~ : String, content~ : String, id~ : Int?)
 }
 
+///|
 enum EditMsg {
   TitleChanged(String)
   ContentChanged(String)
@@ -10,6 +12,7 @@ enum EditMsg {
   Close
 } derive(Show)
 
+///|
 fn update_edit(
   msg : EditMsg,
   model : EditModel
@@ -52,6 +55,7 @@ fn update_edit(
   }
 }
 
+///|
 fn view_text_input[M](
   label : String,
   value : String,
@@ -77,6 +81,7 @@ fn view_text_input[M](
   )
 }
 
+///|
 fn view_edit(model : EditModel) -> @html.Html[EditMsg] {
   match model {
     Closed => @html.div(style=["display: none"], [])

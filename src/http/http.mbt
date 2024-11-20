@@ -1,14 +1,17 @@
+///|
 pub(all) enum Expecting[Msg] {
   Json((Result[Json, String]) -> Msg)
   Text((Result[String, String]) -> Msg)
 }
 
+///|
 pub(all) enum Body {
   Json(Json)
   Text(String)
   Empty
 }
 
+///|
 fn content_type(self : Body) -> String {
   match self {
     Json(_) => "application/json"
@@ -17,6 +20,7 @@ fn content_type(self : Body) -> String {
   }
 }
 
+///|
 fn stringfiy(self : Body) -> String {
   match self {
     Json(json) => json.stringify()
@@ -25,6 +29,7 @@ fn stringfiy(self : Body) -> String {
   }
 }
 
+///|
 extern "js" fn js_request(
   url : String,
   http_method : String,
@@ -47,6 +52,7 @@ extern "js" fn js_request(
   #|     })
   #| }
 
+///|
 fn request[M](
   url : String,
   http_method : String,
@@ -93,14 +99,17 @@ fn request[M](
   @adapter.Custom(launch)
 }
 
+///|
 pub fn get[M](url : String, expect~ : Expecting[M]) -> @adapter.Command[M] {
   request(url, "GET", expect~, body=Empty)
 }
 
+///|
 pub fn delete[M](url : String, expect~ : Expecting[M]) -> @adapter.Command[M] {
   request(url, "DELETE", expect~, body=Empty)
 }
 
+///|
 pub fn post[M](
   url : String,
   body : Body,
@@ -109,6 +118,7 @@ pub fn post[M](
   request(url, "POST", body~, expect~)
 }
 
+///|
 pub fn patch[M](
   url : String,
   body : Body,

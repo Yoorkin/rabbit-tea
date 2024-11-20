@@ -1,3 +1,4 @@
+///|
 pub(all) enum Command[M] {
   Custom(((M) -> Unit) -> Unit)
   Message(M)
@@ -5,6 +6,7 @@ pub(all) enum Command[M] {
   None
 }
 
+///|
 fn launch[M](self : Command[M], update : (M) -> Unit) -> Unit {
   match self {
     Custom(f) => f(update)
@@ -17,6 +19,7 @@ fn launch[M](self : Command[M], update : (M) -> Unit) -> Unit {
   }
 }
 
+///|
 pub fn map[A, B](self : Command[A], f : (A) -> B) -> Command[B] {
   match self {
     Custom(g) => Custom(fn(h) { g(fn(x) { h(f(x)) }) })

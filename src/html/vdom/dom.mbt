@@ -18,6 +18,7 @@
 /// - Need Iter::filter_map
 /// - Type of Map::iter() is not Iter2
 
+///|
 pub(all) struct Node {
   tag : String
   attrs : Map[String, String]
@@ -25,6 +26,7 @@ pub(all) struct Node {
   events : Map[String, (@adapter.Event) -> Unit]
 }
 
+///|
 fn to_element[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]
@@ -42,6 +44,7 @@ fn to_element[Msg, Model, View](
   }
 }
 
+///|
 pub fn patch[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]

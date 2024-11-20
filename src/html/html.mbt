@@ -1,5 +1,6 @@
 /// TODO: struct creation should pop up a completion of labels
 
+///|
 struct Html[M] {
   attrs : Map[String, String]
   tag : String
@@ -7,6 +8,7 @@ struct Html[M] {
   events : Map[String, (@adapter.Event) -> M]
 }
 
+///|
 pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
   let { attrs, tag, childrens, events } = self
   let childrens = childrens.map(fn(x) { x.map(f) })
@@ -18,6 +20,7 @@ pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
   { attrs, tag, childrens, events }
 }
 
+///|
 pub fn to_virtual_dom[Msg, Model, View](
   self : Html[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
@@ -34,6 +37,7 @@ pub fn to_virtual_dom[Msg, Model, View](
   }
 }
 
+///|
 fn Html::new[M](
   tag : String,
   attrs : Map[String, String],
@@ -72,6 +76,7 @@ fn Html::new[M](
   { attrs, tag, childrens, events }
 }
 
+///|
 pub fn button[M](
   style~ : Array[String] = [],
   id? : String,
@@ -90,6 +95,7 @@ pub fn button[M](
   )
 }
 
+///|
 pub fn h1[M](
   style~ : Array[String] = [],
   id? : String,
@@ -99,6 +105,7 @@ pub fn h1[M](
   new("h1", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn h2[M](
   style~ : Array[String] = [],
   id? : String,
@@ -108,6 +115,7 @@ pub fn h2[M](
   new("h2", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn h3[M](
   style~ : Array[String] = [],
   id? : String,
@@ -117,6 +125,7 @@ pub fn h3[M](
   new("h3", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn h4[M](
   style~ : Array[String] = [],
   id? : String,
@@ -126,6 +135,7 @@ pub fn h4[M](
   new("h4", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn h5[M](
   style~ : Array[String] = [],
   id? : String,
@@ -135,6 +145,7 @@ pub fn h5[M](
   new("h5", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn h6[M](
   style~ : Array[String] = [],
   id? : String,
@@ -145,6 +156,8 @@ pub fn h6[M](
 }
 
 // ------ grouping content ------
+
+///|
 pub fn div[M](
   style~ : Array[String] = [],
   id? : String,
@@ -163,6 +176,7 @@ pub fn div[M](
   )
 }
 
+///|
 pub fn p[M](
   style~ : Array[String] = [],
   id? : String,
@@ -172,6 +186,7 @@ pub fn p[M](
   new("p", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn hr[M](
   style~ : Array[String] = [],
   id? : String,
@@ -181,6 +196,7 @@ pub fn hr[M](
   new("hr", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn pre[M](
   style~ : Array[String] = [],
   id? : String,
@@ -190,6 +206,7 @@ pub fn pre[M](
   new("pre", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn blockquote[M](
   style~ : Array[String] = [],
   id? : String,
@@ -201,6 +218,7 @@ pub fn blockquote[M](
 
 // ---- text ----
 
+///|
 pub fn span[M](
   style~ : Array[String] = [],
   id? : String,
@@ -210,11 +228,13 @@ pub fn span[M](
   new("span", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub(all) enum Target {
   Self
   Blank
 }
 
+///|
 pub fn a[M](
   style~ : Array[String] = [],
   id? : String,
@@ -230,6 +250,7 @@ pub fn a[M](
   new("a", { "target": target, "href": href }, style~, class?, id?, childrens)
 }
 
+///|
 pub fn code[M](
   style~ : Array[String] = [],
   id? : String,
@@ -239,6 +260,7 @@ pub fn code[M](
   new("code", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn em[M](
   style~ : Array[String] = [],
   id? : String,
@@ -248,6 +270,7 @@ pub fn em[M](
   new("em", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn strong[M](
   style~ : Array[String] = [],
   id? : String,
@@ -257,6 +280,7 @@ pub fn strong[M](
   new("strong", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn i[M](
   style~ : Array[String] = [],
   id? : String,
@@ -266,6 +290,7 @@ pub fn i[M](
   new("i", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn b[M](
   style~ : Array[String] = [],
   id? : String,
@@ -275,6 +300,7 @@ pub fn b[M](
   new("b", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn u[M](
   style~ : Array[String] = [],
   id? : String,
@@ -284,6 +310,7 @@ pub fn u[M](
   new("u", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn sub[M](
   style~ : Array[String] = [],
   id? : String,
@@ -293,6 +320,7 @@ pub fn sub[M](
   new("sub", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn sup[M](
   style~ : Array[String] = [],
   id? : String,
@@ -302,12 +330,14 @@ pub fn sup[M](
   new("sup", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn text[M](str : String) -> Html[M] {
   new("plain-text", { "value": str }, [])
 }
 
 // ---- lists ----
 
+///|
 pub fn ul[M](
   style~ : Array[String] = [],
   id? : String,
@@ -317,6 +347,7 @@ pub fn ul[M](
   new("ul", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn ol[M](
   style~ : Array[String] = [],
   id? : String,
@@ -326,6 +357,7 @@ pub fn ol[M](
   new("ol", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn li[M](
   style~ : Array[String] = [],
   id? : String,
@@ -335,6 +367,7 @@ pub fn li[M](
   new("ol", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn dl[M](
   style~ : Array[String] = [],
   id? : String,
@@ -344,6 +377,7 @@ pub fn dl[M](
   new("dl", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn dt[M](
   style~ : Array[String] = [],
   id? : String,
@@ -353,6 +387,7 @@ pub fn dt[M](
   new("dt", {}, style~, class?, id?, childrens)
 }
 
+///|
 pub fn dd[M](
   style~ : Array[String] = [],
   id? : String,
@@ -364,6 +399,7 @@ pub fn dd[M](
 
 // ---- embbded content ----
 
+///|
 pub fn img[M](
   style~ : Array[String] = [],
   id? : String,
@@ -394,6 +430,7 @@ pub fn img[M](
   )
 }
 
+///|
 pub fn iframe[M](
   style~ : Array[String] = [],
   id? : String,
@@ -419,6 +456,7 @@ pub fn iframe[M](
   )
 }
 
+///|
 pub fn canvas[M](
   style~ : Array[String] = [],
   id? : String,
@@ -442,6 +480,7 @@ pub fn canvas[M](
 
 // ---- inputs ----
 
+///|
 pub fn br[M](
   style~ : Array[String] = [],
   id? : String,
@@ -450,6 +489,7 @@ pub fn br[M](
   new("br", {}, style~, class?, id?, [])
 }
 
+///|
 pub(all) enum InputType {
   Button
   Checkbox
@@ -475,11 +515,13 @@ pub(all) enum InputType {
   Week
 }
 
+///|
 pub(all) enum AutoComplete {
   On
   Off
 }
 
+///|
 pub fn form[M](
   style~ : Array[String] = [],
   id? : String,
@@ -498,6 +540,7 @@ pub fn form[M](
   )
 }
 
+///|
 pub fn label[M](
   style~ : Array[String] = [],
   id? : String,
@@ -516,6 +559,7 @@ pub fn label[M](
   )
 }
 
+///|
 pub fn input[M](
   input_type~ : InputType = Text,
   name? : String,

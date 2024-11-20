@@ -1,3 +1,4 @@
+///|
 struct Sandbox[Msg, Model, View] {
   mut model : Model
   update : (Msg, Model) -> (Command[Msg], Model)
@@ -6,6 +7,7 @@ struct Sandbox[Msg, Model, View] {
   attach_to : String
 }
 
+///|
 pub fn update[Msg, Model, View](
   self : Sandbox[Msg, Model, View],
   message : Msg
@@ -17,11 +19,13 @@ pub fn update[Msg, Model, View](
   (self.after_update)(view)
 }
 
+///|
 pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
   let view = (self.view)(self.model)
   (self.after_update)(view)
 }
 
+///|
 pub fn Sandbox::new[Model, Msg, View](
   model : Model,
   update : (Msg, Model) -> (Command[Msg], Model),

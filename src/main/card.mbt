@@ -1,8 +1,10 @@
+///|
 enum CardModel {
   TitleCard(title~ : String, content~ : String, id~ : Int)
   Card(String, id~ : Int)
 }
 
+///|
 fn id(self : CardModel) -> Int {
   match self {
     TitleCard(title~, content~, id~) => id
@@ -10,6 +12,7 @@ fn id(self : CardModel) -> Int {
   }
 }
 
+///|
 fn view_card(model : CardModel) -> @html.Html[Message] {
   let (elements, id) = match model {
     TitleCard(title~, content~, id~) =>
