@@ -26,8 +26,10 @@ pub(all) struct Node {
   events : Map[String, (@adapter.Event) -> Unit]
 }
 
+///|
 pub const FragmentTag = "fragment"
 
+///|
 pub const PlainTextTag = "plain-text"
 
 ///|
