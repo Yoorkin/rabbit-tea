@@ -32,28 +32,35 @@ pub const FragmentTag = "fragment"
 ///|
 pub const PlainTextTag = "plain-text"
 
+pub const NothingTag = "nothing"
+
 ///|
 fn to_element[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> @adapter.Element {
+) -> Array[@adapter.Element] {
   match self.tag {
     FragmentTag => {
-      let fragment = @adapter.create_element("div") //TODO: eliminate this div
-      self.childrens.each(
-        fn(child) { fragment.append_child(to_element(child, sandbox)) },
-      )
-      fragment
+      let xs = []
+      for child in self.childrens {
+        xs.append(to_element(self, sandbox))
+      }
+      xs
     }
-    PlainTextTag => @adapter.create_text_node(self.attrs["value"].unwrap())
+    PlainTextTag => [@adapter.create_text_node(self.attrs["value"].unwrap())]
+    NothingTag => []
     _ => {
       let element = @adapter.create_element(self.tag)
       self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
-      self.childrens.each(
-        fn(child) { element.append_child(to_element(child, sandbox)) },
-      )
-      self.events.each(fn(k, v) { @adapter.listen(element, k, v) })
-      element
+      for child in self.childrens {
+        for elem in to_element(child, sandbox) {
+          element.append_child(elem)
+        }
+      }
+      for k, v in self.events {
+        @adapter.listen(element, k, fn(e) { v(e) })
+      }
+      [element]
     }
   }
 }
@@ -63,7 +70,14 @@ pub fn patch[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]
 ) -> Unit {
-  let element = to_element(self, sandbox)
+  let xs = to_element(self, sandbox)
+  let element = if xs.length() != 1 {
+    let element = @adapter.create_element("div")
+    xs.each(fn(x) { element.append_child(x) })
+    element
+  } else {
+    xs[0]
+  }
   @adapter.patch(element)
 }
 

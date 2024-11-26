@@ -76,6 +76,25 @@ fn Html::new[M](
   { attrs, tag, childrens, events }
 }
 
+///| 
+pub fn node[M](
+  tag~ : String,
+  attributes~ : Map[String, String] = Map::new(),
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  { tag, attrs: attributes, childrens, events: Map::new() }
+}
+
+///| Represents an empty element
+pub fn nothing[M]() -> Html[M] {
+  new(@vdom.NothingTag, {}, [])
+}
+
+///| Represents a fragment of elements, useful for grouping elements without adding an extra div
+pub fn fragment[M](childrens : Array[Html[M]]) -> Html[M] {
+  new(@vdom.FragmentTag, {}, childrens)
+}
+
 ///|
 pub fn button[M](
   style~ : Array[String] = [],
