@@ -332,7 +332,7 @@ pub fn sup[M](
 
 ///|
 pub fn text[M](str : String) -> Html[M] {
-  new("plain-text", { "value": str }, [])
+  new(@vdom.PlainTextTag, { "value": str }, [])
 }
 
 // ---- lists ----
@@ -342,9 +342,18 @@ pub fn ul[M](
   style~ : Array[String] = [],
   id? : String,
   class? : String,
+  click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ul", {}, style~, class?, id?, childrens)
+  new(
+    "ul",
+    {},
+    style~,
+    class?,
+    id?,
+    childrens,
+    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+  )
 }
 
 ///|
@@ -362,9 +371,18 @@ pub fn li[M](
   style~ : Array[String] = [],
   id? : String,
   class? : String,
+  click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ol", {}, style~, class?, id?, childrens)
+  new(
+    "li",
+    {},
+    style~,
+    class?,
+    id?,
+    childrens,
+    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+  )
 }
 
 ///|
@@ -567,6 +585,7 @@ pub fn input[M](
   read_only? : Bool,
   multiple? : Bool,
   accept? : String,
+  placeholder? : String,
   auto_complete? : AutoComplete,
   style~ : Array[String] = [],
   id? : String,
@@ -611,6 +630,7 @@ pub fn input[M](
       "readonly": read_only.map(Bool::to_string),
       "multiple": multiple.map(Bool::to_string),
       "accept": accept,
+      "placeholder": placeholder,
     },
     events={
       "change": change.map(fn(m) { fn(event) { m(event.target().value()) } }),

@@ -26,21 +26,33 @@ pub(all) struct Node {
   events : Map[String, (@adapter.Event) -> Unit]
 }
 
+pub const FragmentTag = "fragment"
+
+pub const PlainTextTag = "plain-text"
+
 ///|
 fn to_element[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]
 ) -> @adapter.Element {
-  if self.tag == "plain-text" {
-    @adapter.create_text_node(self.attrs["value"].unwrap())
-  } else {
-    let element = @adapter.create_element(self.tag)
-    self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
-    self.childrens.each(
-      fn(child) { element.append_child(to_element(child, sandbox)) },
-    )
-    self.events.each(fn(k, v) { @adapter.listen(element, k, v) })
-    element
+  match self.tag {
+    FragmentTag => {
+      let fragment = @adapter.create_element("div") //TODO: eliminate this div
+      self.childrens.each(
+        fn(child) { fragment.append_child(to_element(child, sandbox)) },
+      )
+      fragment
+    }
+    PlainTextTag => @adapter.create_text_node(self.attrs["value"].unwrap())
+    _ => {
+      let element = @adapter.create_element(self.tag)
+      self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
+      self.childrens.each(
+        fn(child) { element.append_child(to_element(child, sandbox)) },
+      )
+      self.events.each(fn(k, v) { @adapter.listen(element, k, v) })
+      element
+    }
   }
 }
 
