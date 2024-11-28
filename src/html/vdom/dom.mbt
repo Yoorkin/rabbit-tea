@@ -43,7 +43,7 @@ fn to_element[Msg, Model, View](
     FragmentTag => {
       let xs = []
       for child in self.childrens {
-        xs.append(to_element(self, sandbox))
+        xs.append(to_element(child, sandbox))
       }
       xs
     }
