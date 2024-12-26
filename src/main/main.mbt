@@ -126,5 +126,5 @@ fn view(model : Model) -> @html.Html[Message] {
 ///|
 fn main {
   let model = Home([Card("Refershing", id=0)])
-  @tea.startup(model~, update~, view~, init_msg=Some(RefreshList))
+  @tea.startup(model~, update~, view~, initialize=RefreshList)
 }
