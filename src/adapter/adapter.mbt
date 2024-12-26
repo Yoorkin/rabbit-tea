@@ -20,16 +20,9 @@ pub fn update[Msg, Model, View](
 }
 
 ///|
-pub fn refersh[Msg, Model, View](
-  self : Sandbox[Msg, Model, View],
-  initialize : Msg?
-) -> Unit {
+pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
   let view = (self.view)(self.model)
   (self.after_update)(view)
-  match initialize {
-    None => ()
-    Some(msg) => self.update(msg)
-  }
 }
 
 ///|

@@ -29,5 +29,9 @@ pub fn startup[Model, Message](
   }
 
   sandbox = Some(@adapter.new(model, update, view, after_update~))
-  sandbox.unwrap().refersh(initialize)
+  match initialize {
+    Some(msg) => sandbox.unwrap().update(msg)
+    _ => ()
+  }
+  sandbox.unwrap().refersh()
 }
