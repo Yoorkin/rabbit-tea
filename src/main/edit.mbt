@@ -33,13 +33,11 @@ fn update_edit(
         Some(id) =>
           @http.patch(
             "api/cards/\{id}",
-            Json(
-              {
-                "title": title.to_json(),
-                "content": content.to_json(),
-                "id": id.to_json(),
-              },
-            ),
+            Json({
+              "title": title.to_json(),
+              "content": content.to_json(),
+              "id": id.to_json(),
+            }),
             expect=Json(EditMsg::ReqResult),
           )
         None =>
@@ -61,24 +59,20 @@ fn view_text_input[M](
   value : String,
   change~ : (String) -> M
 ) -> @html.Html[M] {
-  @html.div(
-    [
-      @html.label(
-        [
-          @html.text(label),
-          @html.input(
-            style=[
-              "border: 1px solid #ccc", "border-radius: 5px", "padding: 5px", "margin: 10px",
-              "width: 500px",
-            ],
-            value~,
-            input_type=Text,
-            change~,
-          ),
+  @html.div([
+    @html.label([
+      @html.text(label),
+      @html.input(
+        style=[
+          "border: 1px solid #ccc", "border-radius: 5px", "padding: 5px", "margin: 10px",
+          "width: 500px",
         ],
+        value~,
+        input_type=Text,
+        change~,
       ),
-    ],
-  )
+    ]),
+  ])
 }
 
 ///|
