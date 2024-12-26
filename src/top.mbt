@@ -20,7 +20,8 @@ pub fn task[M](message : M) -> @adapter.Command[M] {
 pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
-  view~ : (Model) -> @html.Html[Message]
+  view~ : (Model) -> @html.Html[Message],
+  initialize? : Message
 ) -> Unit {
   let mut sandbox = None
   fn after_update(html : @html.Html[Message]) {
@@ -28,5 +29,9 @@ pub fn startup[Model, Message](
   }
 
   sandbox = Some(@adapter.new(model, update, view, after_update~))
+  match initialize {
+    Some(msg) => sandbox.unwrap().update(msg)
+    _ => ()
+  }
   sandbox.unwrap().refersh()
 }

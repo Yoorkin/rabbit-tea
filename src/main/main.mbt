@@ -54,14 +54,12 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
     }
     (DeleteAll, Home(cards)) => {
       let cmds = @tea.batch(
-        cards.map(
-          fn(card) {
-            @http.delete(
-              "/api/cards/\{card.id()}",
-              expect=Json(Message::ReqResult),
-            )
-          },
-        ),
+        cards.map(fn(card) {
+          @http.delete(
+            "/api/cards/\{card.id()}",
+            expect=Json(Message::ReqResult),
+          )
+        }),
       )
       (cmds, Home([]))
     }
@@ -70,21 +68,20 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
     (GotCardsData(Ok(json)), Home(cards)) => {
       let cards = match json {
         { "cards": Array(elems) } =>
-          elems.map_option(
-            fn {
-              {
-                "title"? : Some(String("")) | None,
-                "content": String(content),
-                "id": Number(id),
-              } => Some(Card(content, id=id.to_int()))
-              {
-                "title": String(title),
-                "content": String(content),
-                "id": Number(id),
-              } => Some(TitleCard(title~, content~, id=id.to_int()))
-              _ => None
-            },
-          )
+          elems.map_option(fn {
+            {
+              "title"? : Some(String(""))
+              | None,
+              "content": String(content),
+              "id": Number(id),
+            } => Some(Card(content, id=id.to_int()))
+            {
+              "title": String(title),
+              "content": String(content),
+              "id": Number(id),
+            } => Some(TitleCard(title~, content~, id=id.to_int()))
+            _ => None
+          })
       }
       (@tea.none(), Home(cards))
     }
@@ -110,30 +107,24 @@ fn view_button[M](text : String, click~ : M) -> @html.Html[M] {
 fn view(model : Model) -> @html.Html[Message] {
   match model {
     Home(model) =>
-      @html.div(
-        style=["p-0", "display:flex", "flex-direction:column"],
-        [
-          @html.h1([@html.text("MoonBit TodoMVC")]),
-          @html.div(
-            style=["display: flex", "width: 500px", "height: 100%"],
-            [
-              view_button("clear", click=DeleteAll),
-              view_button("refersh", click=RefreshList),
-              view_button("+", click=NewCard),
-            ],
-          ),
-          @html.p(
-            [@html.text("Click cards below to edit, click + to add a new card")],
-          ),
-          view_list(model),
-        ],
-      )
+      @html.div(style=["p-0", "display:flex", "flex-direction:column"], [
+        @html.h1([@html.text("MoonBit TodoMVC")]),
+        @html.div(style=["display: flex", "width: 500px", "height: 100%"], [
+          view_button("clear", click=DeleteAll),
+          view_button("refersh", click=RefreshList),
+          view_button("+", click=NewCard),
+        ]),
+        @html.p([
+          @html.text("Click cards below to edit, click + to add a new card"),
+        ]),
+        view_list(model),
+      ])
     Edit(model) => view_edit(model).map(Message::GotEditMsg)
   }
 }
 
 ///|
 fn main {
-  let model = Home([Card("click refersh to request data from server", id=0)])
-  @tea.startup(model~, update~, view~)
+  let model = Home([Card("Refershing", id=0)])
+  @tea.startup(model~, update~, view~, initialize=RefreshList)
 }

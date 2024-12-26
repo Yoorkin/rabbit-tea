@@ -48,31 +48,24 @@ fn Html::new[M](
   events~ : Map[String, ((@adapter.Event) -> M)?] = {},
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  optional_attrs["style"] = style.map(
-    fn(x) { String::concat(x, separator=";") },
-  )
+  optional_attrs["style"] = style.map(fn(x) { String::concat(x, separator=";") })
   optional_attrs["class"] = class
-  optional_attrs.each(
-    fn(k, v) {
-      match v {
-        Some(v) => attrs[k] = v
-        None => ()
-      }
-    },
-  )
+  optional_attrs.each(fn(k, v) {
+    match v {
+      Some(v) => attrs[k] = v
+      None => ()
+    }
+  })
   match id {
     Some(id) => attrs["id"] = id
     None => ()
   }
   let events = events
     .iter()
-    .fold(
-      init={},
-      fn {
-        acc, (k, Some(v)) => acc..op_set(k, v)
-        acc, (_, None) => acc
-      },
-    )
+    .fold(init={}, fn {
+      acc, (k, Some(v)) => acc..op_set(k, v)
+      acc, (_, None) => acc
+    })
   { attrs, tag, childrens, events }
 }
 
@@ -364,15 +357,9 @@ pub fn ul[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "ul",
-    {},
-    style~,
-    class?,
-    id?,
-    childrens,
-    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
-  )
+  new("ul", {}, style~, class?, id?, childrens, events={
+    "click": click.map(fn(m) { fn(_event) { m } }),
+  })
 }
 
 ///|
@@ -393,15 +380,9 @@ pub fn li[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "li",
-    {},
-    style~,
-    class?,
-    id?,
-    childrens,
-    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
-  )
+  new("li", {}, style~, class?, id?, childrens, events={
+    "click": click.map(fn(m) { fn(_event) { m } }),
+  })
 }
 
 ///|
