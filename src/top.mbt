@@ -1,19 +1,19 @@
 ///|
-pub typealias Command[M] = @adapter.Command[M]
+pub typealias Command[M] = @browser.Command[M]
 
 ///|
 pub fn none[M]() -> Command[M] {
-  @adapter.none()
+  @browser.none()
 }
 
 ///|
 pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
-  @adapter.batch(xs)
+  @browser.batch(xs)
 }
 
 ///|
 pub fn task[M](message : M) -> Command[M] {
-  @adapter.task(message)
+  @browser.task(message)
 }
 
 ///| Start the application.
@@ -22,8 +22,8 @@ pub fn startup[Model, Message](
   update~ : (Message, Model) -> (Command[Message], Model),
   view~ : (Model) -> @html.Html[Message],
   initialize? : Message,
-  url_changed? : (@adapter.UrlRequest) -> Message,
-  url_request? : (@adapter.UrlRequest) -> Message
+  url_changed? : (@browser.UrlRequest) -> Message,
+  url_request? : (@browser.UrlRequest) -> Message
 ) -> Unit {
   let mut sandbox = None
   fn after_update(html : @html.Html[Message]) {
@@ -31,7 +31,7 @@ pub fn startup[Model, Message](
   }
 
   sandbox = Some(
-    @adapter.new(model, update, view, after_update~, url_changed?, url_request?),
+    @browser.new(model, update, view, after_update~, url_changed?, url_request?),
   )
   match initialize {
     Some(msg) => sandbox.unwrap().update(msg)

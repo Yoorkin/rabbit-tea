@@ -5,7 +5,7 @@
             "alias": "vdom"
         },
         {
-            "path": "Yoorkin/rabbit-tea/adapter",
+            "path": "Yoorkin/rabbit-tea/browser",
             "alias": "adapter"
         }
     ],
