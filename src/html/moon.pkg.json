@@ -1,7 +1,7 @@
 {
     "import": [
         {
-            "path": "Yoorkin/rabbit-tea/html/vdom",
+            "path": "Yoorkin/rabbit-tea/internal/vdom",
             "alias": "vdom"
         },
         {
