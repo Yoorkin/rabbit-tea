@@ -1,4 +1,11 @@
 test "basic_url" {
+  let a = "http://localhost:5173/abcd"
+  inspect!(
+    @url.parse(a),
+    content=
+      #|{protocol: Http, host: "localhost", port: Some(5173), path: "abcd", query: None, fragment: None}
+    ,
+  )
   inspect!(
     @url.parse("https://example.com"),
     content=
@@ -27,6 +34,15 @@ test "basic_url" {
     @url.parse("https://example.com:8080/path/to/somewhere?key=value&key2=value2#fragment"),
     content=
       #|{protocol: Https, host: "example.com", port: Some(8080), path: "path/to/somewhere", query: Some("key=value&key2=value2"), fragment: Some("fragment")}
+    ,
+  )
+}
+
+test "special url" {
+  inspect!(
+    @url.parse("localhost:8080/abcd"),
+    content=
+      #|{protocol: Other(""), host: "localhost", port: Some(8080), path: "abcd", query: None, fragment: None}
     ,
   )
 }

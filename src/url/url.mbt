@@ -51,6 +51,7 @@ pub fn parse(url : String) -> Url {
     ["http", remain] => (Http, remain)
     ["https", remain] => (Https, remain)
     [x, remain] => (Other(x), remain)
+    [remain] => (Other(""), remain)
     _ => abort("Invalid protocol")
   }
   let (mid, remain) = match remain.split("?").collect() {
@@ -69,7 +70,7 @@ pub fn parse(url : String) -> Url {
       let port = try {
         @strconv.parse_int!(port)
       } catch {
-        _ => None
+        _ => Option::None
       } else {
         number => Some(number)
       }
