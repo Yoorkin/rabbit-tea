@@ -59,7 +59,7 @@ fn request[M](
   expect~ : Expecting[M],
   body~ : Body
 ) -> @adapter.Command[M] {
-  let launch = fn(fulfill) {
+  let launch = fn(_predef, fulfill) {
     let has_body = match body {
       Empty => false
       _ => true
@@ -96,7 +96,7 @@ fn request[M](
         )
     }
   }
-  Custom(launch)
+  Command(launch)
 }
 
 ///|

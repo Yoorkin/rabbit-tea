@@ -5,7 +5,6 @@
         "path": "Yoorkin/rabbit-tea",
         "alias": "tea"
       },
-      "Yoorkin/rabbit-tea/command",
       "Yoorkin/rabbit-tea/html",
       "Yoorkin/rabbit-tea/http",
       "Yoorkin/rabbit-tea/internal/vdom",
