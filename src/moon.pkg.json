@@ -1,6 +1,7 @@
 {
   "import": [
     "Yoorkin/rabbit-tea/html",
+    "Yoorkin/rabbit-tea/command",
     "Yoorkin/rabbit-tea/internal/vdom",
     "Yoorkin/rabbit-tea/internal/adapter"
   ]
