@@ -5,7 +5,7 @@
         }
     },
     "import": [
-        "Yoorkin/rabbit-tea/command"
+        "Yoorkin/rabbit-tea/url"
     ]
 
 }

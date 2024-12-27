@@ -1,23 +1,17 @@
 ///|
-struct Sandbox[Msg, Model, View] {
+pub(all) struct Sandbox[Msg, Model, View] {
   mut model : Model
   update : (Msg, Model) -> (Command[Msg], Model)
   view : (Model) -> View
   after_update : (View) -> Unit
   attach_to : String
+  mut predefined : PredefinedEvent?
 }
 
-///| Launch commands. It may trigger the update function.
-fn launch_cmd[M](cmd : @command.T[M], update : (M) -> Unit) -> Unit {
-  match cmd {
-    Custom(f) => f(update)
-    Message(msg) => update(msg)
-    Batch(cmds) =>
-      for cmd in cmds {
-        launch_cmd(cmd, update)
-      }
-    None => ()
-  }
+///|
+pub(all) struct PredefinedEvent {
+  on_url_changed : (UrlRequest) -> Unit
+  on_url_request : (UrlRequest) -> Unit
 }
 
 ///| Update the model and launch commands.
@@ -27,7 +21,7 @@ pub fn update[Msg, Model, View](
 ) -> Unit {
   let (cmd, model) = (self.update)(message, self.model)
   self.model = model
-  launch_cmd(cmd, fn(msg) { self.update(msg) })
+  self.launch(cmd)
   let view = (self.view)(self.model)
   (self.after_update)(view)
 }
@@ -45,7 +39,26 @@ pub fn Sandbox::new[Model, Msg, View](
   update : (Msg, Model) -> (Command[Msg], Model),
   view : (Model) -> View,
   after_update~ : (View) -> Unit,
-  attach_to~ : String = "app"
+  attach_to~ : String = "app",
+  url_changed? : (UrlRequest) -> Msg,
+  url_request? : (UrlRequest) -> Msg
 ) -> Sandbox[Msg, Model, View] {
-  { model, update, view, after_update, attach_to }
+  let sandbox = {
+    model,
+    update,
+    view,
+    after_update,
+    attach_to,
+    predefined: None,
+  }
+  let on_url_changed = match url_changed {
+    Some(f) => fn(url) { sandbox.update(f(url)) }
+    None => ignore
+  }
+  let on_url_request = match url_request {
+    Some(f) => fn(url) { sandbox.update(f(url)) }
+    None => ignore
+  }
+  sandbox.predefined = Some({ on_url_changed, on_url_request })
+  sandbox
 }

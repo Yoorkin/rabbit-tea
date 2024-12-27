@@ -1,19 +1,19 @@
 ///|
 pub typealias Command[M] = @adapter.Command[M]
 
-///| @alert deprecated "Use `@command.None` instead"
-pub fn none[M]() -> @command.T[M] {
-  None
+///|
+pub fn none[M]() -> Command[M] {
+  @adapter.none()
 }
 
-///| @alert deprecated "Use `@command.Batch` instead"
-pub fn batch[M](xs : Array[Command[M]]) -> @command.T[M] {
-  Batch(xs)
+///|
+pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
+  @adapter.batch(xs)
 }
 
-///| @alert deprecated "Use `@command.Task` instead"
-pub fn task[M](message : M) -> @command.T[M] {
-  Message(message)
+///|
+pub fn task[M](message : M) -> Command[M] {
+  @adapter.task(message)
 }
 
 ///| Start the application.
@@ -21,14 +21,18 @@ pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
   view~ : (Model) -> @html.Html[Message],
-  initialize? : Message
+  initialize? : Message,
+  url_changed? : (@adapter.UrlRequest) -> Message,
+  url_request? : (@adapter.UrlRequest) -> Message
 ) -> Unit {
   let mut sandbox = None
   fn after_update(html : @html.Html[Message]) {
     html.to_virtual_dom(sandbox.unwrap()).patch(sandbox.unwrap())
   }
 
-  sandbox = Some(@adapter.new(model, update, view, after_update~))
+  sandbox = Some(
+    @adapter.new(model, update, view, after_update~, url_changed?, url_request?),
+  )
   match initialize {
     Some(msg) => sandbox.unwrap().update(msg)
     _ => ()
