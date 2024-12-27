@@ -1,6 +1,6 @@
 {
     "import": [
-        { "path" : "Yoorkin/rabbit-tea/adapter", "alias": "adapter" }
+        { "path" : "Yoorkin/rabbit-tea/internal/adapter", "alias": "adapter" }
     ],
     "link": {
         "js": {

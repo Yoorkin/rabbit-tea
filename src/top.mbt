@@ -1,22 +1,22 @@
 ///|
 pub typealias Command[M] = @adapter.Command[M]
 
-///|
-pub fn none[M]() -> Command[M] {
-  @adapter.None
+///| @alert deprecated "Use `@command.None` instead"
+pub fn none[M]() -> @command.T[M] {
+  None
 }
 
-///|
-pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
-  @adapter.Batch(xs)
+///| @alert deprecated "Use `@command.Batch` instead"
+pub fn batch[M](xs : Array[Command[M]]) -> @command.T[M] {
+  Batch(xs)
 }
 
-///|
-pub fn task[M](message : M) -> @adapter.Command[M] {
-  @adapter.Message(message)
+///| @alert deprecated "Use `@command.Task` instead"
+pub fn task[M](message : M) -> @command.T[M] {
+  Message(message)
 }
 
-///|
+///| Start the application.
 pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),

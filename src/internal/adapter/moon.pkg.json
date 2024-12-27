@@ -3,5 +3,9 @@
         "js": {
             "format": "iife"
         }
-    }
+    },
+    "import": [
+        "Yoorkin/rabbit-tea/command"
+    ]
+
 }

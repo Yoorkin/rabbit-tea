@@ -96,7 +96,7 @@ fn request[M](
         )
     }
   }
-  @adapter.Custom(launch)
+  Custom(launch)
 }
 
 ///|
