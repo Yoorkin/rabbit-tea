@@ -8,6 +8,6 @@
       "Yoorkin/rabbit-tea/html",
       "Yoorkin/rabbit-tea/http",
       "Yoorkin/rabbit-tea/internal/vdom",
-      "Yoorkin/rabbit-tea/adapter"
+      "Yoorkin/rabbit-tea/browser"
     ]
 }

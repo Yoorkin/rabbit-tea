@@ -58,7 +58,7 @@ fn request[M](
   http_method : String,
   expect~ : Expecting[M],
   body~ : Body
-) -> @adapter.Command[M] {
+) -> @browser.Command[M] {
   let launch = fn(_predef, fulfill) {
     let has_body = match body {
       Empty => false
@@ -100,12 +100,12 @@ fn request[M](
 }
 
 ///|
-pub fn get[M](url : String, expect~ : Expecting[M]) -> @adapter.Command[M] {
+pub fn get[M](url : String, expect~ : Expecting[M]) -> @browser.Command[M] {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
-pub fn delete[M](url : String, expect~ : Expecting[M]) -> @adapter.Command[M] {
+pub fn delete[M](url : String, expect~ : Expecting[M]) -> @browser.Command[M] {
   request(url, "DELETE", expect~, body=Empty)
 }
 
@@ -114,7 +114,7 @@ pub fn post[M](
   url : String,
   body : Body,
   expect~ : Expecting[M]
-) -> @adapter.Command[M] {
+) -> @browser.Command[M] {
   request(url, "POST", body~, expect~)
 }
 
@@ -123,6 +123,6 @@ pub fn patch[M](
   url : String,
   body : Body,
   expect~ : Expecting[M]
-) -> @adapter.Command[M] {
+) -> @browser.Command[M] {
   request(url, "PATCH", body~, expect~)
 }
