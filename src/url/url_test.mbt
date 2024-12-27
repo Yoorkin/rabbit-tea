@@ -31,7 +31,9 @@ test "basic_url" {
     ,
   )
   inspect!(
-    @url.parse("https://example.com:8080/path/to/somewhere?key=value&key2=value2#fragment"),
+    @url.parse(
+      "https://example.com:8080/path/to/somewhere?key=value&key2=value2#fragment",
+    ),
     content=
       #|{protocol: Https, host: "example.com", port: Some(8080), path: "path/to/somewhere", query: Some("key=value&key2=value2"), fragment: Some("fragment")}
     ,
