@@ -2,7 +2,7 @@
 pub(all) enum UrlRequest {
   Internal(@url.Url)
   External(@url.Url)
-}
+} derive(Show, Eq, Compare)
 
 ///|
 extern "js" fn ffi_go_back() =
