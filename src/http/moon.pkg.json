@@ -1,5 +1,5 @@
 {
     "import": [
-        "Yoorkin/rabbit-tea/adapter"
+        "Yoorkin/rabbit-tea/internal/adapter"
     ]
 }
