@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Serve main.js
+// Serve example.js
 app.get('/main.js', (req, res) => {
-    res.sendFile(path.join(__dirname, 'target/js/release/build/main/main.js'));
+    res.sendFile(path.join(__dirname, 'target/js/release/build/example/example.js'));
 });
