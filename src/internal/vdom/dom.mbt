@@ -23,7 +23,7 @@ pub(all) struct Node {
   tag : String
   attrs : Map[String, String]
   childrens : Array[Node]
-  events : Map[String, (@adapter.Event) -> Unit]
+  events : Map[String, (@ffi.Event) -> Unit]
 }
 
 ///|
@@ -39,7 +39,7 @@ pub const NothingTag = "nothing"
 fn to_element[Msg, Model, View](
   self : Node,
   sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> Array[@adapter.Element] {
+) -> Array[@ffi.Element] {
   match self.tag {
     FragmentTag => {
       let xs = []
@@ -48,18 +48,18 @@ fn to_element[Msg, Model, View](
       }
       xs
     }
-    PlainTextTag => [@adapter.create_text_node(self.attrs["value"].unwrap())]
+    PlainTextTag => [@ffi.create_text_node(self.attrs["value"].unwrap())]
     NothingTag => []
     _ => {
-      let element = @adapter.create_element(self.tag)
+      let element = @ffi.create_element(self.tag)
       self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
       for child in self.childrens {
         for elem in to_element(child, sandbox) {
-          element.append_child(elem)
+          element.append_childern(elem)
         }
       }
       for k, v in self.events {
-        @adapter.listen(element, k, fn(e) { v(e) })
+        @ffi.add_event_listener(element, k, fn(e) { v(e) })
       }
       [element]
     }
@@ -73,13 +73,13 @@ pub fn patch[Msg, Model, View](
 ) -> Unit {
   let xs = to_element(self, sandbox)
   let element = if xs.length() != 1 {
-    let element = @adapter.create_element("div")
-    xs.each(fn(x) { element.append_child(x) })
+    let element = @ffi.create_element("div")
+    xs.each(fn(x) { element.append_childern(x) })
     element
   } else {
     xs[0]
   }
-  @adapter.patch(element)
+  @ffi.patch(element)
 }
 
 // pub enum Patch[Msg, Model, View] {

@@ -26,7 +26,7 @@ pub fn update[Msg, Model, View](
   // TODO: 
   // The command may trigger another message immediately, causing the VDOM to be generated twice.
   // We need to optimize this.
-  self.launch(cmd) 
+  self.launch(cmd)
 }
 
 ///| Refresh the view.
