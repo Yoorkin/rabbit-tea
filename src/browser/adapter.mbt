@@ -21,9 +21,12 @@ pub fn update[Msg, Model, View](
 ) -> Unit {
   let (cmd, model) = (self.update)(message, self.model)
   self.model = model
-  self.launch(cmd)
   let view = (self.view)(self.model)
   (self.after_update)(view)
+  // TODO: 
+  // The command may trigger another message immediately, causing the VDOM to be generated twice.
+  // We need to optimize this.
+  self.launch(cmd) 
 }
 
 ///| Refresh the view.
