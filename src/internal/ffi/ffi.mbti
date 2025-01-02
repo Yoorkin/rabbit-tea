@@ -5,9 +5,23 @@ fn create_element(String) -> Element
 
 fn create_text_node(String) -> Element
 
+fn current_url() -> String
+
 fn get_element_by_id(String) -> Element
 
+fn history_go_back() -> Unit
+
+fn history_go_forward() -> Unit
+
+fn load_url(String) -> Unit
+
 fn patch(Element) -> Unit
+
+fn push_url(String) -> Unit
+
+fn reload_url() -> Unit
+
+fn replace_url(String) -> Unit
 
 fn scroll_by(Int, Int) -> Unit
 
