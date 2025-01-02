@@ -1,0 +1,48 @@
+package Yoorkin/rabbit-tea/internal/ffi
+
+// Values
+fn create_element(String) -> Element
+
+fn create_text_node(String) -> Element
+
+fn get_element_by_id(String) -> Element
+
+fn patch(Element) -> Unit
+
+fn scroll_by(Int, Int) -> Unit
+
+fn scroll_to(Int, Int) -> Unit
+
+fn scroll_to_bottom() -> Unit
+
+fn scroll_to_top() -> Unit
+
+// Types and methods
+type Element
+impl Element {
+  add_event_listener(Self, String, (Event) -> Unit) -> Unit
+  append_childern(Self, Self) -> Unit
+  count_childern(Self) -> Int
+  get_childern(Self, Int) -> Self
+  remove_attribute(Self, String) -> Unit
+  remove_childern(Self, Self) -> Unit
+  remove_event_listener(Self, String, (Event) -> Unit) -> Unit
+  scroll_into_view(Self) -> Unit
+  set_attribute(Self, String, String) -> Unit
+  set_childern(Self, Int, Self) -> Unit
+}
+
+type Event
+impl Event {
+  target(Self) -> EventTarget
+}
+
+type EventTarget
+impl EventTarget {
+  value(Self) -> String
+}
+
+// Type aliases
+
+// Traits
+

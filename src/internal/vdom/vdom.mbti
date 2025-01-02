@@ -1,0 +1,27 @@
+package Yoorkin/rabbit-tea/internal/vdom
+
+alias @Yoorkin/rabbit-tea/browser as @browser
+alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
+
+// Values
+const FragmentTag : String = "fragment"
+
+const NothingTag : String = "nothing"
+
+const PlainTextTag : String = "plain-text"
+
+// Types and methods
+pub(all) struct Node {
+  tag : String
+  attrs : Map[String, String]
+  childrens : Array[Node]
+  events : Map[String, (@ffi.Event) -> Unit]
+}
+impl Node {
+  patch[Msg, Model, View](Self, @browser.Sandbox[Msg, Model, View]) -> Unit
+}
+
+// Type aliases
+
+// Traits
+

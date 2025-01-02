@@ -5,7 +5,7 @@ struct Html[M] {
   attrs : Map[String, String]
   tag : String
   childrens : Array[Html[M]]
-  events : Map[String, (@adapter.Event) -> M]
+  events : Map[String, (@ffi.Event) -> M]
 }
 
 ///|
@@ -45,7 +45,7 @@ fn Html::new[M](
   class? : String,
   id? : String,
   optional_attrs~ : Map[String, String?] = {},
-  events~ : Map[String, ((@adapter.Event) -> M)?] = {},
+  events~ : Map[String, ((@ffi.Event) -> M)?] = {},
   childrens : Array[Html[M]]
 ) -> Html[M] {
   optional_attrs["style"] = style.map(fn(x) { String::concat(x, separator=";") })

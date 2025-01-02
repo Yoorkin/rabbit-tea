@@ -1,0 +1,29 @@
+package Yoorkin/rabbit-tea/http
+
+alias @Yoorkin/rabbit-tea/browser as @browser
+
+// Values
+fn delete[M](String, expect~ : Expecting[M]) -> @browser.Command[M]
+
+fn get[M](String, expect~ : Expecting[M]) -> @browser.Command[M]
+
+fn patch[M](String, Body, expect~ : Expecting[M]) -> @browser.Command[M]
+
+fn post[M](String, Body, expect~ : Expecting[M]) -> @browser.Command[M]
+
+// Types and methods
+pub(all) enum Body {
+  Json(Json)
+  Text(String)
+  Empty
+}
+
+pub(all) enum Expecting {
+  Json((Result[Json, String]) -> Msg)
+  Text((Result[String, String]) -> Msg)
+}
+
+// Type aliases
+
+// Traits
+
