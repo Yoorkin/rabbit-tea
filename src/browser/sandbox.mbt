@@ -1,5 +1,5 @@
 ///|
-pub(all) struct Sandbox[Msg, Model, View] {
+struct Sandbox[Msg, Model, View] {
   mut model : Model
   update : (Msg, Model) -> (Command[Msg], Model)
   view : (Model) -> View
