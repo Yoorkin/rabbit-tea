@@ -27,6 +27,32 @@ pub(all) struct Node {
 }
 
 ///|
+impl @pp.Pretty for Node with pretty(node) {
+  @pp.group(
+    @pp.text("<\{node.tag} \{node.attrs}>") +
+    @pp.nest(
+      indent=2,
+      @pp.line + @pp.separate_map(@pp.line, node.childrens, @pp.pretty),
+    ) +
+    @pp.line +
+    @pp.text("</\{node.tag}>"),
+  )
+}
+
+///|
+impl Show for Node with output(node, buf) {
+  buf.write_string(@pp.render(@pp.pretty(node)))
+}
+
+///|
+typealias Nodes = Array[Node]
+
+///| Return a new div node 
+pub fn empty() -> Node {
+  { tag: "div", attrs: {}, childrens: [], events: {} }
+}
+
+///|
 pub const FragmentTag = "fragment"
 
 ///|
@@ -35,51 +61,166 @@ pub const PlainTextTag = "plain-text"
 ///|
 pub const NothingTag = "nothing"
 
-///|
-fn to_element[Msg, Model, View](
-  self : Node,
-  sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> Array[@ffi.Element] {
+///| convert a vdom node to a ffi node
+fn to_node(self : Node) -> @ffi.Node {
   match self.tag {
     FragmentTag => {
-      let xs = []
+      let fragment = @ffi.document().create_document_fragment().to_node()
       for child in self.childrens {
-        xs.append(to_element(child, sandbox))
+        fragment.append_child(child.to_node())
       }
-      xs
+      fragment
     }
-    PlainTextTag => [@ffi.create_text_node(self.attrs["value"].unwrap())]
-    NothingTag => []
+    PlainTextTag =>
+      @ffi.document().create_text_node(self.attrs["value"].unwrap()).to_node()
+    NothingTag => @ffi.document().create_document_fragment().to_node()
     _ => {
-      let element = @ffi.create_element(self.tag)
+      let element = @ffi.document().create_element(self.tag)
       self.attrs.each(fn(k, v) { element.set_attribute(k, v) })
-      for child in self.childrens {
-        for elem in to_element(child, sandbox) {
-          element.append_childern(elem)
-        }
-      }
       for k, v in self.events {
         @ffi.add_event_listener(element, k, fn(e) { v(e) })
       }
-      [element]
+      let node = element.to_node()
+      for child in self.childrens {
+        node.append_child(child.to_node())
+      }
+      node
     }
   }
 }
 
 ///|
-pub fn patch[Msg, Model, View](
-  self : Node,
-  sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> Unit {
-  let xs = to_element(self, sandbox)
-  let element = if xs.length() != 1 {
-    let element = @ffi.create_element("div")
-    xs.each(fn(x) { element.append_childern(x) })
-    element
-  } else {
-    xs[0]
+pub fn patch(self : Node, old : Node, root_id~ : String) -> Unit {
+  let patch = diff(self, old)
+  fn aux(patch : Patch, current : @ffi.Node, offset : Int) -> Unit {
+    match patch {
+      Remove(index) => current.remove_child(current.nth_child(index))
+      InsertBefore(index, vnode) => {
+        let anchor = current.nth_child(index)
+        current.insert_before(vnode.to_node(), anchor)
+      }
+      Append(vnode) => current.append_child(vnode.to_node())
+      Replace(index, vnode) => {
+        let old = current.nth_child(index)
+        current.replace_child(vnode.to_node(), old)
+      }
+      Update(index, attrs, events, patches) => {
+        let node = current.nth_child(index)
+        if patches.length() != 0 {
+          let element = node.to_element()
+          attrs.each(fn(k, v) { element.set_attribute(k, v) })
+          for k, v in events {
+            element.add_event_listener(k, fn(e) { v(e) })
+          }
+          for patch in patches {
+            aux(patch, node, 0)
+          }
+        }
+      }
+    }
   }
-  @ffi.patch(element)
+
+  let root = @ffi.document().get_element_by_id(root_id)
+  aux(patch, root.to_node(), 0)
+}
+
+///|
+enum Patch {
+  Remove(Int) // remove a node
+  InsertBefore(Int, Node) // insert before a node
+  Append(Node) // append a new node to the end
+  Replace(Int, Node) // replace with a new node
+  Update(
+    Int,
+    Map[String, String],
+    Map[String, (@ffi.Event) -> Unit],
+    Array[Patch]
+  ) // patches for it's childrens
+}
+
+///|
+impl @pp.Pretty for Patch with pretty(patch) {
+  match patch {
+    Remove(index) => @pp.text("Remove(\{index})")
+    InsertBefore(index, vnode) =>
+      @pp.text("InsertBefore") +
+      @pp.parens(
+        @pp.nest(
+          @pp.line + @pp.text("\{index},") + @pp.line + @pp.pretty(vnode),
+        ),
+      )
+    Append(vnode) =>
+      @pp.text("Append") + @pp.parens(@pp.nest(@pp.line + @pp.pretty(vnode)))
+    Replace(index, vnode) =>
+      @pp.text("Replace") +
+      @pp.parens(
+        @pp.nest(
+          @pp.line +
+          @pp.pretty(index) +
+          @pp.char(',') +
+          @pp.line +
+          @pp.pretty(vnode),
+        ),
+      )
+    Update(index, attrs, events, patches) =>
+      @pp.text("Update(\{index}, attrs=\{attrs}, events=\{events.size()}, ") +
+      @pp.pretty(patches) +
+      @pp.text(")")
+  }
+}
+
+///|
+impl Show for Patch with output(patch, buf) {
+  buf.write_string(@pp.render(@pp.pretty(patch)))
+}
+
+///|
+pub fn diff(self : Node, old : Node) -> Patch {
+  println("new:\n \{self}\n\nold:\n\{old}")
+  fn neq_events(old, new) {
+    true
+  }
+
+  fn aux(
+    xs : ArrayView[Node],
+    ys : ArrayView[Node],
+    patches : Array[Patch],
+    index
+  ) -> Unit {
+    match (xs, ys) {
+      ([], []) => ()
+      ([], [new, .. as tl]) => {
+        patches.push(Append(new))
+        aux(xs, tl, patches, index + 1)
+      }
+      ([_, .. as tl], []) => {
+        patches.push(Remove(index))
+        aux(tl, ys, patches, index)
+      }
+      ([old, .. as tl1], [new, .. as tl2]) => {
+        if old.tag != new.tag {
+          patches.push(Replace(index, new))
+        } else {
+          let attrs = if old.attrs != new.attrs { new.attrs } else { {} }
+          let events = if neq_events(old.events, new.events) {
+            new.events
+          } else {
+            {}
+          }
+          let sub_patches = []
+          patches.push(Update(index, attrs, events, sub_patches))
+          aux(old.childrens[:], new.childrens[:], sub_patches, 0)
+        }
+        aux(tl1, tl2, patches, index + 1)
+      }
+    }
+  }
+
+  let root_patches = []
+  aux([old][:], [self][:], root_patches, 0)
+  guard let [patch] = root_patches
+  println("diff: \{patch}")
+  patch
 }
 
 // pub enum Patch[Msg, Model, View] {

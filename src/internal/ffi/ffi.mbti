@@ -1,13 +1,9 @@
 package Yoorkin/rabbit-tea/internal/ffi
 
 // Values
-fn create_element(String) -> Element
-
-fn create_text_node(String) -> Element
-
 fn current_url() -> String
 
-fn get_element_by_id(String) -> Element
+fn document() -> Document
 
 fn history_go_back() -> Unit
 
@@ -23,6 +19,8 @@ fn reload_url() -> Unit
 
 fn replace_url(String) -> Unit
 
+fn request_animination_frame(() -> Unit) -> Unit
+
 fn scroll_by(Int, Int) -> Unit
 
 fn scroll_to(Int, Int) -> Unit
@@ -32,6 +30,20 @@ fn scroll_to_bottom() -> Unit
 fn scroll_to_top() -> Unit
 
 // Types and methods
+type Document
+impl Document {
+  create_document_fragment(Self) -> DocumentFragment
+  create_element(Self, String) -> Element
+  create_text_node(Self, String) -> Element
+  get_element_by_id(Self, String) -> Element
+  to_node(Self) -> Node
+}
+
+type DocumentFragment
+impl DocumentFragment {
+  to_node(Self) -> Node
+}
+
 type Element
 impl Element {
   add_event_listener(Self, String, (Event) -> Unit) -> Unit
@@ -43,7 +55,8 @@ impl Element {
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
-  set_childern(Self, Int, Self) -> Unit
+  set_inner_html(Self, String) -> Unit
+  to_node(Self) -> Node
 }
 
 type Event
@@ -54,6 +67,33 @@ impl Event {
 type EventTarget
 impl EventTarget {
   value(Self) -> String
+}
+
+type Node
+impl Node {
+  append_child(Self, Self) -> Unit
+  count_child(Self) -> Int
+  first_child(Self) -> Self
+  insert_before(Self, Self, Self) -> Unit
+  last_child(Self) -> Self
+  next_sibling(Self) -> Self
+  node_name(Self) -> String
+  node_type(Self) -> Int
+  node_value(Self) -> String
+  nth_child(Self, Int) -> Self
+  parent_node(Self) -> Self
+  previous_sibling(Self) -> Self
+  remove_child(Self, Self) -> Unit
+  replace_child(Self, Self, Self) -> Unit
+  to_document(Self) -> Document
+  to_document_fragment(Self) -> DocumentFragment
+  to_element(Self) -> Element
+  to_text(Self) -> Text
+}
+
+type Text
+impl Text {
+  to_node(Self) -> Node
 }
 
 // Type aliases

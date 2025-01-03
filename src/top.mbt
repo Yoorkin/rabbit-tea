@@ -23,11 +23,15 @@ pub fn startup[Model, Message](
   view~ : (Model) -> @html.Html[Message],
   initialize? : Message,
   url_changed? : (@browser.UrlRequest) -> Message,
-  url_request? : (@browser.UrlRequest) -> Message
+  url_request? : (@browser.UrlRequest) -> Message,
+  root_id~ : String = "app"
 ) -> Unit {
+  @ffi.document().get_element_by_id(root_id).set_inner_html("<div></div>")
   let mut sandbox = None
-  fn after_update(html : @html.Html[Message]) {
-    html.to_virtual_dom(sandbox.unwrap()).patch(sandbox.unwrap())
+  fn after_update(html : @html.Html[Message], vdom : @vdom.Node) -> @vdom.Node {
+    let new_vdom = html.to_virtual_dom(sandbox.unwrap())
+    new_vdom.patch(vdom, root_id~)
+    new_vdom
   }
 
   sandbox = Some(
