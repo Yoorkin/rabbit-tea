@@ -10,7 +10,9 @@ pub fn scroll_by_pos[M](x : Int, y : Int) -> Command[M] {
 
 ///|
 pub fn scroll_to[M](element : String) -> Command[M] {
-  fn(_events, update) { @ffi.get_element_by_id(element).scroll_into_view() }
+  fn(_events, update) {
+    @ffi.document().get_element_by_id(element).scroll_into_view()
+  }
 }
 
 ///|

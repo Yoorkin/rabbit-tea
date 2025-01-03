@@ -3,8 +3,9 @@ struct Sandbox[Msg, Model, View] {
   mut model : Model
   update : (Msg, Model) -> (Command[Msg], Model)
   view : (Model) -> View
-  after_update : (View) -> Unit
+  after_update : (View, @vdom.Node) -> @vdom.Node
   attach_to : String
+  mut vdom : @vdom.Node
   mut predefined : PredefinedEvent?
 }
 
@@ -22,7 +23,8 @@ pub fn update[Msg, Model, View](
   let (cmd, model) = (self.update)(message, self.model)
   self.model = model
   let view = (self.view)(self.model)
-  (self.after_update)(view)
+  // update vdom and patch the result to the DOM (the patching happens in the after_update function)
+  self.vdom = (self.after_update)(view, self.vdom)
   // TODO: 
   // The command may trigger another message immediately, causing the VDOM to be generated twice.
   // We need to optimize this.
@@ -33,7 +35,7 @@ pub fn update[Msg, Model, View](
 /// This function will call the view function and patch the result to the DOM.
 pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
   let view = (self.view)(self.model)
-  (self.after_update)(view)
+  self.vdom = (self.after_update)(view, self.vdom)
 }
 
 ///|
@@ -41,7 +43,7 @@ pub fn Sandbox::new[Model, Msg, View](
   model : Model,
   update : (Msg, Model) -> (Command[Msg], Model),
   view : (Model) -> View,
-  after_update~ : (View) -> Unit,
+  after_update~ : (View, @vdom.Node) -> @vdom.Node,
   attach_to~ : String = "app",
   url_changed? : (UrlRequest) -> Msg,
   url_request? : (UrlRequest) -> Msg
@@ -53,6 +55,7 @@ pub fn Sandbox::new[Model, Msg, View](
     after_update,
     attach_to,
     predefined: None,
+    vdom : @vdom.empty()
   }
   let on_url_changed = match url_changed {
     Some(f) => fn(url) { sandbox.update(f(url)) }
