@@ -94,6 +94,21 @@ pub(all) enum Handler[Msg] {
 }
 
 ///|
+impl[Msg] Eq for Handler[Msg] with op_equal(a, b) {
+  false // TODO: implement this
+}
+
+///|
+impl[Msg] Eq for AttrValue[Msg] with op_equal(a, b) {
+  false // TODO: implement this
+}
+
+///|
+impl[Msg] Eq for Attribute[Msg] with op_equal(a, b) {
+  false // TODO: implement this
+}
+
+///|
 pub fn map[A, B](self : Handler[A], f : (A) -> B) -> Handler[B] {
   match self {
     Normal(msg) => Normal(f(msg))
@@ -136,10 +151,10 @@ pub fn style[Msg](key : String, value : String) -> Attribute[Msg] {
 }
 
 ///| Convert virtual DOM to real DOM
-fn to_element[Msg, Model, View](
+fn to_node[Msg, Model, View](
   self : Node[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> Array[@ffi.Element] {
+) -> @ffi.Node {
   // NOTE:
   // In Elm, the sandbox is a spacial type and handled in the runtime. But in Moonbit,
   // the sandbox is just a normal type and handled in the user code. Because any operation
@@ -149,7 +164,7 @@ fn to_element[Msg, Model, View](
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   match self {
     Node(tag, attrs~, childrens~) => {
-      let element = @ffi.create_element(tag)
+      let element = @ffi.document().create_element(tag)
       attrs.each(fn {
         Attribute((event, AttrEvent(handler))) => {
           let cb = match handler {
@@ -199,80 +214,34 @@ fn to_element[Msg, Model, View](
         _ => ()
       }
       for child in childrens {
-        for elem in to_element(child, sandbox) {
-          element.append_childern(elem)
-        }
+        element.to_node().append_child(to_node(child, sandbox))
       }
-      [element]
+      element.to_node()
     }
-    Text(value) => [@ffi.create_text_node(value)]
+    Text(value) => @ffi.document().create_text_node(value).to_node()
     Fragment(childrens) => {
-      let xs = []
+      let node = @ffi.document().create_document_fragment().to_node()
       for child in childrens {
-        xs.append(to_element(child, sandbox))
+        node.append_child(to_node(child, sandbox))
       }
-      xs
+      node
     }
-    Nothing => []
+    Nothing => @ffi.document().create_document_fragment().to_node()
   }
 }
 
 ///|
 pub fn patch[Msg, Model, View](
   self : Node[Msg],
-  sandbox : @adapter.Sandbox[Msg, Model, View]
+  old : Node[Msg],
+  sandbox : @adapter.Sandbox[Msg, Model, View],
+  mount~ : String
 ) -> Unit {
-  let xs = to_element(self, sandbox)
-  let element = if xs.length() != 1 {
-    let element = @ffi.create_element("div")
-    xs.each(fn(x) { element.append_childern(x) })
-    element
-  } else {
-    xs[0]
+  //TODO: diff and patch the virtual DOM
+  let root = @ffi.document().get_element_by_id(mount).to_node()
+  while not(root.first_child().is_null()) {
+    root.remove_child(root.first_child())
   }
-  @ffi.patch(element)
+  root.append_child(self.to_node(sandbox))
 }
 
-// pub enum Patch[Msg, Model, View] {
-//   Remove(Int)
-//   InsertAfter(Int, Node)
-//   Replace(Int, Node)
-//   MutateAttrs(Int, Map[String, String])
-//   MutateEvents(Int, Map[String, () -> Unit])
-// }
-
-// // impl @pp.Pretty for Patch with pretty(p) { @pp.text(p.to_string()) }
-
-// pub fn diff[Msg, Model, View](
-//   self : Node,
-//   other : Node
-// ) -> Array[Patch[Msg, Model, View]] {
-//   let patches = []
-//   fn aux(xs : ArrayView[Node], ys : ArrayView[Node], index) -> Int {
-//     match (xs, ys) {
-//       ([], []) => index - 1
-//       ([], [new, .. as tl]) => {
-//         patches.push(InsertAfter(index, new))
-//         aux(xs, tl, index + 1)
-//       }
-//       ([_, .. as tl], []) => {
-//         patches.push(Remove(index))
-//         aux(tl, ys, index + 1)
-//       }
-//       ([old, .. as tl1], [new, .. as tl2]) => {
-//         if old.tag != new.tag {
-//           patches.push(Replace(index, new))
-//         } else if old.attrs != new.attrs {
-//           patches.push(MutateAttrs(index, new.attrs))
-//         } else if old.attrs != new.attrs {
-//           patches.push(MutateEvents(index, new.events))
-//         }
-//         let index = aux(old.childrens[:], new.childrens[:], index + 1)
-//         aux(tl1, tl2, index + 1)
-//       }
-//     }
-//   }
-
-//   aux([self][:], [other][:], 0) |> ignore()
-//   patches
-// }

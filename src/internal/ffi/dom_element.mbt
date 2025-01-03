@@ -2,26 +2,10 @@
 type Element
 
 ///|
-pub extern "js" fn get_element_by_id(id : String) -> Element = "(id) => document.getElementById(id)"
-
-///|
-pub extern "js" fn create_element(tag : String) -> Element = "(tag) => document.createElement(tag)"
-
-///|
-pub extern "js" fn create_text_node(str : String) -> Element = "(str) => document.createTextNode(str)"
-
-///|
 pub extern "js" fn count_childern(self : Element) -> Int = "(self) => self.children.length"
 
 ///|
 pub extern "js" fn get_childern(self : Element, index : Int) -> Element = "(self) => self.children[index]"
-
-///|
-pub extern "js" fn set_childern(
-  self : Element,
-  index : Int,
-  child : Element
-) -> Unit = "function(self, index, child){self.children[index] = child}"
 
 ///|
 pub extern "js" fn append_childern(self : Element, child : Element) -> Unit = "(self, child) => self.append(child)"
@@ -71,3 +55,6 @@ pub extern "js" fn remove_event_listener(
 
 ///|
 pub extern "js" fn scroll_into_view(self : Element) -> Unit = "(self) => self.scrollIntoView()"
+
+///|
+pub extern "js" fn set_inner_html(self : Element, html : String) -> Unit = "(self,html) => self.innerHTML = html"
