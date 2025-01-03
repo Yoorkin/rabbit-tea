@@ -30,7 +30,7 @@ pub fn startup[Model, Message](
   let mut sandbox = None
   fn after_update(html : @html.Html[Message], vdom : @vdom.Node) -> @vdom.Node {
     let new_vdom = html.to_virtual_dom(sandbox.unwrap())
-    new_vdom.patch(vdom, root_id~)  
+    new_vdom.patch(vdom, root_id~)
     new_vdom
   }
 

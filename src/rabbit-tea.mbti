@@ -8,7 +8,7 @@ fn batch[M](Array[@browser.Command[M]]) -> @browser.Command[M]
 
 fn none[M]() -> @browser.Command[M]
 
-fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message], initialize? : Message, url_changed? : (@browser.UrlRequest) -> Message, url_request? : (@browser.UrlRequest) -> Message) -> Unit
+fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message], initialize? : Message, url_changed? : (@browser.UrlRequest) -> Message, url_request? : (@browser.UrlRequest) -> Message, root_id~ : String = ..) -> Unit
 
 fn task[M](M) -> @browser.Command[M]
 

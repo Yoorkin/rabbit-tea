@@ -1,5 +1,6 @@
 package Yoorkin/rabbit-tea/browser
 
+alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
 alias @Yoorkin/rabbit-tea/url as @url
 
 // Values
@@ -45,7 +46,7 @@ pub(all) struct PredefinedEvent {
 type Sandbox
 impl Sandbox {
   launch[M, Model, View](Self[M, Model, View], Command[M]) -> Unit
-  new[Model, Msg, View](Model, (Msg, Model) -> (Command[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, attach_to~ : String = .., url_changed? : (UrlRequest) -> Msg, url_request? : (UrlRequest) -> Msg) -> Self[Msg, Model, View]
+  new[Model, Msg, View](Model, (Msg, Model) -> (Command[Msg], Model), (Model) -> View, after_update~ : (View, @vdom.Node) -> @vdom.Node, attach_to~ : String = .., url_changed? : (UrlRequest) -> Msg, url_request? : (UrlRequest) -> Msg) -> Self[Msg, Model, View]
   refersh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
   update[Msg, Model, View](Self[Msg, Model, View], Msg) -> Unit
 }

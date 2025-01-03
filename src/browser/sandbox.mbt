@@ -55,7 +55,7 @@ pub fn Sandbox::new[Model, Msg, View](
     after_update,
     attach_to,
     predefined: None,
-    vdom : @vdom.empty()
+    vdom: @vdom.empty(),
   }
   let on_url_changed = match url_changed {
     Some(f) => fn(url) { sandbox.update(f(url)) }

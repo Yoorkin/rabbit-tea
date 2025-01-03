@@ -1,6 +1,5 @@
 package Yoorkin/rabbit-tea/internal/vdom
 
-alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
 
 // Values
@@ -10,6 +9,8 @@ const NothingTag : String = "nothing"
 
 const PlainTextTag : String = "plain-text"
 
+fn empty() -> Node
+
 // Types and methods
 pub(all) struct Node {
   tag : String
@@ -18,8 +19,11 @@ pub(all) struct Node {
   events : Map[String, (@ffi.Event) -> Unit]
 }
 impl Node {
-  patch[Msg, Model, View](Self, @browser.Sandbox[Msg, Model, View]) -> Unit
+  diff(Self, Self) -> Patch
+  patch(Self, Self, root_id~ : String) -> Unit
 }
+
+type Patch
 
 // Type aliases
 
