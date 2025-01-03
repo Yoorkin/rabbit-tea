@@ -195,7 +195,7 @@ pub fn diff(self : Node, old : Node) -> Patch {
       }
       ([_, .. as tl], []) => {
         patches.push(Remove(index))
-        aux(tl, ys, patches, index + 1)
+        aux(tl, ys, patches, index)
       }
       ([old, .. as tl1], [new, .. as tl2]) => {
         if old.tag != new.tag {
