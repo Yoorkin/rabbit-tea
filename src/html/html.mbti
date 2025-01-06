@@ -68,6 +68,8 @@ fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M
 
 fn pre[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
+fn section[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+
 fn span[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn strong[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
