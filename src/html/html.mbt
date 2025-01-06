@@ -228,6 +228,16 @@ pub fn blockquote[M](
   new("blockquote", {}, style~, class?, id?, childrens)
 }
 
+///|
+pub fn section[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  new("section", {}, style~, class?, id?, childrens)
+}
+
 // ---- text ----
 
 ///|
