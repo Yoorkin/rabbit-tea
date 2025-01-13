@@ -244,4 +244,3 @@ pub fn patch[Msg, Model, View](
   }
   root.append_child(self.to_node(sandbox))
 }
-

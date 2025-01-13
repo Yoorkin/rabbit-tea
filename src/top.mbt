@@ -35,7 +35,6 @@ pub fn startup[Model, Message](
 ) -> Unit {
   @ffi.document().get_element_by_id(mount).set_inner_html("<div></div>")
   let mut sandbox = None
-
   let mut curr_dom = @vdom.fragment([])
   fn after_update(html : @html.Html[Message]) {
     guard let Some(sandbox) = sandbox

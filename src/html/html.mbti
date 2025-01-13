@@ -120,7 +120,7 @@ pub(all) enum AutoComplete {
   Off
 }
 
-type Html
+pub type Html @vdom.Node[Msg]
 impl Html {
   map[A, B](Self[A], (A) -> B) -> Self[B]
   to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node[Msg]

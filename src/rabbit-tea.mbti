@@ -5,13 +5,13 @@ alias @Yoorkin/rabbit-tea/html as @html
 alias @Yoorkin/rabbit-tea/url as @url
 
 // Values
-fn application[Model, Msg](initialize~ : (@url.Url) -> (@browser.Command[Msg], Model), update~ : (Msg, Model) -> (@browser.Command[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@browser.UrlRequest) -> Msg) -> Unit
+fn application[Model, Msg](initialize~ : (@url.Url) -> (@browser.Command[Msg], Model), update~ : (Msg, Model) -> (@browser.Command[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@browser.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
 
 fn batch[M](Array[@browser.Command[M]]) -> @browser.Command[M]
 
 fn none[M]() -> @browser.Command[M]
 
-fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message]) -> Unit
+fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message], mount~ : String) -> Unit
 
 fn task[M](M) -> @browser.Command[M]
 
