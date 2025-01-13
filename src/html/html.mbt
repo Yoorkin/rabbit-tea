@@ -1,91 +1,81 @@
-/// TODO: struct creation should pop up a completion of labels
+///| TODO: struct creation should pop up a completion of labels
+type Html[Msg] @vdom.Node[Msg]
 
-///|
-struct Html[M] {
-  attrs : Map[String, String]
-  tag : String
-  childrens : Array[Html[M]]
-  events : Map[String, (@ffi.Event) -> M]
-}
-
-///|
+///| Convert msg type of Html.
+/// 
+/// This is a expensive operation and should be used rarely.
 pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
-  let { attrs, tag, childrens, events } = self
-  let childrens = childrens.map(fn(x) { x.map(f) })
-  let events = events
-    .iter()
-    .map(fn { (name, callback) => (name, fn(e) { f(callback(e)) }) })
-    .collect()
-    |> Map::from_array
-  { attrs, tag, childrens, events }
+  self._.map(f)
 }
 
 ///|
 pub fn to_virtual_dom[Msg, Model, View](
   self : Html[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> @vdom.Node {
-  {
-    tag: self.tag,
-    attrs: self.attrs,
-    childrens: self.childrens.map(fn(x) { x.to_virtual_dom(sandbox) }),
-    events: self.events
-    .iter()
-    .map(fn { (k, v) => (k, fn(event) { sandbox.update(v(event)) }) })
-    .collect()
-    |> Map::from_array,
-  }
+) -> @vdom.Node[Msg] {
+  self._
 }
 
 ///|
-fn Html::new[M](
+fn Html::new[Msg](
   tag : String,
   attrs : Map[String, String],
   style? : Array[String],
   class? : String,
   id? : String,
   optional_attrs~ : Map[String, String?] = {},
-  events~ : Map[String, ((@ffi.Event) -> M)?] = {},
-  childrens : Array[Html[M]]
-) -> Html[M] {
-  optional_attrs["style"] = style.map(fn(x) { String::concat(x, separator=";") })
-  optional_attrs["class"] = class
-  optional_attrs.each(fn(k, v) {
-    match v {
-      Some(v) => attrs[k] = v
-      None => ()
-    }
+  attributes~ : Array[Attribute[Msg]] = [],
+  optional_attributes~ : Array[Attribute[Msg]?] = [],
+  events~ : Map[String, Msg?] = {},
+  childrens : Array[Html[Msg]]
+) -> Html[Msg] {
+  let attrs = attrs.to_array().map(fn(p) { attribute(p.0, p.1) })
+  attrs.push_iter(attributes.iter())
+  optional_attributes.each(fn {
+    Some(attr) => attrs.push(attr)
+    None => ()
   })
-  match id {
-    Some(id) => attrs["id"] = id
+  optional_attrs.each(fn {
+    k, Some(v) => attrs.push(attribute(k, v))
+    _, None => ()
+  })
+  match style {
+    Some(style) =>
+      attrs.push(attribute("style", String::concat(style, separator=";")))
     None => ()
   }
-  let events = events
-    .iter()
-    .fold(init={}, fn {
-      acc, (k, Some(v)) => acc..op_set(k, v)
-      acc, (_, None) => acc
-    })
-  { attrs, tag, childrens, events }
+  match class {
+    Some(class) => attrs.push(attribute("class", class))
+    None => ()
+  }
+  match id {
+    Some(id) => attrs.push(attribute("id", id))
+    None => ()
+  }
+  events.each(fn {
+    k, Some(v) => attrs.push(@vdom.on(k, Normal(v)))
+    _, None => ()
+  })
+  node(tag, attrs, childrens)
 }
 
 ///| 
-pub fn node[M](
-  tag~ : String,
-  attributes~ : Map[String, String] = Map::new(),
-  childrens : Array[Html[M]]
-) -> Html[M] {
-  { tag, attrs: attributes, childrens, events: Map::new() }
+pub fn node[Msg](
+  tag : String,
+  attributes : Array[Attribute[Msg]],
+  childrens : Array[Html[Msg]]
+) -> Html[Msg] {
+  @vdom.node(tag, attributes.map(fn(x) { x._ }), childrens.map(fn(x) { x._ }))
 }
 
 ///| Represents an empty element
 pub fn nothing[M]() -> Html[M] {
-  new(@vdom.NothingTag, {}, [])
+  @vdom.nothing()
 }
 
 ///| Represents a fragment of elements, useful for grouping elements without adding an extra div
 pub fn fragment[M](childrens : Array[Html[M]]) -> Html[M] {
-  new(@vdom.FragmentTag, {}, childrens)
+  @vdom.fragment(childrens.map(fn(x) { x._ }))
 }
 
 ///|
@@ -102,7 +92,7 @@ pub fn button[M](
     style~,
     class?,
     id?,
-    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+    events={ "click": click.map(fn(m) { m }) },
     childrens,
   )
 }
@@ -183,7 +173,7 @@ pub fn div[M](
     style~,
     class?,
     id?,
-    events={ "click": click.map(fn(m) { fn(_event) { m } }) },
+    events={ "click": click.map(fn(m) { m }) },
     childrens,
   )
 }
@@ -251,12 +241,6 @@ pub fn span[M](
 }
 
 ///|
-pub(all) enum Target {
-  Self
-  Blank
-}
-
-///|
 pub fn a[M](
   style~ : Array[String] = [],
   id? : String,
@@ -265,11 +249,9 @@ pub fn a[M](
   target~ : Target = Self,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  let target = match target {
-    Self => "_self"
-    Blank => "_blank"
-  }
-  new("a", { "target": target, "href": href }, style~, class?, id?, childrens)
+  new("a", { "href": href }, style~, class?, id?, childrens, attributes=[
+    attribute("target", target.to_string()),
+  ])
 }
 
 ///|
@@ -353,8 +335,8 @@ pub fn sup[M](
 }
 
 ///|
-pub fn text[M](str : String) -> Html[M] {
-  new(@vdom.PlainTextTag, { "value": str }, [])
+pub fn text[Msg](str : String) -> Html[Msg] {
+  @vdom.text(str)
 }
 
 // ---- lists ----
@@ -368,7 +350,7 @@ pub fn ul[M](
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("ul", {}, style~, class?, id?, childrens, events={
-    "click": click.map(fn(m) { fn(_event) { m } }),
+    "click": click.map(fn(m) { m }),
   })
 }
 
@@ -391,7 +373,7 @@ pub fn li[M](
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new("li", {}, style~, class?, id?, childrens, events={
-    "click": click.map(fn(m) { fn(_event) { m } }),
+    "click": click.map(fn(m) { m }),
   })
 }
 
@@ -642,9 +624,7 @@ pub fn input[M](
       "accept": accept,
       "placeholder": placeholder,
     },
-    events={
-      "change": change.map(fn(m) { fn(event) { m(event.target().value()) } }),
-    },
+    optional_attributes=[change.map(on_change)],
     style~,
     class?,
     childrens,

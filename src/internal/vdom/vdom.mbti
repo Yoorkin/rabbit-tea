@@ -4,21 +4,44 @@ alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
 
 // Values
-const FragmentTag : String = "fragment"
+fn attribute[Msg](String, String) -> Attribute[Msg]
 
-const NothingTag : String = "nothing"
+fn fragment[Msg](Array[Node[Msg]]) -> Node[Msg]
 
-const PlainTextTag : String = "plain-text"
+fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
+
+fn nothing[Msg]() -> Node[Msg]
+
+fn on[Msg](String, Handler[Msg]) -> Attribute[Msg]
+
+fn property[Msg](String, String) -> Attribute[Msg]
+
+fn style[Msg](String, String) -> Attribute[Msg]
+
+fn text[Msg](String) -> Node[Msg]
 
 // Types and methods
-pub(all) struct Node {
-  tag : String
-  attrs : Map[String, String]
-  childrens : Array[Node]
-  events : Map[String, (@ffi.Event) -> Unit]
+type AttrValue
+
+type Attribute
+impl Attribute {
+  map[A, B](Self[A], (A) -> B) -> Self[B]
 }
+
+pub(all) enum Handler {
+  Normal(Msg)
+  HandleEvent((@ffi.Event) -> Msg)
+  TriggerUrlChange(String)
+  Custom(Msg, Bool, Bool)
+}
+impl Handler {
+  map[A, B](Self[A], (A) -> B) -> Self[B]
+}
+
+type Node
 impl Node {
-  patch[Msg, Model, View](Self, @browser.Sandbox[Msg, Model, View]) -> Unit
+  map[A, B](Self[A], (A) -> B) -> Self[B]
+  patch[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> Unit
 }
 
 // Type aliases

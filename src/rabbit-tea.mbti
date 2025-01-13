@@ -2,13 +2,14 @@ package Yoorkin/rabbit-tea
 
 alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/html as @html
+alias @Yoorkin/rabbit-tea/url as @url
 
 // Values
 fn batch[M](Array[@browser.Command[M]]) -> @browser.Command[M]
 
 fn none[M]() -> @browser.Command[M]
 
-fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message], initialize? : Message, url_changed? : (@browser.UrlRequest) -> Message, url_request? : (@browser.UrlRequest) -> Message) -> Unit
+fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.Html[Message], initialize? : Message, url_changed? : (@url.Url) -> Message, url_request? : (@browser.UrlRequest) -> Message) -> Unit
 
 fn task[M](M) -> @browser.Command[M]
 

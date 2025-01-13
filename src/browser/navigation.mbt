@@ -1,7 +1,7 @@
 ///|
 pub(all) enum UrlRequest {
   Internal(@url.Url)
-  External(@url.Url)
+  External(String)
 } derive(Show, Eq, Compare)
 
 ///|
@@ -28,8 +28,7 @@ pub fn reload[M]() -> Command[M] {
 pub fn push_url[M](url : String) -> Command[M] {
   fn(events, update) {
     @ffi.push_url(url)
-    let request = Internal(@url.parse(url))
-    (events.on_url_changed)(request)
+    (events.on_url_changed)(@url.parse(url))
   }
 }
 
@@ -37,7 +36,6 @@ pub fn push_url[M](url : String) -> Command[M] {
 pub fn replace_url[M](url : String) -> Command[M] {
   fn(events, update) {
     @ffi.replace_url(url)
-    let request = Internal(@url.parse(url))
-    (events.on_url_changed)(request)
+    (events.on_url_changed)(@url.parse(url))
   }
 }

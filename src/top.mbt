@@ -22,7 +22,7 @@ pub fn startup[Model, Message](
   update~ : (Message, Model) -> (Command[Message], Model),
   view~ : (Model) -> @html.Html[Message],
   initialize? : Message,
-  url_changed? : (@browser.UrlRequest) -> Message,
+  url_changed? : (@url.Url) -> Message,
   url_request? : (@browser.UrlRequest) -> Message
 ) -> Unit {
   let mut sandbox = None

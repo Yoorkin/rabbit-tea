@@ -5,13 +5,39 @@ struct Sandbox[Msg, Model, View] {
   view : (Model) -> View
   after_update : (View) -> Unit
   attach_to : String
+  on_url_changed : ((@url.Url) -> Msg)?
+  on_url_request : ((UrlRequest) -> Msg)?
   mut predefined : PredefinedEvent?
 }
 
-///|
+///| 
+// used by vdom
 pub(all) struct PredefinedEvent {
-  on_url_changed : (UrlRequest) -> Unit
+  on_url_changed : (@url.Url) -> Unit
   on_url_request : (UrlRequest) -> Unit
+}
+
+///|
+// used by vdom
+pub fn get_predefined_event[Msg, Model, View](
+  self : Sandbox[Msg, Model, View]
+) -> PredefinedEvent {
+  self.predefined.unwrap()
+}
+
+///|
+// used by vdom
+pub fn get_on_url_changed[Msg, Model, View](
+  self : Sandbox[Msg, Model, View]
+) -> ((@url.Url) -> Msg)? {
+  self.on_url_changed
+}
+
+///|
+pub fn get_on_url_request[Msg, Model, View](
+  self : Sandbox[Msg, Model, View]
+) -> ((UrlRequest) -> Msg)? {
+  self.on_url_request
 }
 
 ///| Update the model and launch commands.
@@ -43,7 +69,7 @@ pub fn Sandbox::new[Model, Msg, View](
   view : (Model) -> View,
   after_update~ : (View) -> Unit,
   attach_to~ : String = "app",
-  url_changed? : (UrlRequest) -> Msg,
+  url_changed? : (@url.Url) -> Msg,
   url_request? : (UrlRequest) -> Msg
 ) -> Sandbox[Msg, Model, View] {
   let sandbox = {
@@ -52,6 +78,8 @@ pub fn Sandbox::new[Model, Msg, View](
     view,
     after_update,
     attach_to,
+    on_url_changed: url_changed,
+    on_url_request: url_request,
     predefined: None,
   }
   let on_url_changed = match url_changed {
