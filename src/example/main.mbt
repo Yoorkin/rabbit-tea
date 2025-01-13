@@ -124,7 +124,12 @@ fn view(model : Model) -> @html.Html[Message] {
 }
 
 ///|
+fn initialize(url : @url.Url) -> (@tea.Command[Message], Model) {
+  (@tea.task(RefreshList), Home([]))
+}
+
+///|
 fn main {
   let model = Home([Card("Refershing", id=0)])
-  @tea.startup(model~, update~, view~, initialize=RefreshList)
+  @tea.application(initialize~, update~, view~)
 }

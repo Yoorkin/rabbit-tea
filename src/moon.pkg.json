@@ -3,6 +3,7 @@
     "Yoorkin/rabbit-tea/html",
     "Yoorkin/rabbit-tea/internal/vdom",
     "Yoorkin/rabbit-tea/browser",
-    "Yoorkin/rabbit-tea/url"
+    "Yoorkin/rabbit-tea/url",
+    "Yoorkin/rabbit-tea/internal/ffi"
   ]
 }
