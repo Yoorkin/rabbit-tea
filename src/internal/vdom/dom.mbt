@@ -185,8 +185,8 @@ fn to_element[Msg, Model, View](
           element.add_event_listener("click", fn(event) {
             event.prevent_default()
             let href = element.get_property("href")
-            let curr = @url.parse(@ffi.current_url())
-            let next = @url.parse(href)
+            guard let Ok(curr) = @url.parse?(@ffi.current_url())
+            guard let Ok(next) = @url.parse?(href)
             let request = if curr.protocol == next.protocol &&
               curr.host == next.host &&
               curr.port == next.port {
