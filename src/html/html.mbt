@@ -1,5 +1,5 @@
 ///| TODO: struct creation should pop up a completion of labels
-type Html[Msg] @vdom.Node[Msg]
+pub type Html[Msg] @vdom.Node[Msg]
 
 ///| Convert msg type of Html.
 /// 

@@ -41,7 +41,7 @@ impl Handler {
 type Node
 impl Node {
   map[A, B](Self[A], (A) -> B) -> Self[B]
-  patch[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> Unit
+  patch[Msg, Model, View](Self[Msg], Self[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 }
 
 // Type aliases

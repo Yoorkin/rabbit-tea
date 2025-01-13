@@ -41,3 +41,6 @@ pub extern "js" fn current_url() -> String =
 ///|
 pub extern "js" fn replace_url(url : String) =
   #| (url) => { window.history.replaceState(null, '', url); }
+
+///|
+pub extern "js" fn request_animination_frame(f : () -> Unit) = "(f) => { window.requestAnimationFrame(f); }"

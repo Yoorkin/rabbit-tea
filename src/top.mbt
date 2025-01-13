@@ -30,12 +30,17 @@ pub fn task[M](message : M) -> Command[M] {
 pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
-  view~ : (Model) -> @html.Html[Message]
+  view~ : (Model) -> @html.Html[Message],
+  mount~ : String
 ) -> Unit {
+  @ffi.document().get_element_by_id(mount).set_inner_html("<div></div>")
   let mut sandbox = None
+  let mut curr_dom = @vdom.fragment([])
   fn after_update(html : @html.Html[Message]) {
     guard let Some(sandbox) = sandbox
-    html.to_virtual_dom(sandbox).patch(sandbox)
+    let new_dom = html.to_virtual_dom(sandbox)
+    new_dom.patch(curr_dom, sandbox, mount~)
+    curr_dom = new_dom
   }
 
   sandbox = Some(@browser.new(model, update, view, after_update~))
@@ -53,12 +58,16 @@ pub fn application[Model, Msg](
   update~ : (Msg, Model) -> (Command[Msg], Model),
   view~ : (Model) -> @html.Html[Msg],
   url_changed? : (@url.Url) -> Msg,
-  url_request? : (@browser.UrlRequest) -> Msg
+  url_request? : (@browser.UrlRequest) -> Msg,
+  mount~ : String = "app"
 ) -> Unit {
   let mut sandbox = None
+  let mut curr_dom = @vdom.fragment([])
   fn after_update(html : @html.Html[Msg]) {
     guard let Some(sandbox) = sandbox
-    html.to_virtual_dom(sandbox).patch(sandbox)
+    let new_dom = html.to_virtual_dom(sandbox)
+    new_dom.patch(curr_dom, sandbox, mount~)
+    curr_dom = new_dom
   }
 
   guard let Ok(url) = @url.parse?(@ffi.current_url())
