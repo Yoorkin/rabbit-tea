@@ -36,6 +36,22 @@ pub extern "js" fn set_attribute(
   value : String
 ) -> Unit = "(self,attr,value) => self.setAttribute(attr, value)"
 
+///| 
+pub extern "js" fn set_property(self : Element, prop : String, value : String) = "(self,prop,value) => self[prop] = value"
+
+///|
+pub extern "js" fn get_property(self : Element, prop : String) -> String = "(self,prop) => self[prop]"
+
+///|
+pub extern "js" fn get_attribute(self : Element, attr : String) -> String = "(self,attr) => self.getAttribute(attr)"
+
+///|
+pub extern "js" fn set_style(
+  self : Element,
+  key : String,
+  value : String
+) -> Unit = "(self,key,value) => self.style[key] = value"
+
 ///|
 pub extern "js" fn remove_attribute(self : Element, attr : String) -> Unit = "(self,attr) => self.removeAttribute(attr)"
 

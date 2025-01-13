@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -30,6 +30,13 @@ let cards = [
 // GET /api/cards - Retrieve all cards
 app.get('/api/cards', (req, res) => {
     res.json({ cards: cards });
+});
+
+// GET /api/cards/:id - Retrieve all cards
+app.get('/api/cards/:id', (req, res) => {
+    const cardId = parseInt(req.params.id, 10);
+    const cardIndex = cards.findIndex(card => card.id === cardId);
+    res.json(cards[cardIndex]);
 });
 
 // POST /api/cards - Create a new card

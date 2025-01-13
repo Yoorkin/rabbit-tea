@@ -6,6 +6,8 @@ alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
 // Values
 fn a[M](style~ : Array[String] = .., id? : String, class? : String, href~ : String, target~ : Target = .., Array[Html[M]]) -> Html[M]
 
+fn attribute[Msg](String, String) -> Attribute[Msg]
+
 fn b[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn blockquote[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
@@ -46,6 +48,8 @@ fn h6[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 
 fn hr[M](style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[Html[M]] = ..) -> Html[M]
 
+fn href[Msg](String) -> Attribute[Msg]
+
 fn i[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int) -> Html[M]
@@ -58,11 +62,31 @@ fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : 
 
 fn li[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
 
-fn node[M](tag~ : String, attributes~ : Map[String, String] = .., Array[Html[M]]) -> Html[M]
+fn node[Msg](String, Array[Attribute[Msg]], Array[Html[Msg]]) -> Html[Msg]
 
 fn nothing[M]() -> Html[M]
 
 fn ol[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+
+fn on_change[Msg]((String) -> Msg) -> Attribute[Msg]
+
+fn on_click[Msg](Msg) -> Attribute[Msg]
+
+fn on_double_click[Msg](Msg) -> Attribute[Msg]
+
+fn on_input[Msg]((String) -> Msg) -> Attribute[Msg]
+
+fn on_mouse_down[Msg](Msg) -> Attribute[Msg]
+
+fn on_mouse_enter[Msg](Msg) -> Attribute[Msg]
+
+fn on_mouse_leave[Msg](Msg) -> Attribute[Msg]
+
+fn on_mouse_out[Msg](Msg) -> Attribute[Msg]
+
+fn on_mouse_over[Msg](Msg) -> Attribute[Msg]
+
+fn on_mouse_up[Msg](Msg) -> Attribute[Msg]
 
 fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
@@ -74,17 +98,23 @@ fn span[M](style~ : Array[String] = .., id? : String, class? : String, Array[Htm
 
 fn strong[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
+fn style[Msg](String, String) -> Attribute[Msg]
+
 fn sub[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn sup[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
-fn text[M](String) -> Html[M]
+fn target[Msg](Target) -> Attribute[Msg]
+
+fn text[Msg](String) -> Html[Msg]
 
 fn u[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn ul[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
 
 // Types and methods
+type Attribute
+
 pub(all) enum AutoComplete {
   On
   Off
@@ -93,7 +123,7 @@ pub(all) enum AutoComplete {
 type Html
 impl Html {
   map[A, B](Self[A], (A) -> B) -> Self[B]
-  to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node
+  to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node[Msg]
 }
 
 pub(all) enum InputType {

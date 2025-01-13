@@ -5,7 +5,7 @@ pub(all) type Command[M] (PredefinedEvent, (M) -> Unit) -> Unit
 pub fn map[A, B](self : Command[A], f : (A) -> B) -> Command[B] {
   Command(fn(predef, update) {
     let update = fn(msg) { update(f(msg)) }
-    guard let Command(f) = self
+    let Command(f) = self
     f(predef, update)
   })
 }

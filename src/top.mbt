@@ -17,25 +17,54 @@ pub fn task[M](message : M) -> Command[M] {
 }
 
 ///| Start the application.
+/// 
+/// - `model` is the state of your application.
+/// - `view` is a way to turn your model into HTML.
+/// - `update` a way to update your state based on messages.
+/// 
+/// These three are the core of the TEA. Rabbit-TEA is highly unstable at this time, 
+/// but it follows the same pattern as Elm. You can visit https://guide.elm-lang.org/ 
+/// to get more intuition!
+/// 
+/// To start the application with router, you can use the `application` function.
 pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
-  view~ : (Model) -> @html.Html[Message],
-  initialize? : Message,
-  url_changed? : (@browser.UrlRequest) -> Message,
-  url_request? : (@browser.UrlRequest) -> Message
+  view~ : (Model) -> @html.Html[Message]
 ) -> Unit {
   let mut sandbox = None
   fn after_update(html : @html.Html[Message]) {
-    html.to_virtual_dom(sandbox.unwrap()).patch(sandbox.unwrap())
+    guard let Some(sandbox) = sandbox
+    html.to_virtual_dom(sandbox).patch(sandbox)
   }
 
-  sandbox = Some(
-    @browser.new(model, update, view, after_update~, url_changed?, url_request?),
-  )
-  match initialize {
-    Some(msg) => sandbox.unwrap().update(msg)
-    _ => ()
-  }
+  sandbox = Some(@browser.new(model, update, view, after_update~))
   sandbox.unwrap().refersh()
+}
+
+///| Start the application with initial URL. 
+/// 
+/// - `url_changed` is a message that will be passed when the URL is changed by the navigation API in the `@browser` package.
+/// - `url_request` is a message that will be passed when an `<a>` tag is clicked.
+/// - `initialize` will be called when the application is started. 
+/// 
+pub fn application[Model, Msg](
+  initialize~ : (@url.Url) -> (Command[Msg], Model),
+  update~ : (Msg, Model) -> (Command[Msg], Model),
+  view~ : (Model) -> @html.Html[Msg],
+  url_changed? : (@url.Url) -> Msg,
+  url_request? : (@browser.UrlRequest) -> Msg
+) -> Unit {
+  let mut sandbox = None
+  fn after_update(html : @html.Html[Msg]) {
+    guard let Some(sandbox) = sandbox
+    html.to_virtual_dom(sandbox).patch(sandbox)
+  }
+
+  guard let Ok(url) = @url.parse?(@ffi.current_url())
+  let (cmd, model) = initialize(url)
+  sandbox = Some(
+    @browser.new(model, update, view, after_update~, url_request?, url_changed?),
+  )
+  sandbox.unwrap().launch(cmd)
 }

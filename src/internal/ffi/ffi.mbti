@@ -37,17 +37,23 @@ impl Element {
   add_event_listener(Self, String, (Event) -> Unit) -> Unit
   append_childern(Self, Self) -> Unit
   count_childern(Self) -> Int
+  get_attribute(Self, String) -> String
   get_childern(Self, Int) -> Self
+  get_property(Self, String) -> String
   remove_attribute(Self, String) -> Unit
   remove_childern(Self, Self) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
   set_childern(Self, Int, Self) -> Unit
+  set_property(Self, String, String) -> Unit
+  set_style(Self, String, String) -> Unit
 }
 
 type Event
 impl Event {
+  prevent_default(Self) -> Unit
+  stop_propagation(Self) -> Unit
   target(Self) -> EventTarget
 }
 
