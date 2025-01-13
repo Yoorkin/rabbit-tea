@@ -5,13 +5,17 @@ type Element
 pub extern "js" fn count_childern(self : Element) -> Int = "(self) => self.children.length"
 
 ///|
-pub extern "js" fn get_childern(self : Element, index : Int) -> Element = "(self) => self.children[index]"
+pub extern "js" fn get_childern(self : Element, index : Int) -> Element = "(self, index) => self.children[index]"
 
 ///|
 pub extern "js" fn append_childern(self : Element, child : Element) -> Unit = "(self, child) => self.append(child)"
 
 ///|
 pub extern "js" fn remove_childern(self : Element, child : Element) -> Unit = " (self,child) => self.remove(child) "
+
+// NOTE: The DOM tree also includes the TEXT_NODE, which is not an element.
+// Therefore, a vdom patch algorithm should not be based on the ffi above.
+// https://dom.spec.whatwg.org/#ref-for-dom-node-nodetype%E2%91%A0
 
 ///|
 pub extern "js" fn set_attribute(
