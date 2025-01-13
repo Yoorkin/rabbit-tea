@@ -1,5 +1,4 @@
 {
-    "is-main": true,
     "import": [
       {
         "path": "Yoorkin/rabbit-tea",
@@ -10,7 +9,6 @@
       "Yoorkin/rabbit-tea/internal/vdom",
       "Yoorkin/rabbit-tea/browser",
       "Yoorkin/rabbit-tea/url",
-      "Yoorkin/rabbit-tea/example/home",
-      "Yoorkin/rabbit-tea/example/editor"
+      "Yoorkin/rabbit-tea/example/views"
     ]
 }
