@@ -1,7 +1,7 @@
 package Yoorkin/rabbit-tea/url
 
 // Values
-fn parse(String) -> Url
+fn parse(String) -> Url!
 
 // Types and methods
 pub(all) enum Protocol {
