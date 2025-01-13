@@ -237,10 +237,93 @@ pub fn patch[Msg, Model, View](
   sandbox : @adapter.Sandbox[Msg, Model, View],
   mount~ : String
 ) -> Unit {
-  //TODO: diff and patch the virtual DOM
-  let root = @ffi.document().get_element_by_id(mount).to_node()
-  while not(root.first_child().is_null()) {
-    root.remove_child(root.first_child())
+  let patch = diff(self, old)
+  fn aux(patch : Patch[Msg], current : @ffi.Node, offset : Int) -> Unit {
+    match patch {
+      Remove(index) => current.remove_child(current.nth_child(index))
+      InsertBefore(index, vnode) => {
+        let anchor = current.nth_child(index)
+        let vdoms = vnode.to_node(sandbox)
+        current.insert_before(vnode.to_node(sandbox), anchor)
+      }
+      Append(vnode) => current.append_child(vnode.to_node(sandbox))
+      Replace(index, vnode) => {
+        let old = current.nth_child(index)
+        current.replace_child(vnode.to_node(sandbox), old)
+      }
+      Update(index, attrs, patches) => {
+        let node = current.nth_child(index)
+        if patches.length() != 0 {
+          let element = node.to_element()
+          //TODO: Update attributes
+          for patch in patches {
+            aux(patch, node, 0)
+          }
+        }
+      }
+    }
   }
-  root.append_child(self.to_node(sandbox))
+
+  let root = @ffi.document().get_element_by_id(mount).to_node()
+  aux(patch, root, 0)
+}
+
+///|
+pub fn diff[Msg](self : Node[Msg], old : Node[Msg]) -> Patch[Msg] {
+  fn aux(
+    xs : ArrayView[Node[Msg]],
+    ys : ArrayView[Node[Msg]],
+    patches : Array[Patch[Msg]],
+    index
+  ) -> Unit {
+    match (xs, ys) {
+      ([], []) => ()
+      ([], [new, .. as tl]) => {
+        patches.push(Append(new))
+        aux(xs, tl, patches, index + 1)
+      }
+      ([_, .. as tl], []) => {
+        patches.push(Remove(index))
+        aux(tl, ys, patches, index)
+      }
+      ([old, .. as tl1], [new, .. as tl2]) =>
+        match (old, new) {
+          (
+            Node(tag1, attrs=attrs1, childrens=childrens1),
+            Node(tag2, attrs=attrs2, childrens=childrens2),
+          ) => {
+            // TODO: compare attributes
+            let attrs = if attrs1 != attrs2 { attrs2 } else { [] }
+            let sub_patches = []
+            patches.push(Update(index, [], sub_patches))
+            aux(childrens1[:], childrens2[:], sub_patches, index)
+          }
+          (Text(value1), Text(value2)) =>
+            if value1 != value2 {
+              patches.push(Replace(index, new))
+            }
+          (Fragment(childrens1), Fragment(childrens2)) => {
+            let sub_patches = []
+            patches.push(Update(index, [], sub_patches))
+            aux(childrens1[:], childrens2[:], sub_patches, index)
+          }
+          (Nothing, Nothing) => ()
+          (_, _) => patches.push(Replace(index, new))
+        }
+    }
+  }
+
+  let root_patches = []
+  aux([old][:], [self][:], root_patches, 0)
+  guard let [patch] = root_patches
+  patch
+}
+
+///|
+enum Patch[Msg] {
+  Remove(Int) // remove a node
+  InsertBefore(Int, Node[Msg]) // insert before a node
+  Append(Node[Msg]) // append a new node to the end
+  Replace(Int, Node[Msg]) // replace with a new node
+  Update(Int, Array[Attribute[Msg]], Array[Patch[Msg]]) // patches for it's childrens
 }
