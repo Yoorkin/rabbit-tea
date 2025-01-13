@@ -17,6 +17,20 @@ pub fn task[M](message : M) -> Command[M] {
 }
 
 ///| Start the application.
+/// 
+/// - `model` is the state of your application.
+/// - `view` is a way to turn your model into HTML.
+/// - `update` a way to update your state based on messages.
+/// 
+/// These three are the core of the TEA. Rabbit-TEA is highly unstable at this time, 
+/// but it follows the same pattern as Elm. You can visit https://guide.elm-lang.org/ 
+/// to get more intuition!
+/// 
+/// # More parameters 
+/// 
+/// - `url_changed` is a message that will be passed when the URL is changed by the navigation API in the `@browser` package.
+/// - `url_request` is a message that will be passed when an `<a>` tag is clicked.
+/// 
 pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
