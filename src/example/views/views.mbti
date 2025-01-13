@@ -1,0 +1,13 @@
+package Yoorkin/rabbit-tea/example/views
+
+alias @Yoorkin/rabbit-tea/html as @html
+
+// Values
+fn button[M](String, href? : String, click? : M) -> @html.Html[M]
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

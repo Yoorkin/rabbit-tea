@@ -1,0 +1,25 @@
+package Yoorkin/rabbit-tea/example/editor
+
+alias @Yoorkin/rabbit-tea/browser as @browser
+alias @Yoorkin/rabbit-tea/html as @html
+
+// Values
+fn load(Int?) -> (@browser.Command[Msg], Model)
+
+fn update(Msg, Model) -> (@browser.Command[Msg], Model)
+
+fn view(Model) -> @html.Html[Msg]
+
+// Types and methods
+type Card
+impl Show for Card
+
+type Model
+
+type Msg
+impl Show for Msg
+
+// Type aliases
+
+// Traits
+

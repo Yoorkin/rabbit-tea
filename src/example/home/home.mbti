@@ -1,0 +1,32 @@
+package Yoorkin/rabbit-tea/example/home
+
+alias @Yoorkin/rabbit-tea/browser as @browser
+alias @Yoorkin/rabbit-tea/html as @html
+
+// Values
+fn load() -> (@browser.Command[Msg], Model)
+
+fn update(Msg, Model) -> (@browser.Command[Msg], Model)
+
+fn view(Model) -> @html.Html[Msg]
+
+// Types and methods
+type CardModel
+impl Show for CardModel
+
+pub struct Model {
+  cards : Array[CardModel]
+}
+impl Show for Model
+
+pub enum Msg {
+  DeleteAll
+  GotCardsData(Result[Json, String])
+  ReqResult(Result[Json, String])
+}
+impl Show for Msg
+
+// Type aliases
+
+// Traits
+

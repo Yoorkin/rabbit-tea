@@ -3,13 +3,6 @@ package Yoorkin/rabbit-tea/example
 // Values
 
 // Types and methods
-type CardModel
-
-type EditModel
-
-type EditMsg
-impl Show for EditMsg
-
 type Message
 impl Show for Message
 
