@@ -537,7 +537,7 @@ pub fn form[M](
   id? : String,
   class? : String,
   action? : String,
-  childern : Array[Html[M]]
+  children : Array[Html[M]]
 ) -> Html[M] {
   new(
     "form",
@@ -546,7 +546,7 @@ pub fn form[M](
     id?,
     class?,
     optional_attrs={ "action": action },
-    childern,
+    children,
   )
 }
 

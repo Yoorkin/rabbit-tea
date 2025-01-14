@@ -2,16 +2,16 @@
 type Element
 
 ///|
-pub extern "js" fn count_childern(self : Element) -> Int = "(self) => self.children.length"
+pub extern "js" fn count_children(self : Element) -> Int = "(self) => self.children.length"
 
 ///|
-pub extern "js" fn get_childern(self : Element, index : Int) -> Element = "(self, index) => self.children[index]"
+pub extern "js" fn get_children(self : Element, index : Int) -> Element = "(self, index) => self.children[index]"
 
 ///|
-pub extern "js" fn append_childern(self : Element, child : Element) -> Unit = "(self, child) => self.append(child)"
+pub extern "js" fn append_children(self : Element, child : Element) -> Unit = "(self, child) => self.append(child)"
 
 ///|
-pub extern "js" fn remove_childern(self : Element, child : Element) -> Unit = " (self,child) => self.remove(child) "
+pub extern "js" fn remove_children(self : Element, child : Element) -> Unit = " (self,child) => self.remove(child) "
 
 // NOTE: The DOM tree also includes the TEXT_NODE, which is not an element.
 // Therefore, a vdom patch algorithm should not be based on the ffi above.
