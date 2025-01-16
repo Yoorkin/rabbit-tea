@@ -47,13 +47,13 @@ impl DocumentFragment {
 type Element
 impl Element {
   add_event_listener(Self, String, (Event) -> Unit) -> Unit
-  append_childern(Self, Self) -> Unit
-  count_childern(Self) -> Int
+  append_children(Self, Self) -> Unit
+  count_children(Self) -> Int
   get_attribute(Self, String) -> String
-  get_childern(Self, Int) -> Self
+  get_children(Self, Int) -> Self
   get_property(Self, String) -> String
   remove_attribute(Self, String) -> Unit
-  remove_childern(Self, Self) -> Unit
+  remove_children(Self, Self) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
