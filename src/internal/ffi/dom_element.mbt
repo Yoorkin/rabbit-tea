@@ -47,14 +47,14 @@ pub extern "js" fn remove_attribute(self : Element, attr : String) -> Unit = "(s
 pub extern "js" fn add_event_listener(
   self : Element,
   event : String,
-  callback : (Event) -> Unit
+  listener : Listener
 ) -> Unit = "(self,event,callback) => self.addEventListener(event, callback)"
 
 ///|
 pub extern "js" fn remove_event_listener(
   self : Element,
   event : String,
-  callback : (Event) -> Unit
+  listener : Listener
 ) -> Unit = "(self,event,callback) => self.removeEventListener(event, callback)"
 
 ///|

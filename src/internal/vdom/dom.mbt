@@ -20,7 +20,13 @@
 
 ///|
 enum Node[Msg] {
-  Node(String, attrs~ : Array[Attribute[Msg]], childrens~ : Array[Node[Msg]])
+  Node(
+    String,
+    attrs~ : Array[Attribute[Msg]],
+    childrens~ : Array[Node[Msg]],
+    // Store the event listener uesd in real DOM
+    listeners~ : Array[(String, @ffi.Listener)]
+  )
   Text(String)
   Fragment(Array[Node[Msg]])
   Nothing
@@ -34,7 +40,7 @@ pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
     Node(tag, attrs~, childrens~) => {
       let attrs = attrs.map(fn(x) { x.map(f) })
       let childrens = childrens.map(fn(x) { x.map(f) })
-      Node(tag, attrs~, childrens~)
+      Node(tag, attrs~, childrens~, listeners=[])
     }
     Text(value) => Text(value)
     Fragment(childrens) => Fragment(childrens.map(fn(x) { x.map(f) }))
@@ -48,7 +54,7 @@ pub fn node[Msg](
   attrs : Array[Attribute[Msg]],
   childrens : Array[Node[Msg]]
 ) -> Node[Msg] {
-  Node(tag, attrs~, childrens~)
+  Node(tag, attrs~, childrens~, listeners=[])
 }
 
 ///| Create a plain text
@@ -89,7 +95,6 @@ enum AttrValue[Msg] {
 pub(all) enum Handler[Msg] {
   Normal(Msg)
   HandleEvent((@ffi.Event) -> Msg)
-  TriggerUrlChange(String)
   Custom(Msg, stop_progapation~ : Bool, prevent_default~ : Bool)
 }
 
@@ -163,11 +168,11 @@ fn to_node[Msg, Model, View](
   // 
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   match self {
-    Node(tag, attrs~, childrens~) => {
+    Node(tag, attrs~, childrens~) as node => {
       let element = @ffi.document().create_element(tag)
       attrs.each(fn {
         Attribute((event, AttrEvent(handler))) => {
-          let cb = match handler {
+          let listener = match handler {
             Normal(msg) => fn(_event) { sandbox.update(msg) }
             HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
             Custom(msg, stop_progapation~, prevent_default~) =>
@@ -181,7 +186,8 @@ fn to_node[Msg, Model, View](
                 sandbox.update(msg)
               }
           }
-          element.add_event_listener(event, cb)
+          element.add_event_listener(event, listener)
+          node.listeners.push((event, listener))
         }
         Attribute((key, AttrString(value))) => element.set_attribute(key, value)
         Attribute((key, AttrStyle(value))) => element.set_style(key, value)

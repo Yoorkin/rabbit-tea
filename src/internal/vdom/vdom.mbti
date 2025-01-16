@@ -31,7 +31,6 @@ impl Attribute {
 pub(all) enum Handler {
   Normal(Msg)
   HandleEvent((@ffi.Event) -> Msg)
-  TriggerUrlChange(String)
   Custom(Msg, Bool, Bool)
 }
 impl Handler {

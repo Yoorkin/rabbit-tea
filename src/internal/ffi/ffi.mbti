@@ -104,6 +104,7 @@ impl Text {
 }
 
 // Type aliases
+pub typealias Listener = (Event) -> Unit
 
 // Traits
 
