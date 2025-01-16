@@ -19,3 +19,6 @@ pub extern "js" fn prevent_default(self : Event) =
 ///|
 pub extern "js" fn stop_propagation(self : Event) =
   #| (self) => self.stopPropagation()
+
+///|
+pub typealias Listener = (Event) -> Unit
