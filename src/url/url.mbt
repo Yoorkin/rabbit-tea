@@ -60,7 +60,7 @@ pub fn parse(url : String) -> Url!Error {
     _ => fail!("Invalid host")
   }
   let (mid, path) = match mid.split("/").collect() {
-    [mid, .. as paths] =>
+    [mid, .. paths] =>
       (mid, String::concat(paths.iter().collect(), separator="/"))
     [mid] => (mid, "")
     _ => fail!("Invalid host")
