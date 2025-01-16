@@ -40,12 +40,9 @@ impl Handler {
 
 type Node
 impl Node {
-  diff[Msg](Self[Msg], Self[Msg]) -> Patch[Msg]
   map[A, B](Self[A], (A) -> B) -> Self[B]
   patch[Msg, Model, View](Self[Msg], Self[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 }
-
-type Patch
 
 // Type aliases
 
