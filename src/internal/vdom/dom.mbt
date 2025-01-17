@@ -37,10 +37,10 @@ enum Node[Msg] {
 /// This is a expensive operation and should be used rarely.
 pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
   match self {
-    Node(tag, attrs~, childrens~) => {
+    Node(tag, attrs~, childrens~, listeners~) => {
       let attrs = attrs.map(fn(x) { x.map(f) })
       let childrens = childrens.map(fn(x) { x.map(f) })
-      Node(tag, attrs~, childrens~, listeners=[])
+      Node(tag, attrs~, childrens~, listeners~)
     }
     Text(value) => Text(value)
     Fragment(childrens) => Fragment(childrens.map(fn(x) { x.map(f) }))
@@ -96,6 +96,17 @@ pub(all) enum Handler[Msg] {
   Normal(Msg)
   HandleEvent((@ffi.Event) -> Msg)
   Custom(Msg, stop_progapation~ : Bool, prevent_default~ : Bool)
+}
+
+///|
+fn is_same_type[Msg](x : Node[Msg], y : Node[Msg]) -> Bool {
+  match (x, y) {
+    (Node(_), Node(_)) => true
+    (Text(_), Text(_)) => true
+    (Fragment(_), Fragment(_)) => true
+    (Nothing, Nothing) => true
+    _ => false
+  }
 }
 
 ///|
@@ -168,7 +179,7 @@ fn to_node[Msg, Model, View](
   // 
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   match self {
-    Node(tag, attrs~, childrens~) as node => {
+    Node(tag, attrs~, childrens~, ..) as node => {
       let element = @ffi.document().create_element(tag)
       attrs.each(fn {
         Attribute((event, AttrEvent(handler))) => {
@@ -225,14 +236,15 @@ fn to_node[Msg, Model, View](
       element.to_node()
     }
     Text(value) => @ffi.document().create_text_node(value).to_node()
-    Fragment(childrens) => {
-      let node = @ffi.document().create_document_fragment().to_node()
-      for child in childrens {
-        node.append_child(to_node(child, sandbox))
-      }
-      node
-    }
-    Nothing => @ffi.document().create_document_fragment().to_node()
+    Fragment(_) =>
+      // Now we cannot do diff with fragment, so there is no implement.
+      abort("fragment is not implemented")
+    // let node = @ffi.document().create_document_fragment().to_node()
+    // for child in childrens {
+    //   node.append_child(to_node(child, sandbox))
+    // }
+    // node
+    Nothing => @ffi.document().create_text_node("").to_node()
   }
 }
 
@@ -243,10 +255,279 @@ pub fn patch[Msg, Model, View](
   sandbox : @adapter.Sandbox[Msg, Model, View],
   mount~ : String
 ) -> Unit {
-  //TODO: diff and patch the virtual DOM
-  let root = @ffi.document().get_element_by_id(mount).to_node()
-  while not(root.first_child().is_null()) {
-    root.remove_child(root.first_child())
+  let patches = diff(old, self)
+  fn aux(patches : Patch[Msg], current : @ffi.Node) -> Unit {
+    match patches {
+      Drop(index, length) =>
+        for i in 0..<length {
+          current.remove_child(current.nth_child(index))
+        }
+      Remove(index) => current.remove_child(current.nth_child(index))
+      Replace(index, node) =>
+        current.replace_child(node.to_node(sandbox), current.nth_child(index))
+      InsertBefore(index, node) =>
+        if current.count_child() == 0 {
+          current.append_child(node.to_node(sandbox))
+        } else {
+          current.insert_before(node.to_node(sandbox), current.nth_child(index))
+        }
+      Append(nodes) =>
+        for node in nodes {
+          current.append_child(node.to_node(sandbox))
+        }
+      Update(update) =>
+        match update {
+          UpdateNode(index, attrs_patches, childs_patches, new_listeners) => {
+            let node = current.nth_child(index)
+            let element = node.to_element()
+            for patch in attrs_patches {
+              match patch {
+                AttrRemove(key) => element.remove_attribute(key)
+                AttrAdd(key, value) => element.set_attribute(key, value)
+                StyleAdd(key, value) => element.set_style(key, value)
+                StyleRemove(key) => element.remove_style(key)
+                PropertyAdd(key, value) => element.set_property(key, value)
+                PropertyRemove(key) => element.remove_property(key)
+                EventRemove(key, listener) =>
+                  element.remove_event_listener(key, listener)
+                EventAdd(key, handler) => {
+                  let listener = match handler {
+                    Normal(msg) => fn(_event) { sandbox.update(msg) }
+                    HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
+                    Custom(msg, stop_progapation~, prevent_default~) =>
+                      fn(event : @ffi.Event) {
+                        if stop_progapation {
+                          event.stop_propagation()
+                        }
+                        if prevent_default {
+                          event.prevent_default()
+                        }
+                        sandbox.update(msg)
+                      }
+                  }
+                  element.add_event_listener(key, listener)
+                  new_listeners.push((key, listener))
+                }
+              }
+            }
+            for patch in childs_patches {
+              aux(patch, node)
+            }
+          }
+          UpdateText(index, value) => {
+            let text_node = @ffi.document().create_text_node(value)
+            current.replace_child(text_node.to_node(), current.nth_child(index))
+          }
+          UpdateFragment(index, childs_patches) => {
+            let node = current.nth_child(index)
+            for patch in childs_patches {
+              aux(patch, node)
+            }
+          }
+        }
+    }
   }
-  root.append_child(self.to_node(sandbox))
+
+  let root = @ffi.document().get_element_by_id(mount).to_node()
+  aux(patches, root)
+}
+
+///|
+enum AttrsUpdate[Msg] {
+  AttrRemove(String)
+  AttrAdd(String, String)
+  StyleAdd(String, String)
+  StyleRemove(String)
+  PropertyAdd(String, String)
+  PropertyRemove(String)
+  EventRemove(String, @ffi.Listener)
+  EventAdd(String, Handler[Msg])
+}
+
+///|
+enum Patch[Msg] {
+  Drop(Int, Int)
+  Remove(Int)
+  Replace(Int, Node[Msg])
+  InsertBefore(Int, Node[Msg])
+  Append(Array[Node[Msg]])
+  Update(Update[Msg])
+}
+
+///|
+enum Update[Msg] {
+  UpdateNode(
+    Int,
+    Array[AttrsUpdate[Msg]],
+    Array[Patch[Msg]],
+    Array[(String, @ffi.Listener)]
+  )
+  UpdateText(Int, String)
+  UpdateFragment(Int, Array[Patch[Msg]])
+}
+
+///|
+/// Now the root node must be a Node
+pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
+  guard let Node(_, attrs=attrs_old, listeners~, ..) = root_old
+  guard let Node(_, attrs=attrs_new, ..) = root_new
+  Update(
+    UpdateNode(
+      0,
+      attrs_diff(attrs_old, attrs_new, listeners),
+      do_diff(root_old, root_new),
+      [],
+    ),
+  )
+}
+
+///|
+pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
+  let childrens_old = match old {
+    Node(_, childrens~, ..) | Fragment(childrens) => childrens
+    _ => abort("old is not a node or fragment")
+  }
+  let childrens_new = match new {
+    Node(_, childrens~, ..) | Fragment(childrens) => childrens
+    _ => abort("new is not a node or fragment")
+  }
+  if childrens_old.length() == 0 && childrens_new.length() == 0 {
+    []
+  } else {
+    diff_without_key(childrens_old, childrens_new)
+  }
+}
+
+// To be improved!!! Now this implementation will affect the performance of the diff algorithm.
+// And If a AttrbuteString's name is same as a AttrEvent's name, the diff algorithm will not work.
+// Now we think the events is different although they never changed.
+///|
+fn attrs_diff[Msg](
+  old : Array[Attribute[Msg]],
+  new : Array[Attribute[Msg]],
+  // We think the event is different although they never changed.
+  // The listeners is used to remove the event listener when the attribute is removed.
+  listeners : Array[(String, @ffi.Listener)]
+) -> Array[AttrsUpdate[Msg]] {
+  let old_map = Map::from_iter(old.iter().map(fn(attr) { attr._ }))
+  let new_map = Map::from_iter(new.iter().map(fn(attr) { attr._ }))
+  let result = []
+  for x in listeners {
+    result.push(EventRemove(x.0, x.1))
+  }
+  for key, value in old_map {
+    match value {
+      // We think the event is different although they never changed.
+      AttrEvent(_) => ()
+      AttrStyle(value) =>
+        if new_map.contains(key) {
+          let AttrStyle(value_new) = new_map.get(key).unwrap()
+          if value != value_new {
+            result.push(StyleAdd(key, value_new))
+          }
+        } else {
+          result.push(StyleRemove(key))
+        }
+      AttrString(value) =>
+        if new_map.contains(key) {
+          let AttrString(value_new) = new_map.get(key).unwrap()
+          if value != value_new {
+            result.push(AttrAdd(key, value_new))
+          }
+        } else {
+          result.push(AttrRemove(key))
+        }
+      AttrProperty(value) =>
+        if new_map.contains(key) {
+          let AttrProperty(value_new) = new_map.get(key).unwrap()
+          if value != value_new {
+            result.push(PropertyAdd(key, value_new))
+          }
+        } else {
+          result.push(PropertyRemove(key))
+        }
+    }
+  }
+  for key, value in new_map {
+    match value {
+      // We think the event is different although they never changed.
+      AttrEvent(handler) => result.push(EventAdd(key, handler))
+      AttrStyle(value) =>
+        if not(old_map.contains(key)) {
+          result.push(StyleAdd(key, value))
+        }
+      AttrString(value) =>
+        if not(old_map.contains(key)) {
+          result.push(AttrAdd(key, value))
+        }
+      AttrProperty(value) =>
+        if not(old_map.contains(key)) {
+          result.push(PropertyAdd(key, value))
+        }
+    }
+  }
+  result
+}
+
+///|
+pub fn diff_without_key[Msg](
+  old : Array[Node[Msg]],
+  new : Array[Node[Msg]]
+) -> Array[Patch[Msg]] {
+  fn aux(
+    xs : ArrayView[Node[Msg]],
+    ys : ArrayView[Node[Msg]],
+    patches : Array[Patch[Msg]],
+    index : Int
+  ) -> Unit {
+    match (xs, ys) {
+      ([], []) => ()
+      ([], tl) => patches.push(Append(tl.map(fn(x) { x })))
+      (l, []) => patches.push(Drop(index, l.length()))
+      ([x, .. tl1], [y, .. tl2]) => {
+        if is_same_type(x, y) {
+          match (x, y) {
+            (
+              Node(taga, attrs=xattrs, listeners~, ..),
+              Node(tagb, attrs=yattrs, listeners=new_listeners, ..),
+            ) =>
+              if taga == tagb {
+                let attrs_patches = attrs_diff(xattrs, yattrs, listeners)
+                let childs_patches = do_diff(x, y)
+                if attrs_patches.length() > 0 || childs_patches.length() > 0 {
+                  patches.push(
+                    Update(
+                      UpdateNode(
+                        index, attrs_patches, childs_patches, new_listeners,
+                      ),
+                    ),
+                  )
+                }
+              } else {
+                patches.push(Replace(index, y))
+              }
+            (Text(value_a), Text(value_b)) =>
+              if value_a != value_b {
+                patches.push(Update(UpdateText(index, value_b)))
+              }
+            (Fragment(_), Fragment(_)) =>
+              // Now we cannot do diff with fragment, so there is no implement.
+              abort("fragment is not implemented")
+            // let children_patches = do_diff(x, y)
+            // if children_patches.length() > 0 {
+            //   patches.push(UpdateFragment(index, children_patches))
+            // }
+            _ => ()
+          }
+        } else {
+          patches.push(Replace(index, y))
+        }
+        aux(tl1, tl2, patches, index + 1)
+      }
+    }
+  }
+
+  let patches = []
+  aux(old[:], new[:], patches, 0)
+  patches
 }

@@ -74,8 +74,10 @@ pub fn nothing[M]() -> Html[M] {
 }
 
 ///| Represents a fragment of elements, useful for grouping elements without adding an extra div
+/// 
+/// Note: fragment is not implemented yet, because it is not easy to diff fragment, now we still use `div` to group elements.
 pub fn fragment[M](childrens : Array[Html[M]]) -> Html[M] {
-  @vdom.fragment(childrens.map(fn(x) { x._ }))
+  @vdom.node("div", [], childrens.map(fn(x) { x._ }))
 }
 
 ///|
