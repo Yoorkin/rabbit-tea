@@ -1,5 +1,8 @@
-///| TODO: struct creation should pop up a completion of labels
-pub type Html[Msg] @vdom.Node[Msg]
+///|
+type T[Msg] @vdom.Node[Msg]
+
+///|
+pub typealias Html[Msg] = T[Msg]
 
 ///| Convert msg type of Html.
 /// 

@@ -4,67 +4,67 @@ alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
 
 // Values
-fn a[M](style~ : Array[String] = .., id? : String, class? : String, href~ : String, target~ : Target = .., Array[Html[M]]) -> Html[M]
+fn a[M](style~ : Array[String] = .., id? : String, class? : String, href~ : String, target~ : Target = .., Array[T[M]]) -> T[M]
 
 fn attribute[Msg](String, String) -> Attribute[Msg]
 
-fn b[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn b[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn blockquote[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn blockquote[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn br[M](style~ : Array[String] = .., id? : String, class? : String) -> Html[M]
+fn br[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
 
-fn button[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+fn button[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
-fn canvas[M](style~ : Array[String] = .., id? : String, class? : String, width? : Int, height? : Int) -> Html[M]
+fn canvas[M](style~ : Array[String] = .., id? : String, class? : String, width? : Int, height? : Int) -> T[M]
 
-fn code[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn code[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn div[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+fn div[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
-fn dl[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn dl[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[Html[M]]) -> Html[M]
+fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[T[M]]) -> T[M]
 
-fn h1[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h1[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn h2[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h2[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn h3[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h3[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn h4[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h4[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn h5[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h5[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn h6[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn h6[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn hr[M](style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[Html[M]] = ..) -> Html[M]
+fn hr[M](style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[T[M]] = ..) -> T[M]
 
 fn href[Msg](String) -> Attribute[Msg]
 
-fn i[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn i[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int) -> Html[M]
+fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int) -> T[M]
 
-fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[Html[M]]) -> Html[M]
+fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[T[M]]) -> T[M]
 
-fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[Html[M]] = .., change? : (String) -> M) -> Html[M]
+fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M) -> T[M]
 
-fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[Html[M]]) -> Html[M]
+fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[T[M]]) -> T[M]
 
-fn li[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+fn li[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
-fn node[Msg](String, Array[Attribute[Msg]], Array[Html[Msg]]) -> Html[Msg]
+fn node[Msg](String, Array[Attribute[Msg]], Array[T[Msg]]) -> T[Msg]
 
-fn nothing[M]() -> Html[M]
+fn nothing[M]() -> T[M]
 
-fn ol[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn ol[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn on_change[Msg]((String) -> Msg) -> Attribute[Msg]
 
@@ -86,29 +86,29 @@ fn on_mouse_over[Msg](Msg) -> Attribute[Msg]
 
 fn on_mouse_up[Msg](Msg) -> Attribute[Msg]
 
-fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn pre[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn pre[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn section[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn section[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn span[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn span[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn strong[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn strong[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn style[Msg](String, String) -> Attribute[Msg]
 
-fn sub[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn sub[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn sup[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn sup[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn target[Msg](Target) -> Attribute[Msg]
 
-fn text[Msg](String) -> Html[Msg]
+fn text[Msg](String) -> T[Msg]
 
-fn u[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
+fn u[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn ul[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+fn ul[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
 // Types and methods
 type Attribute
@@ -116,12 +116,6 @@ type Attribute
 pub(all) enum AutoComplete {
   On
   Off
-}
-
-pub type Html @vdom.Node[Msg]
-impl Html {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-  to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node[Msg]
 }
 
 pub(all) enum InputType {
@@ -149,12 +143,19 @@ pub(all) enum InputType {
   Week
 }
 
+type T
+impl T {
+  map[A, B](Self[A], (A) -> B) -> Self[B]
+  to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node[Msg]
+}
+
 pub(all) enum Target {
   Self
   Blank
 }
 
 // Type aliases
+pub typealias Html[Msg] = T[Msg]
 
 // Traits
 
