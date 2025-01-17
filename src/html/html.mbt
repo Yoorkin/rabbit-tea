@@ -13,7 +13,7 @@ pub fn to_virtual_dom[Msg, Model, View](
   self : Html[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
 ) -> @vdom.Node[Msg] {
-  self._
+  @vdom.node("div", [], self._.to_virtual_dom_map(fn(x) { x }))
 }
 
 ///|

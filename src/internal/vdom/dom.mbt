@@ -37,14 +37,32 @@ enum Node[Msg] {
 /// This is a expensive operation and should be used rarely.
 pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
   match self {
-    Node(tag, attrs~, childrens~) => {
+    Node(tag, attrs~, childrens~, listeners~) => {
       let attrs = attrs.map(fn(x) { x.map(f) })
       let childrens = childrens.map(fn(x) { x.map(f) })
-      Node(tag, attrs~, childrens~, listeners=[])
+      Node(tag, attrs~, childrens~, listeners~)
     }
     Text(value) => Text(value)
     Fragment(childrens) => Fragment(childrens.map(fn(x) { x.map(f) }))
     Nothing => Nothing
+  }
+}
+
+///| To virtual dom tree mapping.
+/// 
+/// This is a expensive operation and now we use it because we need to flatten the fragment.
+/// We should write a better implementation for fragment diff in the future.
+pub fn to_virtual_dom_map[A, B](self : Node[A], f : (A) -> B) -> Array[Node[B]] {
+  match self {
+    Node(tag, attrs~, childrens~, listeners~) => {
+      let attrs = attrs.map(fn(x) { x.map(f) })
+      let childrens = childrens.map(fn(x) { x.to_virtual_dom_map(f) }).flatten()
+      [Node(tag, attrs~, childrens~, listeners~)]
+    }
+    Text(value) => [Text(value)]
+    Fragment(childrens) =>
+      childrens.map(fn(x) { x.to_virtual_dom_map(f) }).flatten()
+    Nothing => []
   }
 }
 
@@ -168,7 +186,7 @@ fn to_node[Msg, Model, View](
   // 
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   match self {
-    Node(tag, attrs~, childrens~) as node => {
+    Node(tag, attrs~, childrens~,listeners~) => {
       let element = @ffi.document().create_element(tag)
       attrs.each(fn {
         Attribute((event, AttrEvent(handler))) => {
@@ -187,7 +205,7 @@ fn to_node[Msg, Model, View](
               }
           }
           element.add_event_listener(event, listener)
-          node.listeners.push((event, listener))
+          listeners.push((event, listener))
         }
         Attribute((key, AttrString(value))) => element.set_attribute(key, value)
         Attribute((key, AttrStyle(value))) => element.set_style(key, value)
@@ -225,14 +243,13 @@ fn to_node[Msg, Model, View](
       element.to_node()
     }
     Text(value) => @ffi.document().create_text_node(value).to_node()
-    Fragment(childrens) => {
-      let node = @ffi.document().create_document_fragment().to_node()
-      for child in childrens {
-        node.append_child(to_node(child, sandbox))
-      }
-      node
-    }
-    Nothing => @ffi.document().create_document_fragment().to_node()
+    Fragment(_) => abort("Fragment on the vdom tree is not supported")
+    // let node = @ffi.document().create_document_fragment().to_node()
+    // for child in childrens {
+    //   node.append_child(to_node(child, sandbox))
+    // }
+    // node
+    Nothing => @ffi.document().create_text_node("").to_node()
   }
 }
 
