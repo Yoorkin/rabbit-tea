@@ -21,7 +21,7 @@ impl Show for Model
 
 pub enum Msg {
   DeleteAll
-  GotCardsData(Result[Json, String])
+  GotCardsData(Result[Array[CardModel], String])
   ReqResult(Result[Json, String])
 }
 impl Show for Msg

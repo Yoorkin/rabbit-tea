@@ -1,6 +1,9 @@
 ///|
-pub(all) enum Expecting[Msg] {
-  Json((Result[Json, String]) -> Msg)
+pub typealias Decoder[Model] = (Json) -> Result[Model, String]
+
+///|
+pub(all) enum Expecting[Msg, Model] {
+  Json((Result[Model, String]) -> Msg, Decoder[Model])
   Text((Result[String, String]) -> Msg)
 }
 
@@ -53,12 +56,12 @@ extern "js" fn js_request(
   #| }
 
 ///|
-fn request[M](
+fn request[Msg, Model](
   url : String,
   http_method : String,
-  expect~ : Expecting[M],
+  expect~ : Expecting[Msg, Model],
   body~ : Body
-) -> @browser.Command[M] {
+) -> @browser.Command[Msg] {
   let launch = fn(_predef, fulfill) {
     let has_body = match body {
       Empty => false
@@ -67,7 +70,7 @@ fn request[M](
     let content_type = body.content_type()
     let body = body.stringfiy()
     match expect {
-      Json(f) =>
+      Json(f, decoder) =>
         js_request(
           url,
           http_method,
@@ -80,7 +83,7 @@ fn request[M](
             } catch {
               _ => Err("Json parse error")
             }
-            fulfill(f(result))
+            fulfill(f(result.bind(decoder)))
           },
           failed=fn(msg) { fulfill(f(Err("Http request failed:\{msg}"))) },
         )
@@ -100,29 +103,35 @@ fn request[M](
 }
 
 ///|
-pub fn get[M](url : String, expect~ : Expecting[M]) -> @browser.Command[M] {
+pub fn get[Msg, Model](
+  url : String,
+  expect~ : Expecting[Msg, Model]
+) -> @browser.Command[Msg] {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
-pub fn delete[M](url : String, expect~ : Expecting[M]) -> @browser.Command[M] {
+pub fn delete[Msg, Model](
+  url : String,
+  expect~ : Expecting[Msg, Model]
+) -> @browser.Command[Msg] {
   request(url, "DELETE", expect~, body=Empty)
 }
 
 ///|
-pub fn post[M](
+pub fn post[Msg, Model](
   url : String,
   body : Body,
-  expect~ : Expecting[M]
-) -> @browser.Command[M] {
+  expect~ : Expecting[Msg, Model]
+) -> @browser.Command[Msg] {
   request(url, "POST", body~, expect~)
 }
 
 ///|
-pub fn patch[M](
+pub fn patch[Msg, Model](
   url : String,
   body : Body,
-  expect~ : Expecting[M]
-) -> @browser.Command[M] {
+  expect~ : Expecting[Msg, Model]
+) -> @browser.Command[Msg] {
   request(url, "PATCH", body~, expect~)
 }

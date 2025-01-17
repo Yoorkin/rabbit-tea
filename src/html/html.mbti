@@ -32,8 +32,6 @@ fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 
 fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[Html[M]]) -> Html[M]
 
-fn fragment[M](Array[Html[M]]) -> Html[M]
-
 fn h1[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn h2[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
