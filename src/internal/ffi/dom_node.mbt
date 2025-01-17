@@ -50,4 +50,5 @@ pub extern "js" fn nth_child(self : Node, index : Int) -> Node =
 ///|
 pub extern "js" fn count_child(self : Node) -> Int = "(x) => x.childNodes.length"
 
+///|
 pub extern "js" fn print_node(self : Node) = "(x) => console.log(x)"

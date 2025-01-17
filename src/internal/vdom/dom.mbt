@@ -28,7 +28,6 @@ enum Node[Msg] {
     listeners~ : Array[(String, @ffi.Listener)]
   )
   Text(String)
-  Fragment(Array[Node[Msg]])
   Nothing
 }
 
@@ -43,7 +42,6 @@ pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
       Node(tag, attrs~, childrens~, listeners~)
     }
     Text(value) => Text(value)
-    Fragment(childrens) => Fragment(childrens.map(fn(x) { x.map(f) }))
     Nothing => Nothing
   }
 }
@@ -60,11 +58,6 @@ pub fn node[Msg](
 ///| Create a plain text
 pub fn text[Msg](value : String) -> Node[Msg] {
   Text(value)
-}
-
-///| Create a fragment
-pub fn fragment[Msg](childrens : Array[Node[Msg]]) -> Node[Msg] {
-  Fragment(childrens)
 }
 
 ///| Create a dummy node
@@ -103,7 +96,6 @@ fn is_same_type[Msg](x : Node[Msg], y : Node[Msg]) -> Bool {
   match (x, y) {
     (Node(_), Node(_)) => true
     (Text(_), Text(_)) => true
-    (Fragment(_), Fragment(_)) => true
     (Nothing, Nothing) => true
     _ => false
   }
@@ -236,14 +228,6 @@ fn to_node[Msg, Model, View](
       element.to_node()
     }
     Text(value) => @ffi.document().create_text_node(value).to_node()
-    Fragment(_) =>
-      // Now we cannot do diff with fragment, so there is no implement.
-      abort("fragment is not implemented")
-    // let node = @ffi.document().create_document_fragment().to_node()
-    // for child in childrens {
-    //   node.append_child(to_node(child, sandbox))
-    // }
-    // node
     Nothing => @ffi.document().create_text_node("").to_node()
   }
 }
@@ -384,11 +368,11 @@ pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
 ///|
 pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
   let childrens_old = match old {
-    Node(_, childrens~, ..) | Fragment(childrens) => childrens
+    Node(_, childrens~, ..) => childrens
     _ => abort("old is not a node or fragment")
   }
   let childrens_new = match new {
-    Node(_, childrens~, ..) | Fragment(childrens) => childrens
+    Node(_, childrens~, ..) => childrens
     _ => abort("new is not a node or fragment")
   }
   if childrens_old.length() == 0 && childrens_new.length() == 0 {
@@ -510,13 +494,6 @@ pub fn diff_without_key[Msg](
               if value_a != value_b {
                 patches.push(Update(UpdateText(index, value_b)))
               }
-            (Fragment(_), Fragment(_)) =>
-              // Now we cannot do diff with fragment, so there is no implement.
-              abort("fragment is not implemented")
-            // let children_patches = do_diff(x, y)
-            // if children_patches.length() > 0 {
-            //   patches.push(UpdateFragment(index, children_patches))
-            // }
             _ => ()
           }
         } else {
