@@ -108,8 +108,8 @@ pub fn view(model : Model) -> @html.Html[Msg] {
         ],
         [
           @html.h1([title_text]),
-          view_text_input("title", title, change=Msg::TitleChanged),
-          view_text_input("content", content, change=Msg::ContentChanged),
+          view_text_input("title", title, input=Msg::TitleChanged),
+          view_text_input("content", content, input=Msg::ContentChanged),
           @views.button("close", click=Msg::SaveCardAndExit(card)),
         ],
       )
@@ -121,7 +121,7 @@ pub fn view(model : Model) -> @html.Html[Msg] {
 fn view_text_input[M](
   label : String,
   value : String,
-  change~ : (String) -> M
+  input~ : (String) -> M
 ) -> @html.Html[M] {
   @html.div([
     @html.label([
@@ -133,7 +133,7 @@ fn view_text_input[M](
         ],
         value~,
         input_type=Text,
-        change~,
+        input~,
       ),
     ]),
   ])

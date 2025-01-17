@@ -581,7 +581,8 @@ pub fn input[M](
   id? : String,
   class? : String,
   childrens~ : Array[Html[M]] = [],
-  change? : (String) -> M
+  change? : (String) -> M,
+  input? : (String) -> M
 ) -> Html[M] {
   let input_type = match input_type {
     Button => "button"
@@ -622,7 +623,7 @@ pub fn input[M](
       "accept": accept,
       "placeholder": placeholder,
     },
-    optional_attributes=[change.map(on_change)],
+    optional_attributes=[change.map(on_change), input.map(on_input)],
     style~,
     class?,
     childrens,

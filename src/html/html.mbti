@@ -54,7 +54,7 @@ fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : 
 
 fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[T[M]]) -> T[M]
 
-fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M) -> T[M]
+fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M, input? : (String) -> M) -> T[M]
 
 fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[T[M]]) -> T[M]
 
