@@ -55,6 +55,8 @@ impl Element {
   remove_attribute(Self, String) -> Unit
   remove_children(Self, Self) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
+  remove_property(Self, String) -> Unit
+  remove_style(Self, String) -> Unit
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
   set_inner_html(Self, String) -> Unit
@@ -90,6 +92,7 @@ impl Node {
   nth_child(Self, Int) -> Self
   parent_node(Self) -> Self
   previous_sibling(Self) -> Self
+  print_node(Self) -> Unit
   remove_child(Self, Self) -> Unit
   replace_child(Self, Self, Self) -> Unit
   to_document(Self) -> Document

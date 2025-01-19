@@ -24,6 +24,8 @@ fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 
 fn div[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
 
+fn div_keyed[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[(String, Html[M])]) -> Html[M]
+
 fn dl[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
@@ -31,8 +33,6 @@ fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
 fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[Html[M]]) -> Html[M]
-
-fn fragment[M](Array[Html[M]]) -> Html[M]
 
 fn h1[M](style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
@@ -57,6 +57,8 @@ fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : 
 fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[Html[M]]) -> Html[M]
 
 fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[Html[M]] = .., change? : (String) -> M) -> Html[M]
+
+fn keyed_node[Msg](String, Array[Attribute[Msg]], Array[(String, Html[Msg])]) -> Html[Msg]
 
 fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[Html[M]]) -> Html[M]
 

@@ -17,14 +17,22 @@ pub fn load() -> (@tea.Command[Msg], Model) {
 
 ///|
 pub fn view(model : Model) -> @html.Html[Msg] {
-  @html.div(style=["p-0", "display:flex", "flex-direction:column"], [
-    @html.h1([@html.text("MoonBit TodoMVC")]),
-    @html.div(style=["display: flex", "width: 500px", "height: 100%"], [
-      @views.button("clear", click=DeleteAll),
-      @views.button("+", href="/new"),
-    ]),
-    @html.p([@html.text("Click cards below to edit, click + to add a new card")]),
-    view_list(model.cards),
+  @html.div_keyed(style=["p-0", "display:flex", "flex-direction:column"], [
+    ("title", @html.h1([@html.text("MoonBit TodoMVC")])),
+    (
+      "button",
+      @html.div(style=["display: flex", "width: 500px", "height: 100%"], [
+        @views.button("clear", click=DeleteAll),
+        @views.button("+", href="/new"),
+      ]),
+    ),
+    (
+      "info",
+      @html.p([
+        @html.text("Click cards below to edit, click + to add a new card"),
+      ]),
+    ),
+    ("list", view_list(model.cards)),
   ])
 }
 

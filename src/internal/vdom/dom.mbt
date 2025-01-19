@@ -66,6 +66,14 @@ pub fn node[Msg](
   Node(tag, attrs~, childrens~, listeners=[])
 }
 
+pub fn keyed_node[Msg](
+  key : String,
+  attrs : Array[Attribute[Msg]],
+  childrens : Array[(String, Node[Msg])]
+) -> Node[Msg] {
+  KeyedNode(key, attrs~, childrens~, listeners=[])
+}
+
 ///| Create a plain text
 pub fn text[Msg](value : String) -> Node[Msg] {
   Text(value)
@@ -368,8 +376,16 @@ enum Update[Msg] {
 ///|
 /// Now the root node must be a Node
 pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
-  guard let Node(_, attrs=attrs_old, listeners~, ..) = root_old
-  guard let Node(_, attrs=attrs_new, ..) = root_new
+  let (attrs_old, listeners) = match root_old {
+    Node(_, attrs=attrs_old, listeners~, ..) => (attrs_old, listeners)
+    KeyedNode(_, attrs=attrs_old, listeners~, ..) => (attrs_old, listeners)
+    _ => abort("old is not a node or fragment")
+  }
+  let (attrs_new, _) = match root_new {
+    Node(_, attrs=attrs_new, ..) => (attrs_new, [])
+    KeyedNode(_, attrs=attrs_new, ..) => (attrs_new, [])
+    _ => abort("new is not a node or fragment")
+  }
   Update(
     UpdateNode(
       0,
@@ -551,6 +567,15 @@ fn diff_with_key[Msg](
       ([], []) => ()
       ([], tl) => patches.push(Append(tl.map(fn(x) { x.1 })))
       (l, []) => patches.push(Drop(index, l.length()))
+      ([x], [y]) => {
+        let (key_x, x_1) = x
+        let (key_y, y_1) = y
+        if key_x == key_y {
+          diff_pure(x_1, y_1, patches, index)
+        } else {
+          patches.push(Replace(index, y_1))
+        }
+      }
       ([x1, x2], [y]) => {
         let (key_x1, x1_1) = x1
         let (key_x2, x2_1) = x2
@@ -611,6 +636,10 @@ fn diff_with_key[Msg](
             aux([x2, ..tl1][:], [y2, ..tl2][:], patches, index + 1)
           }
         }
+      }
+      x => {
+        println(xs.length())
+        println(ys.length())
       }
     }
   }
