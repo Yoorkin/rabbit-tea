@@ -27,6 +27,12 @@ enum Node[Msg] {
     // Store the event listener uesd in real DOM
     listeners~ : Array[(String, @ffi.Listener)]
   )
+  KeyedNode(
+    String,
+    attrs~ : Array[Attribute[Msg]],
+    childrens~ : Array[(String, Node[Msg])],
+    listeners~ : Array[(String, @ffi.Listener)]
+  )
   Text(String)
   Nothing
 }
@@ -41,6 +47,11 @@ pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
       let childrens = childrens.map(fn(x) { x.map(f) })
       Node(tag, attrs~, childrens~, listeners~)
     }
+    KeyedNode(key, attrs~, childrens~, listeners~) => {
+      let attrs = attrs.map(fn(x) { x.map(f) })
+      let childrens = childrens.map(fn(x) { (x.0, x.1.map(f)) })
+      KeyedNode(key, attrs~, childrens~, listeners~)
+    }
     Text(value) => Text(value)
     Nothing => Nothing
   }
@@ -53,6 +64,14 @@ pub fn node[Msg](
   childrens : Array[Node[Msg]]
 ) -> Node[Msg] {
   Node(tag, attrs~, childrens~, listeners=[])
+}
+
+pub fn keyed_node[Msg](
+  key : String,
+  attrs : Array[Attribute[Msg]],
+  childrens : Array[(String, Node[Msg])]
+) -> Node[Msg] {
+  KeyedNode(key, attrs~, childrens~, listeners=[])
 }
 
 ///| Create a plain text
@@ -227,6 +246,10 @@ fn to_node[Msg, Model, View](
       }
       element.to_node()
     }
+    KeyedNode(key, attrs~, childrens~, listeners~) =>
+      Node(key, attrs~, childrens=childrens.map(fn(x) { x.1 }), listeners~).to_node(
+        sandbox,
+      )
     Text(value) => @ffi.document().create_text_node(value).to_node()
     Nothing => @ffi.document().create_text_node("").to_node()
   }
@@ -353,8 +376,16 @@ enum Update[Msg] {
 ///|
 /// Now the root node must be a Node
 pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
-  guard let Node(_, attrs=attrs_old, listeners~, ..) = root_old
-  guard let Node(_, attrs=attrs_new, ..) = root_new
+  let (attrs_old, listeners) = match root_old {
+    Node(_, attrs=attrs_old, listeners~, ..) => (attrs_old, listeners)
+    KeyedNode(_, attrs=attrs_old, listeners~, ..) => (attrs_old, listeners)
+    _ => abort("old is not a node or fragment")
+  }
+  let (attrs_new, _) = match root_new {
+    Node(_, attrs=attrs_new, ..) => (attrs_new, [])
+    KeyedNode(_, attrs=attrs_new, ..) => (attrs_new, [])
+    _ => abort("new is not a node or fragment")
+  }
   Update(
     UpdateNode(
       0,
@@ -367,18 +398,22 @@ pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
 
 ///|
 pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
-  let childrens_old = match old {
-    Node(_, childrens~, ..) => childrens
+  match (old, new) {
+    (
+      KeyedNode(_, childrens=childrens_old, ..),
+      KeyedNode(_, childrens=childrens_new, ..),
+    ) => diff_with_key(childrens_old, childrens_new)
+    (Node(_, childrens=childrens_old, ..), Node(_, childrens=childrens_new, ..)) =>
+      diff_without_key(childrens_old, childrens_new)
+    (
+      KeyedNode(_, childrens=childrens_old, ..),
+      Node(_, childrens=childrens_new, ..),
+    ) => diff_without_key(childrens_old.map(fn(x) { x.1 }), childrens_new)
+    (
+      Node(_, childrens=childrens_old, ..),
+      KeyedNode(_, childrens=childrens_new, ..),
+    ) => diff_without_key(childrens_old, childrens_new.map(fn(x) { x.1 }))
     _ => abort("old is not a node or fragment")
-  }
-  let childrens_new = match new {
-    Node(_, childrens~, ..) => childrens
-    _ => abort("new is not a node or fragment")
-  }
-  if childrens_old.length() == 0 && childrens_new.length() == 0 {
-    []
-  } else {
-    diff_without_key(childrens_old, childrens_new)
   }
 }
 
@@ -454,6 +489,43 @@ fn attrs_diff[Msg](
 }
 
 ///|
+pub fn diff_pure[Msg](
+  x : Node[Msg],
+  y : Node[Msg],
+  patches : Array[Patch[Msg]],
+  index : Int
+) -> Unit {
+  if is_same_type(x, y) {
+    match (x, y) {
+      (
+        Node(taga, attrs=xattrs, listeners~, ..),
+        Node(tagb, attrs=yattrs, listeners=new_listeners, ..),
+      ) =>
+        if taga == tagb {
+          let attrs_patches = attrs_diff(xattrs, yattrs, listeners)
+          let childs_patches = do_diff(x, y)
+          if attrs_patches.length() > 0 || childs_patches.length() > 0 {
+            patches.push(
+              Update(
+                UpdateNode(index, attrs_patches, childs_patches, new_listeners),
+              ),
+            )
+          }
+        } else {
+          patches.push(Replace(index, y))
+        }
+      (Text(value_a), Text(value_b)) =>
+        if value_a != value_b {
+          patches.push(Update(UpdateText(index, value_b)))
+        }
+      _ => ()
+    }
+  } else {
+    patches.push(Replace(index, y))
+  }
+}
+
+///|
 pub fn diff_without_key[Msg](
   old : Array[Node[Msg]],
   new : Array[Node[Msg]]
@@ -469,37 +541,105 @@ pub fn diff_without_key[Msg](
       ([], tl) => patches.push(Append(tl.map(fn(x) { x })))
       (l, []) => patches.push(Drop(index, l.length()))
       ([x, .. tl1], [y, .. tl2]) => {
-        if is_same_type(x, y) {
-          match (x, y) {
-            (
-              Node(taga, attrs=xattrs, listeners~, ..),
-              Node(tagb, attrs=yattrs, listeners=new_listeners, ..),
-            ) =>
-              if taga == tagb {
-                let attrs_patches = attrs_diff(xattrs, yattrs, listeners)
-                let childs_patches = do_diff(x, y)
-                if attrs_patches.length() > 0 || childs_patches.length() > 0 {
-                  patches.push(
-                    Update(
-                      UpdateNode(
-                        index, attrs_patches, childs_patches, new_listeners,
-                      ),
-                    ),
-                  )
-                }
-              } else {
-                patches.push(Replace(index, y))
-              }
-            (Text(value_a), Text(value_b)) =>
-              if value_a != value_b {
-                patches.push(Update(UpdateText(index, value_b)))
-              }
-            _ => ()
-          }
-        } else {
-          patches.push(Replace(index, y))
-        }
+        diff_pure(x, y, patches, index)
         aux(tl1, tl2, patches, index + 1)
+      }
+    }
+  }
+
+  let patches = []
+  aux(old[:], new[:], patches, 0)
+  patches
+}
+
+///|
+fn diff_with_key[Msg](
+  old : Array[(String, Node[Msg])],
+  new : Array[(String, Node[Msg])]
+) -> Array[Patch[Msg]] {
+  fn aux(
+    xs : ArrayView[(String, Node[Msg])],
+    ys : ArrayView[(String, Node[Msg])],
+    patches : Array[Patch[Msg]],
+    index : Int
+  ) -> Unit {
+    match (xs, ys) {
+      ([], []) => ()
+      ([], tl) => patches.push(Append(tl.map(fn(x) { x.1 })))
+      (l, []) => patches.push(Drop(index, l.length()))
+      ([x], [y]) => {
+        let (key_x, x_1) = x
+        let (key_y, y_1) = y
+        if key_x == key_y {
+          diff_pure(x_1, y_1, patches, index)
+        } else {
+          patches.push(Replace(index, y_1))
+        }
+      }
+      ([x1, x2], [y]) => {
+        let (key_x1, x1_1) = x1
+        let (key_x2, x2_1) = x2
+        let (key_y, y_1) = y
+        if key_x1 == key_y {
+          diff_pure(x1_1, y_1, patches, index)
+          aux([x2][:], [][:], patches, index + 1)
+        } else if key_x2 == key_y {
+          patches.push(Remove(index))
+          diff_pure(x2_1, y_1, patches, index)
+        } else {
+          patches.push(Replace(index, y_1))
+          aux([x2][:], [][:], patches, index + 1)
+        }
+      }
+      ([x], [y1, y2]) => {
+        let (key_x, x_1) = x
+        let (key_y1, y1_1) = y1
+        let (key_y2, y2_1) = y2
+        if key_x == key_y1 {
+          diff_pure(x_1, y1_1, patches, index)
+          aux([][:], [y2][:], patches, index + 1)
+        } else if key_x == key_y2 {
+          diff_pure(x_1, y2_1, patches, index)
+          patches.push(InsertBefore(index, y2_1))
+        } else {
+          patches.push(Replace(index, y1_1))
+          aux([][:], [y2][:], patches, index + 1)
+        }
+      }
+      ([x1, x2, .. tl1], [y1, y2, .. tl2]) => {
+        let (key_x1, x1_1) = x1
+        let (key_x2, x2_1) = x2
+        let (key_y1, y1_1) = y1
+        let (key_y2, y2_1) = y2
+        if key_x1 == key_y1 {
+          diff_pure(x1_1, y1_1, patches, index)
+          aux([x2, ..tl1][:], [y2, ..tl2][:], patches, index + 1)
+        } else {
+          let i_ii_match = key_x1 == key_y2
+          let ii_i_match = key_x2 == key_y1
+          if i_ii_match && ii_i_match {
+            patches.push(Remove(index))
+            patches.push(InsertBefore(index, y2_1))
+            diff_pure(x2_1, y1_1, patches, index)
+            diff_pure(x1_1, y2_1, patches, index + 1)
+            aux(tl1, tl2, patches, index + 2)
+          } else if i_ii_match {
+            patches.push(InsertBefore(index, y1_1))
+            diff_pure(x1_1, y2_1, patches, index + 1)
+            aux([x2, ..tl1][:], tl2, patches, index + 1)
+          } else if ii_i_match {
+            patches.push(Remove(index))
+            diff_pure(x2_1, y1_1, patches, index)
+            aux(tl1, [y2, ..tl2][:], patches, index + 2)
+          } else {
+            patches.push(Replace(index, y1_1))
+            aux([x2, ..tl1][:], [y2, ..tl2][:], patches, index + 1)
+          }
+        }
+      }
+      x => {
+        println(xs.length())
+        println(ys.length())
       }
     }
   }

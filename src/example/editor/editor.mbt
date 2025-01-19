@@ -102,15 +102,15 @@ pub fn view(model : Model) -> @html.Html[Msg] {
         Some(_) => @html.text("Edit Todo")
         None => @html.text("New Todo")
       }
-      @html.div(
+      @html.div_keyed(
         style=[
           "display: flex", "flex-direction: column", "width: 500px", "height: 100%",
         ],
         [
-          @html.h1([title_text]),
-          view_text_input("title", title, input=Msg::TitleChanged),
-          view_text_input("content", content, input=Msg::ContentChanged),
-          @views.button("close", click=Msg::SaveCardAndExit(card)),
+          ("title", @html.h1([title_text])),
+          ("input_1", view_text_input("title", title, input=Msg::TitleChanged)),
+          ("input_2", view_text_input("content", content, input=Msg::ContentChanged)),
+          ("close", @views.button("close", click=Msg::SaveCardAndExit(card))),
         ],
       )
     }
