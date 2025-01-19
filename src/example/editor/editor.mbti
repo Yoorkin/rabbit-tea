@@ -4,11 +4,13 @@ alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/html as @html
 
 // Values
+fn decode_card(Json) -> Result[Card, String]
+
 fn load(Int?) -> (@browser.Command[Msg], Model)
 
 fn update(Msg, Model) -> (@browser.Command[Msg], Model)
 
-fn view(Model) -> @html.Html[Msg]
+fn view(Model) -> @html.T[Msg]
 
 // Types and methods
 type Card

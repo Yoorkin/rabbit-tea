@@ -1,7 +1,7 @@
 ///|
 pub enum Msg {
   DeleteAll
-  GotCardsData(Result[Json, String])
+  GotCardsData(Result[Array[CardModel], String])
   ReqResult(Result[Json, String])
 } derive(Show)
 
@@ -12,7 +12,10 @@ pub struct Model {
 
 ///|
 pub fn load() -> (@tea.Command[Msg], Model) {
-  (@http.get("/api/cards", expect=Json(Msg::GotCardsData)), { cards: [] })
+  (
+    @http.get("/api/cards", expect=Json(Msg::GotCardsData, decode_cards)),
+    { cards: [] },
+  )
 }
 
 ///|
@@ -43,33 +46,42 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
       let cmds = @tea.batch(
         [
           ..model.cards.map(fn(card) {
-            @http.delete("/api/cards/\{card.id()}", expect=Json(Msg::ReqResult))
+            @http.delete(
+              "/api/cards/\{card.id()}",
+              expect=Json(Msg::ReqResult, Result::Ok),
+            )
           }),
           @browser.load("/"),
         ],
       )
       (cmds, model)
     }
-    GotCardsData(Ok(json)) => {
-      let cards = match json {
-        { "cards": Array(elems) } =>
-          elems.map_option(fn {
-            {
-              "title"? : Some(String(""))
-              | None,
-              "content": String(content),
-              "id": Number(id),
-            } => Some(Card(content, id=id.to_int()))
-            {
-              "title": String(title),
-              "content": String(content),
-              "id": Number(id),
-            } => Some(TitleCard(title~, content~, id=id.to_int()))
-            _ => None
-          })
+    GotCardsData(res) =>
+      match res {
+        Ok(cards) => (@tea.none(), { cards, })
+        Err(_) => (@tea.none(), { cards: [] })
       }
-      (@tea.none(), { cards, })
-    }
     ReqResult(Ok(_)) => (@tea.none(), model)
+  }
+}
+
+///|
+fn decode_cards(json : Json) -> Result[Array[CardModel], String] {
+  match json {
+    { "cards": Array(elems) } => {
+      let cards = elems.map_option(fn {
+        {
+          "title"? : Some(String(""))
+          | None,
+          "content": String(content),
+          "id": Number(id),
+        } => Some(Card(content, id=id.to_int()))
+        { "title": String(title), "content": String(content), "id": Number(id) } =>
+          Some(TitleCard(title~, content~, id=id.to_int()))
+        _ => None
+      })
+      Ok(cards)
+    }
+    _ => Err("Invalid cards data")
   }
 }
