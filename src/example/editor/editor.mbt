@@ -16,7 +16,7 @@ struct Card {
 enum Msg {
   TitleChanged(String)
   ContentChanged(String)
-  GotCardData(Result[Card, String])
+  GotCardData(Result[Json, String])
   SaveCardAndExit(Card)
   ReqResult(Result[Json, String])
 } derive(Show)
@@ -26,32 +26,23 @@ pub fn load(index : Int?) -> (@tea.Command[Msg], Model) {
   match index {
     None => (@tea.none(), Editing({ title: "", content: "", id: None }))
     Some(index) =>
-      (
-        @http.get(
-          "/api/cards/\{index}",
-          expect=Json(Msg::GotCardData, decode_card),
-        ),
-        Loading,
-      )
-  }
-}
-
-///|
-pub fn decode_card(data : Json) -> Result[Card, String] {
-  match data {
-    { "title": String(title), "content": String(content), "id": Number(id) } =>
-      Ok({ title, content, id: Some(id.to_int()) })
-    _ => Err("Invalid card data")
+      (@http.get("/api/cards/\{index}", expect=Json(Msg::GotCardData)), Loading)
   }
 }
 
 ///|
 pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
   match (msg, model) {
-    (GotCardData(card), _) =>
-      match card {
-        Ok(card) => (@tea.none(), Editing(card))
-        Err(_) => (@tea.none(), Failed)
+    (GotCardData(res), _) =>
+      match res {
+        Ok(
+          {
+            "title": String(title),
+            "content": String(content),
+            "id": Number(id),
+          }
+        ) => (@tea.none(), Editing({ title, content, id: Some(id.to_int()) }))
+        _ => (@tea.none(), Failed)
       }
     (TitleChanged(title), Editing(card)) =>
       (@tea.none(), Editing({ ..card, title, }))
@@ -61,10 +52,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
       let save = match card.id {
         Some(id) =>
           if card.title == "" && card.content == "" {
-            @http.delete(
-              "/api/cards/\{id}",
-              expect=Json(Msg::ReqResult, Result::Ok),
-            )
+            @http.delete("/api/cards/\{id}", expect=Json(Msg::ReqResult))
           } else {
             @http.patch(
               "/api/cards/\{id}",
@@ -73,7 +61,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
                 "content": card.content.to_json(),
                 "id": id.to_json(),
               }),
-              expect=Json(Msg::ReqResult, Result::Ok),
+              expect=Json(Msg::ReqResult),
             )
           }
         None =>
@@ -83,7 +71,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
               "title": String(card.title),
               "content": String(card.content),
             }),
-            expect=Json(Msg::ReqResult, Result::Ok),
+            expect=Json(Msg::ReqResult),
           )
       }
       let exit = @browser.load("/")
@@ -121,7 +109,7 @@ pub fn view(model : Model) -> @html.Html[Msg] {
 fn view_text_input[M](
   label : String,
   value : String,
-  input~ : (String) -> M
+  change~ : (String) -> M
 ) -> @html.Html[M] {
   @html.div([
     @html.label([
@@ -133,7 +121,7 @@ fn view_text_input[M](
         ],
         value~,
         input_type=Text,
-        input~,
+        change~,
       ),
     ]),
   ])

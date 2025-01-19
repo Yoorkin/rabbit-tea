@@ -1,8 +1,5 @@
-///|
-type T[Msg] @vdom.Node[Msg]
-
-///|
-pub typealias Html[Msg] = T[Msg]
+///| TODO: struct creation should pop up a completion of labels
+pub type Html[Msg] @vdom.Node[Msg]
 
 ///| Convert msg type of Html.
 /// 
@@ -581,8 +578,7 @@ pub fn input[M](
   id? : String,
   class? : String,
   childrens~ : Array[Html[M]] = [],
-  change? : (String) -> M,
-  input? : (String) -> M
+  change? : (String) -> M
 ) -> Html[M] {
   let input_type = match input_type {
     Button => "button"
@@ -623,7 +619,7 @@ pub fn input[M](
       "accept": accept,
       "placeholder": placeholder,
     },
-    optional_attributes=[change.map(on_change), input.map(on_input)],
+    optional_attributes=[change.map(on_change)],
     style~,
     class?,
     childrens,

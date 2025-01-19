@@ -3,13 +3,13 @@ package Yoorkin/rabbit-tea/http
 alias @Yoorkin/rabbit-tea/browser as @browser
 
 // Values
-fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn delete[M](String, expect~ : Expecting[M]) -> @browser.Command[M]
 
-fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn get[M](String, expect~ : Expecting[M]) -> @browser.Command[M]
 
-fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn patch[M](String, Body, expect~ : Expecting[M]) -> @browser.Command[M]
 
-fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn post[M](String, Body, expect~ : Expecting[M]) -> @browser.Command[M]
 
 // Types and methods
 pub(all) enum Body {
@@ -19,12 +19,11 @@ pub(all) enum Body {
 }
 
 pub(all) enum Expecting {
-  Json((Result[Model, String]) -> Msg, (Json) -> Result[Model, String])
+  Json((Result[Json, String]) -> Msg)
   Text((Result[String, String]) -> Msg)
 }
 
 // Type aliases
-pub typealias Decoder[Model] = (Json) -> Result[Model, String]
 
 // Traits
 
