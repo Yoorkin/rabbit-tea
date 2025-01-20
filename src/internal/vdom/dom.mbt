@@ -325,12 +325,6 @@ pub fn patch[Msg, Model, View](
             let text_node = @ffi.document().create_text_node(value)
             current.replace_child(text_node.to_node(), current.nth_child(index))
           }
-          UpdateFragment(index, childs_patches) => {
-            let node = current.nth_child(index)
-            for patch in childs_patches {
-              aux(patch, node)
-            }
-          }
         }
     }
   }
@@ -370,7 +364,6 @@ enum Update[Msg] {
     Array[(String, @ffi.Listener)]
   )
   UpdateText(Int, String)
-  UpdateFragment(Int, Array[Patch[Msg]])
 }
 
 ///|
@@ -619,14 +612,13 @@ fn diff_with_key[Msg](
           let ii_i_match = key_x2 == key_y1
           if i_ii_match && ii_i_match {
             patches.push(Remove(index))
-            patches.push(InsertBefore(index, y2_1))
+            patches.push(InsertBefore(index+2, y2_1))
             diff_pure(x2_1, y1_1, patches, index)
-            diff_pure(x1_1, y2_1, patches, index + 1)
             aux(tl1, tl2, patches, index + 2)
           } else if i_ii_match {
             patches.push(InsertBefore(index, y1_1))
             diff_pure(x1_1, y2_1, patches, index + 1)
-            aux([x2, ..tl1][:], tl2, patches, index + 1)
+            aux([x2, ..tl1][:], tl2, patches, index + 2)
           } else if ii_i_match {
             patches.push(Remove(index))
             diff_pure(x2_1, y1_1, patches, index)
