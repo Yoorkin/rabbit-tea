@@ -637,10 +637,6 @@ fn diff_with_key[Msg](
           }
         }
       }
-      x => {
-        println(xs.length())
-        println(ys.length())
-      }
     }
   }
 
