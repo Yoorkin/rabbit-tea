@@ -2,7 +2,8 @@
 enum Message {
   GotHomeMsg(@home.Msg)
   GotEditorMsg(@editor.Msg)
-  UrlRequest(@browser.UrlRequest)
+  LinkClicked(@browser.UrlRequest)
+  UrlChanged(@url.Url)
 } derive(Show)
 
 ///|
@@ -39,27 +40,31 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
     (GotEditorMsg(msg), Editor(model)) =>
       @editor.update(msg, model)
       |> update_with(Model::Editor, Message::GotEditorMsg)
-    (UrlRequest(Internal(url)), _) => {
-      let (cmd, model) = route(url)
-      (@browser.batch([cmd, @browser.push_url(url.to_string())]), model)
-    }
-    (UrlRequest(External(url)), _) => (@browser.load(url), model)
-    _ => (@tea.none(), NotFound)
+    (LinkClicked(request), _) =>
+      match request {
+        Internal(url) => (@browser.push_url(url.to_string()), model)
+        External(url) => (@browser.load(url), model)
+      }
+    (UrlChanged(url), _) => route(url)
+    _ => (@tea.none(), model)
   }
 }
 
 ///|
 fn route(url : @url.Url) -> (@tea.Command[Message], Model) {
-  println("routing to \{url.path}")
   let paths = url.path.split("/").collect()
+  println("routing to \{url.to_string()}, path \{paths}")
   match paths {
-    ["home"] | [] =>
+    ["home" | "/"] | [] =>
       @home.load() |> update_with(Model::Home, Message::GotHomeMsg)
     ["new"] =>
       @editor.load(None) |> update_with(Model::Editor, Message::GotEditorMsg)
     ["cards", id] => {
       guard let Ok(id) = @strconv.parse_int?(id) else {
-        _ => (@tea.none(), NotFound)
+        err => {
+          println("error parsing id \{err}")
+          (@tea.none(), NotFound)
+        }
       }
       @editor.load(Some(id))
       |> update_with(Model::Editor, Message::GotEditorMsg)
@@ -74,6 +79,7 @@ fn main {
     initialize=route,
     update~,
     view~,
-    url_request=Message::UrlRequest,
+    url_request=Message::LinkClicked,
+    url_changed=Message::UrlChanged,
   )
 }

@@ -43,7 +43,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
               expect=Json(Msg::ReqResult, Result::Ok),
             )
           }),
-          @browser.load("/"),
+          @browser.push_url("/home"),
         ],
       )
       (cmds, model)
@@ -53,7 +53,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
         Ok(cards) => (@tea.none(), { cards, })
         Err(_) => (@tea.none(), { cards: [] })
       }
-    ReqResult(Ok(_)) => (@tea.none(), model)
+    ReqResult(_) => (@tea.none(), model)
   }
 }
 

@@ -30,6 +30,7 @@ let cards = [
 // GET /api/cards - Retrieve all cards
 app.get('/api/cards', (req, res) => {
     res.json({ cards: cards });
+    console.log("GET /api/cards", cards);
 });
 
 // GET /api/cards/:id - Retrieve all cards
@@ -37,6 +38,7 @@ app.get('/api/cards/:id', (req, res) => {
     const cardId = parseInt(req.params.id, 10);
     const cardIndex = cards.findIndex(card => card.id === cardId);
     res.json(cards[cardIndex]);
+    console.log(`GET /api/cards/${cardId}`, cards[cardIndex]);
 });
 
 // POST /api/cards - Create a new card
@@ -60,6 +62,7 @@ app.patch('/api/cards/:id', (req, res) => {
     const updatedCard = { ...cards[cardIndex], ...req.body };
     cards[cardIndex] = updatedCard;
     res.json(updatedCard);
+    console.log(`PATCH /api/cards/${cardId}`, updatedCard);
 });
 
 // DELETE /api/cards/:id - Delete a card
@@ -73,6 +76,7 @@ app.delete('/api/cards/:id', (req, res) => {
 
     cards.splice(cardIndex, 1);
     res.status(204).send();
+    console.log(`DELETE /api/cards/${cardId}`);
 });
 
 // Start the server
@@ -80,12 +84,15 @@ app.listen(port, () => {
     console.log(`Server is listening on http://localhost:${port}`);
 });
 
-// Serve index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 // Serve example.js
 app.get('/main.js', (req, res) => {
-    res.sendFile(path.join(__dirname, 'target/js/release/build/example/example.js'));
+    res.sendFile(path.join(__dirname, '../../target/js/release/build/example/example.js'));
 });
+
+// Serve index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+    console.log('GET /');
+});
+
+
