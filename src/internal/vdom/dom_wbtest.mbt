@@ -66,6 +66,31 @@ test "keyed3" {
 }
 
 
+test "ii_i_match index" {
+  let old = [
+    ("a", node("tag_a", [], [])),
+    ("b", node("tag_b", [], [])),
+    ("c", node("tag_c", [], [])),
+    ("d", node("tag_d", [], [])),
+  ]
+  let new = [
+    ("b", node("tag_b", [], [])),
+    ("x", node("tag_x", [], [])),
+    ("y", node("tag_y", [], [])),
+    ("d", node("tag_d", [], [])),
+  ]
+  let patches = diff_with_key(old, new)
+  inspect!(
+    String::concat(patches.map(patch_to_string)),
+    content=
+      #|Remove(0)
+      #|Replace(2, Node(tag_x))
+      #|InsertBefore(3, Node(tag_d))
+      #|
+    ,
+  )
+}
+
 test "keyed4" {
   let old = [
     ("b", node("tag_b", [], [])),
