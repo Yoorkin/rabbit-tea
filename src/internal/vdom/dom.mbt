@@ -228,7 +228,7 @@ fn to_node[Msg, Model, View](
           element.add_event_listener("click", fn(event) {
             event.prevent_default()
             let href = element.get_property("href")
-            guard let Ok(curr) = @url.parse?(@ffi.current_url())
+            guard let Ok(curr) = @url.parse?(@ffi.window().current_url())
             guard let Ok(next) = @url.parse?(href)
             let request = if curr.protocol == next.protocol &&
               curr.host == next.host &&
