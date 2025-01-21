@@ -50,3 +50,10 @@ pub extern "js" fn request_animination_frame(self : Window, f : () -> Unit) = "(
 
 ///|
 pub extern "js" fn window() -> Window = "() => window"
+
+///|
+pub extern "js" fn add_event_listener(
+  self : Window,
+  event : String,
+  listener : Listener
+) = "(self,event,callback) => self.addEventListener(event, callback)"

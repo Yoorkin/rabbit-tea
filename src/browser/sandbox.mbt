@@ -90,6 +90,10 @@ pub fn Sandbox::new[Model, Msg, View](
     Some(f) => fn(url) { sandbox.update(f(url)) }
     None => ignore
   }
+  @ffi.window().add_event_listener("popstate", fn(_event) {
+    guard let Ok(url) = @url.parse?(@ffi.window().current_url())
+    on_url_changed(url)
+  })
   sandbox.predefined = Some({ on_url_changed, on_url_request })
   sandbox
 }

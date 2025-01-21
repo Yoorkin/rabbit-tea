@@ -86,6 +86,7 @@ impl Text {
 
 pub type Window
 impl Window {
+  add_event_listener(Self, String, (Event) -> Unit) -> Unit
   current_url(Self) -> String
   history_go_back(Self) -> Unit
   history_go_forward(Self) -> Unit
