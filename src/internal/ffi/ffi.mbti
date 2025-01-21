@@ -1,33 +1,11 @@
 package Yoorkin/rabbit-tea/internal/ffi
 
 // Values
-fn current_url() -> String
-
 fn document() -> Document
-
-fn history_go_back() -> Unit
-
-fn history_go_forward() -> Unit
-
-fn load_url(String) -> Unit
 
 fn patch(Element) -> Unit
 
-fn push_url(String) -> Unit
-
-fn reload_url() -> Unit
-
-fn replace_url(String) -> Unit
-
-fn request_animination_frame(() -> Unit) -> Unit
-
-fn scroll_by(Int, Int) -> Unit
-
-fn scroll_to(Int, Int) -> Unit
-
-fn scroll_to_bottom() -> Unit
-
-fn scroll_to_top() -> Unit
+fn window() -> Window
 
 // Types and methods
 type Document
@@ -104,6 +82,22 @@ impl Node {
 type Text
 impl Text {
   to_node(Self) -> Node
+}
+
+pub type Window
+impl Window {
+  current_url(Self) -> String
+  history_go_back(Self) -> Unit
+  history_go_forward(Self) -> Unit
+  load_url(Self, String) -> Unit
+  push_url(Self, String) -> Unit
+  reload_url(Self) -> Unit
+  replace_url(Self, String) -> Unit
+  request_animination_frame(Self, () -> Unit) -> Unit
+  scroll_by(Self, Int, Int) -> Unit
+  scroll_to(Self, Int, Int) -> Unit
+  scroll_to_bottom(Self) -> Unit
+  scroll_to_top(Self) -> Unit
 }
 
 // Type aliases

@@ -1,11 +1,11 @@
 ///|
 pub fn scroll_to_pos[M](x : Int, y : Int) -> Command[M] {
-  fn(_events, update) { @ffi.scroll_to(x, y) }
+  fn(_events, update) { @ffi.window().scroll_to(x, y) }
 }
 
 ///|
 pub fn scroll_by_pos[M](x : Int, y : Int) -> Command[M] {
-  fn(_events, update) { @ffi.scroll_by(x, y) }
+  fn(_events, update) { @ffi.window().scroll_by(x, y) }
 }
 
 ///|
@@ -17,10 +17,10 @@ pub fn scroll_to[M](element : String) -> Command[M] {
 
 ///|
 pub fn scroll_to_top[M]() -> Command[M] {
-  fn(_events, update) { @ffi.scroll_to_top() }
+  fn(_events, update) { @ffi.window().scroll_to_top() }
 }
 
 ///|
 pub fn scroll_to_bottom[M]() -> Command[M] {
-  fn(_events, update) { @ffi.scroll_to_bottom() }
+  fn(_events, update) { @ffi.window().scroll_to_bottom() }
 }
