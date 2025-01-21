@@ -71,7 +71,7 @@ pub fn application[Model, Msg](
     curr_dom = new_dom
   }
 
-  guard let Ok(url) = @url.parse?(@ffi.current_url())
+  guard let Ok(url) = @url.parse?(@ffi.window().current_url())
   let (cmd, model) = initialize(url)
   sandbox = Some(
     @browser.new(model, update, view, after_update~, url_request?, url_changed?),
