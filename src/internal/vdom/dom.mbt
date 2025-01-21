@@ -612,7 +612,7 @@ fn diff_with_key[Msg](
           let ii_i_match = key_x2 == key_y1
           if i_ii_match && ii_i_match {
             patches.push(Remove(index))
-            patches.push(InsertBefore(index+2, y2_1))
+            patches.push(InsertBefore(index+1, y2_1))
             diff_pure(x2_1, y1_1, patches, index)
             aux(tl1, tl2, patches, index + 2)
           } else if i_ii_match {

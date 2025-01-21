@@ -15,7 +15,7 @@ test "keyed1" {
     String::concat(patches.map(patch_to_string)),
     content=
       #|Remove(0)
-      #|InsertBefore(2, Node(tag_b))
+      #|InsertBefore(1, Node(tag_b))
       #|
     ,
   )
