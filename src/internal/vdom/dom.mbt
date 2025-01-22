@@ -66,6 +66,7 @@ pub fn node[Msg](
   Node(tag, attrs~, childrens~, listeners=[])
 }
 
+///|
 pub fn keyed_node[Msg](
   key : String,
   attrs : Array[Attribute[Msg]],
@@ -569,34 +570,36 @@ fn diff_with_key[Msg](
           patches.push(Replace(index, y_1))
         }
       }
-      ([x1, x2], [y]) => {
+      ([x1, x2, .. tl1], [y]) => {
         let (key_x1, x1_1) = x1
         let (key_x2, x2_1) = x2
         let (key_y, y_1) = y
         if key_x1 == key_y {
           diff_pure(x1_1, y_1, patches, index)
-          aux([x2][:], [][:], patches, index + 1)
+          aux([x2, ..tl1][:], [][:], patches, index + 1)
         } else if key_x2 == key_y {
           patches.push(Remove(index))
           diff_pure(x2_1, y_1, patches, index)
+          aux(tl1, [][:], patches, index + 1)
         } else {
           patches.push(Replace(index, y_1))
-          aux([x2][:], [][:], patches, index + 1)
+          aux([x2, ..tl1][:], [][:], patches, index + 1)
         }
       }
-      ([x], [y1, y2]) => {
+      ([x], [y1, y2, .. tl2]) => {
         let (key_x, x_1) = x
         let (key_y1, y1_1) = y1
         let (key_y2, y2_1) = y2
         if key_x == key_y1 {
           diff_pure(x_1, y1_1, patches, index)
-          aux([][:], [y2][:], patches, index + 1)
+          aux([][:], [y2, ..tl2][:], patches, index + 1)
         } else if key_x == key_y2 {
           diff_pure(x_1, y2_1, patches, index)
-          patches.push(InsertBefore(index, y2_1))
+          patches.push(InsertBefore(index, y1_1))
+          aux([][:], tl2, patches, index + 1)
         } else {
           patches.push(Replace(index, y1_1))
-          aux([][:], [y2][:], patches, index + 1)
+          aux([][:], [y2, ..tl2][:], patches, index + 1)
         }
       }
       ([x1, x2, .. tl1], [y1, y2, .. tl2]) => {
@@ -612,7 +615,7 @@ fn diff_with_key[Msg](
           let ii_i_match = key_x2 == key_y1
           if i_ii_match && ii_i_match {
             patches.push(Remove(index))
-            patches.push(InsertBefore(index+1, y2_1))
+            patches.push(InsertBefore(index + 1, y2_1))
             diff_pure(x2_1, y1_1, patches, index)
             aux(tl1, tl2, patches, index + 2)
           } else if i_ii_match {
@@ -622,7 +625,7 @@ fn diff_with_key[Msg](
           } else if ii_i_match {
             patches.push(Remove(index))
             diff_pure(x2_1, y1_1, patches, index)
-            aux(tl1, [y2, ..tl2][:], patches, index + 2)
+            aux(tl1, [y2, ..tl2][:], patches, index + 1)
           } else {
             patches.push(Replace(index, y1_1))
             aux([x2, ..tl1][:], [y2, ..tl2][:], patches, index + 1)

@@ -1,5 +1,5 @@
 // in dom_wbtest.mbt
-test "keyed1" {
+test "i_ii + ii_i" {
   let old = [
     ("b", node("tag_b", [], [])),
     ("a", node("tag_a", [], [])),
@@ -21,7 +21,7 @@ test "keyed1" {
   )
 }
 
-test "keyed2" {
+test "i_ii_match_1" {
   let old = [
     ("b", node("tag_b", [], [])),
     ("d", node("tag_d", [], [])),
@@ -43,7 +43,7 @@ test "keyed2" {
   )
 }
 
-test "keyed3" {
+test "ii_i_match_1" {
   let old = [
     ("f", node("tag_f", [], [])),
     ("b", node("tag_b", [], [])),
@@ -65,8 +65,7 @@ test "keyed3" {
   )
 }
 
-
-test "ii_i_match index" {
+test "ii_i_match_2" {
   let old = [
     ("a", node("tag_a", [], [])),
     ("b", node("tag_b", [], [])),
@@ -84,14 +83,14 @@ test "ii_i_match index" {
     String::concat(patches.map(patch_to_string)),
     content=
       #|Remove(0)
-      #|Replace(2, Node(tag_x))
-      #|InsertBefore(3, Node(tag_d))
+      #|Replace(1, Node(tag_x))
+      #|InsertBefore(2, Node(tag_y))
       #|
     ,
   )
 }
 
-test "keyed4" {
+test "i_ii_match_2" {
   let old = [
     ("b", node("tag_b", [], [])),
     ("h", node("tag_h", [], [])),
@@ -110,6 +109,73 @@ test "keyed4" {
       #|Remove(2)
       #|
     ,
+  )
+}
+
+test "1_2_i_ii" {
+  let old = [("a", node("tag_a", [], []))]
+  let new = [
+    ("b", node("tag_b", [], [])),
+    ("a", node("tag_a", [], [])),
+    ("c", node("tag_c", [], [])),
+  ]
+  let patches = diff_with_key(old, new)
+  inspect!(
+    String::concat(patches.map(patch_to_string)),
+    content=
+      #|InsertBefore(0, Node(tag_b))
+      #|Append(1 ["Node(tag_c)"])
+      #|
+    ,
+  )
+}
+
+test "1_2_i_i" {
+  let old = [("a", node("tag_a", [], []))]
+  let new = [
+    ("a", node("tag_a", [], [])),
+    ("b", node("tag_b", [], [])),
+    ("c", node("tag_c", [], [])),
+  ]
+  let patches = diff_with_key(old, new)
+  inspect!(
+    String::concat(patches.map(patch_to_string)),
+    content=
+      #|Append(2 ["Node(tag_b)", "Node(tag_c)"])
+      #|
+    ,
+  )
+}
+
+test "2_1_i_i" {
+  let old = [
+    ("a", node("tag_a", [], [])),
+    ("b", node("tag_b", [], [])),
+    ("c", node("tag_c", [], [])),
+  ]
+  let new = [("a", node("tag_a", [], []))]
+  let patches = diff_with_key(old, new)
+  inspect!(
+    String::concat(patches.map(patch_to_string)),
+    content=
+      #|Drop(1, 2)
+      #|
+    ,
+  )
+}
+
+test "2_1_i_ii" {
+  let old = [
+    ("b", node("tag_b", [], [])),
+    ("a", node("tag_a", [], [])),
+    ("c", node("tag_c", [], [])),
+  ]
+  let new = [("a", node("tag_a", [], []))]
+  let patches = diff_with_key(old, new)
+  inspect!(String::concat(patches.map(patch_to_string)), content=
+    #|Remove(0)
+    #|Drop(1, 1)
+    #|
   )
 }
 
