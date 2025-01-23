@@ -32,5 +32,5 @@ pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
 
 ///|
 pub fn task[M](message : M) -> Command[M] {
-  Command(fn(predef, update) { update(message) })
+  Command(fn(_, update) { update(message) })
 }

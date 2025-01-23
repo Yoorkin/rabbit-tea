@@ -7,7 +7,7 @@ enum CardModel {
 ///|
 fn id(self : CardModel) -> Int {
   match self {
-    TitleCard(title~, content~, id~) => id
+    TitleCard(id~, ..) => id
     Card(_, id~) => id
   }
 }

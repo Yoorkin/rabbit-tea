@@ -12,15 +12,12 @@ pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
 }
 
 ///|
-pub fn to_virtual_dom[Msg, Model, View](
-  self : Html[Msg],
-  sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> @vdom.Node[Msg] {
+pub fn to_virtual_dom[Msg](self : Html[Msg]) -> @vdom.Node[Msg] {
   self._
 }
 
 ///|
-fn Html::new[Msg](
+fn new[Msg](
   tag : String,
   attrs : Map[String, String],
   style? : Array[String],
@@ -625,6 +622,7 @@ pub fn input[M](
     },
     optional_attributes=[change.map(on_change), input.map(on_input)],
     style~,
+    id?,
     class?,
     childrens,
   )

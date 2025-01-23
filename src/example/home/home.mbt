@@ -61,7 +61,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
 fn decode_cards(json : Json) -> Result[Array[CardModel], String] {
   match json {
     { "cards": Array(elems) } => {
-      let cards = elems.map_option(fn {
+      let cards = elems.filter_map(fn {
         {
           "title"? : Some(String(""))
           | None,

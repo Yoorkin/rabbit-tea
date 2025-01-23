@@ -29,6 +29,7 @@ pub fn to_string(self : Url) -> String {
   let protocol = match self.protocol {
     Http => "http"
     Https => "https"
+    _ => panic() // TODO: fix this
   }
   let port = match self.port {
     Some(p) => ":\{p}"
@@ -60,9 +61,9 @@ pub fn parse(url : String) -> Url!Error {
     _ => fail!("Invalid host")
   }
   let (mid, path) = match mid.split("/").collect() {
+    [mid] => (mid, "")
     [mid, .. paths] =>
       (mid, String::concat(paths.iter().collect(), separator="/"))
-    [mid] => (mid, "")
     _ => fail!("Invalid host")
   }
   let (host, port) = match mid.split(":").collect() {
