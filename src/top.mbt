@@ -31,7 +31,7 @@ pub fn startup[Model, Message](
   model~ : Model,
   update~ : (Message, Model) -> (Command[Message], Model),
   view~ : (Model) -> @html.Html[Message],
-  mount~ : String
+  mount~ : String = "app"
 ) -> Unit {
   @ffi.document().get_element_by_id(mount).set_inner_html("<div></div>")
   let mut sandbox = None

@@ -11,7 +11,7 @@ fn batch[M](Array[@browser.Command[M]]) -> @browser.Command[M]
 
 fn none[M]() -> @browser.Command[M]
 
-fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String) -> Unit
+fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String = ..) -> Unit
 
 fn task[M](M) -> @browser.Command[M]
 
