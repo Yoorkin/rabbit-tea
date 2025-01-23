@@ -13,7 +13,8 @@ pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
 
 ///|
 pub fn to_virtual_dom[Msg](self : Html[Msg]) -> @vdom.Node[Msg] {
-  self._
+  // Wrap the node with a root node. This node represents the root of the real DOM managed by TEA.
+  node("root", [], [self])._
 }
 
 ///|
