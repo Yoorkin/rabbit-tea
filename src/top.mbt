@@ -38,12 +38,12 @@ pub fn startup[Model, Message](
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Message]) {
     guard let Some(sandbox) = sandbox
-    let new_dom = html.to_virtual_dom(sandbox)
+    let new_dom = html.to_virtual_dom()
     new_dom.patch(curr_dom, sandbox, mount~)
     curr_dom = new_dom
   }
 
-  sandbox = Some(@browser.new(model, update, view, after_update~))
+  sandbox = Some(@browser.Sandbox::new(model, update, view, after_update~))
   sandbox.unwrap().refersh()
 }
 
@@ -66,7 +66,7 @@ pub fn application[Model, Msg](
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Msg]) {
     guard let Some(sandbox) = sandbox
-    let new_dom = html.to_virtual_dom(sandbox)
+    let new_dom = html.to_virtual_dom()
     new_dom.patch(curr_dom, sandbox, mount~)
     curr_dom = new_dom
   }
@@ -74,7 +74,14 @@ pub fn application[Model, Msg](
   guard let Ok(url) = @url.parse?(@ffi.window().current_url())
   let (cmd, model) = initialize(url)
   sandbox = Some(
-    @browser.new(model, update, view, after_update~, url_request?, url_changed?),
+    @browser.Sandbox::new(
+      model,
+      update,
+      view,
+      after_update~,
+      url_request?,
+      url_changed?,
+    ),
   )
   sandbox.unwrap().launch(cmd)
 }

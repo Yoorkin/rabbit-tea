@@ -4,7 +4,6 @@ struct Sandbox[Msg, Model, View] {
   update : (Msg, Model) -> (Command[Msg], Model)
   view : (Model) -> View
   after_update : (View) -> Unit
-  attach_to : String
   on_url_changed : ((@url.Url) -> Msg)?
   on_url_request : ((UrlRequest) -> Msg)?
   mut predefined : PredefinedEvent?
@@ -68,7 +67,6 @@ pub fn Sandbox::new[Model, Msg, View](
   update : (Msg, Model) -> (Command[Msg], Model),
   view : (Model) -> View,
   after_update~ : (View) -> Unit,
-  attach_to~ : String = "app",
   url_changed? : (@url.Url) -> Msg,
   url_request? : (UrlRequest) -> Msg
 ) -> Sandbox[Msg, Model, View] {
@@ -77,7 +75,6 @@ pub fn Sandbox::new[Model, Msg, View](
     update,
     view,
     after_update,
-    attach_to,
     on_url_changed: url_changed,
     on_url_request: url_request,
     predefined: None,

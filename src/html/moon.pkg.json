@@ -4,10 +4,6 @@
             "path": "Yoorkin/rabbit-tea/internal/vdom",
             "alias": "vdom"
         },
-        {
-            "path": "Yoorkin/rabbit-tea/browser",
-            "alias": "adapter"
-        },
         "Yoorkin/rabbit-tea/internal/ffi"
     ],
     "link": {

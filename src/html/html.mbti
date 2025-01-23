@@ -1,6 +1,5 @@
 package Yoorkin/rabbit-tea/html
 
-alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
 
 // Values
@@ -146,7 +145,7 @@ pub(all) enum InputType {
 type T
 impl T {
   map[A, B](Self[A], (A) -> B) -> Self[B]
-  to_virtual_dom[Msg, Model, View](Self[Msg], @browser.Sandbox[Msg, Model, View]) -> @vdom.Node[Msg]
+  to_virtual_dom[Msg](Self[Msg]) -> @vdom.Node[Msg]
 }
 
 pub(all) enum Target {

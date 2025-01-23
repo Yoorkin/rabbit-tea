@@ -89,6 +89,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
       let exit = @browser.push_url("/home")
       (@tea.batch([save, exit]), model)
     }
+    _ => (@tea.none(), model)
   }
 }
 

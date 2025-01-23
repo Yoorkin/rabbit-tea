@@ -1,30 +1,10 @@
-/// Things need to do:
-/// - The braces and parentheses in comments and string should not be highlighted.
-/// - ArrayView can be pattern matched by [], but cannot be constructed like that.
-/// - Documentation in mooncakes.io is not convient to use
-///     - members should be listed by order
-///     - search
-/// - If you create this package and click `run test` in test.mbt, 
-///   it will complain that `moon.mod.json` not found, unless you moon clean and moon check first.
-/// 
-/// - All imports in moon.pkg.json used absolute path, 
-///   if i changes the module name, all moon.pkg.json need to be changed.
-/// 
-/// - Function type does not implement Show trait
-///
-/// - Need a Dispose trait to maintains the FFI resource
-/// 
-/// - Need Map::map_values  
-/// - Need Iter::filter_map
-/// - Type of Map::iter() is not Iter2
-
 ///|
 enum Node[Msg] {
   Node(
     String,
     attrs~ : Array[Attribute[Msg]],
     childrens~ : Array[Node[Msg]],
-    // Store the event listener uesd in real DOM
+    // Store the event listener used in real DOM
     listeners~ : Array[(String, @ffi.Listener)]
   )
   Text(String)
@@ -77,7 +57,7 @@ enum AttrValue[Msg] {
   // from the AttrString, which set the attribute of the element.
   // See https://github.com/elm/html/blob/master/properties-vs-attributes.md
   //
-  // Futher more, the behavior of property may be different with attribute, even 
+  // Further more, the behavior of property may be different with attribute, even 
   // they have the same name. For example, if you set the `href` by `setAttribute`, the
   // `href` will be the value you specified, but by property, the value will be 
   // resolved to an absolute URL. 
@@ -88,7 +68,7 @@ enum AttrValue[Msg] {
 pub(all) enum Handler[Msg] {
   Normal(Msg)
   HandleEvent((@ffi.Event) -> Msg)
-  Custom(Msg, stop_progapation~ : Bool, prevent_default~ : Bool)
+  Custom(Msg, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
 
 ///|
@@ -102,32 +82,32 @@ fn is_same_type[Msg](x : Node[Msg], y : Node[Msg]) -> Bool {
 }
 
 ///|
-impl[Msg] Eq for Handler[Msg] with op_equal(a, b) {
+impl[Msg] Eq for Handler[Msg] with op_equal(_a, _b) {
   false // TODO: implement this
 }
 
 ///|
-impl[Msg] Eq for AttrValue[Msg] with op_equal(a, b) {
+impl[Msg] Eq for AttrValue[Msg] with op_equal(_a, _b) {
   false // TODO: implement this
 }
 
 ///|
-impl[Msg] Eq for Attribute[Msg] with op_equal(a, b) {
+impl[Msg] Eq for Attribute[Msg] with op_equal(_a, _b) {
   false // TODO: implement this
 }
 
 ///|
-pub fn map[A, B](self : Handler[A], f : (A) -> B) -> Handler[B] {
+pub fn Handler::map[A, B](self : Handler[A], f : (A) -> B) -> Handler[B] {
   match self {
     Normal(msg) => Normal(f(msg))
     HandleEvent(g) => HandleEvent(fn(event) { g(event) |> f })
-    Custom(msg, stop_progapation~, prevent_default~) =>
-      Custom(f(msg), stop_progapation~, prevent_default~)
+    Custom(msg, stop_propagation~, prevent_default~) =>
+      Custom(f(msg), stop_propagation~, prevent_default~)
   }
 }
 
 ///|
-pub fn map[A, B](self : Attribute[A], f : (A) -> B) -> Attribute[B] {
+pub fn Attribute::map[A, B](self : Attribute[A], f : (A) -> B) -> Attribute[B] {
   let Attribute((key, value)) = self
   let value = match value {
     AttrEvent(handler) => AttrEvent(handler.map(f))
@@ -178,9 +158,9 @@ fn to_node[Msg, Model, View](
           let listener = match handler {
             Normal(msg) => fn(_event) { sandbox.update(msg) }
             HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
-            Custom(msg, stop_progapation~, prevent_default~) =>
+            Custom(msg, stop_propagation~, prevent_default~) =>
               fn(event : @ffi.Event) { // TODO: remove this annotation will cause type error, why?
-                if stop_progapation {
+                if stop_propagation {
                   event.stop_propagation()
                 }
                 if prevent_default {
@@ -278,9 +258,9 @@ pub fn patch[Msg, Model, View](
                   let listener = match handler {
                     Normal(msg) => fn(_event) { sandbox.update(msg) }
                     HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
-                    Custom(msg, stop_progapation~, prevent_default~) =>
+                    Custom(msg, stop_propagation~, prevent_default~) =>
                       fn(event : @ffi.Event) {
-                        if stop_progapation {
+                        if stop_propagation {
                           event.stop_propagation()
                         }
                         if prevent_default {
@@ -301,12 +281,6 @@ pub fn patch[Msg, Model, View](
           UpdateText(index, value) => {
             let text_node = @ffi.document().create_text_node(value)
             current.replace_child(text_node.to_node(), current.nth_child(index))
-          }
-          UpdateFragment(index, childs_patches) => {
-            let node = current.nth_child(index)
-            for patch in childs_patches {
-              aux(patch, node)
-            }
           }
         }
     }
@@ -338,6 +312,12 @@ enum Patch[Msg] {
   Update(Update[Msg])
 }
 
+test {
+  // TODO: this is used to suppress unused warnings. Remove this later.
+  ignore((Patch::Remove : (Int) -> Patch[Unit]))
+  ignore((Patch::InsertBefore : (Int, Node[Unit]) -> Patch[Unit]))
+}
+
 ///|
 enum Update[Msg] {
   UpdateNode(
@@ -347,7 +327,6 @@ enum Update[Msg] {
     Array[(String, @ffi.Listener)]
   )
   UpdateText(Int, String)
-  UpdateFragment(Int, Array[Patch[Msg]])
 }
 
 ///|
@@ -383,7 +362,7 @@ pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
 }
 
 // To be improved!!! Now this implementation will affect the performance of the diff algorithm.
-// And If a AttrbuteString's name is same as a AttrEvent's name, the diff algorithm will not work.
+// And If a AttributeString's name is same as a AttrEvent's name, the diff algorithm will not work.
 // Now we think the events is different although they never changed.
 ///|
 fn attrs_diff[Msg](
@@ -405,7 +384,8 @@ fn attrs_diff[Msg](
       AttrEvent(_) => ()
       AttrStyle(value) =>
         if new_map.contains(key) {
-          let AttrStyle(value_new) = new_map.get(key).unwrap()
+          // FIXME: avoid unwrap and guard let
+          guard let AttrStyle(value_new) = new_map.get(key).unwrap()
           if value != value_new {
             result.push(StyleAdd(key, value_new))
           }
@@ -414,7 +394,8 @@ fn attrs_diff[Msg](
         }
       AttrString(value) =>
         if new_map.contains(key) {
-          let AttrString(value_new) = new_map.get(key).unwrap()
+          // FIXME: avoid unwrap and guard let
+          guard let AttrString(value_new) = new_map.get(key).unwrap()
           if value != value_new {
             result.push(AttrAdd(key, value_new))
           }
@@ -423,7 +404,8 @@ fn attrs_diff[Msg](
         }
       AttrProperty(value) =>
         if new_map.contains(key) {
-          let AttrProperty(value_new) = new_map.get(key).unwrap()
+          // FIXME: avoid unwrap and guard let
+          guard let AttrProperty(value_new) = new_map.get(key).unwrap()
           if value != value_new {
             result.push(PropertyAdd(key, value_new))
           }
