@@ -74,7 +74,14 @@ pub fn application[Model, Msg](
   guard let Ok(url) = @url.parse?(@ffi.window().current_url())
   let (cmd, model) = initialize(url)
   sandbox = Some(
-    @browser.Sandbox::new(model, update, view, after_update~, url_request?, url_changed?),
+    @browser.Sandbox::new(
+      model,
+      update,
+      view,
+      after_update~,
+      url_request?,
+      url_changed?,
+    ),
   )
   sandbox.unwrap().launch(cmd)
 }

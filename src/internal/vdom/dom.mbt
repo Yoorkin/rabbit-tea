@@ -335,7 +335,7 @@ enum Patch[Msg] {
 test {
   // TODO: this is used to suppress unused warnings. Remove this later.
   ignore((Patch::Remove : (Int) -> Patch[Unit]))
-  ignore((Patch::InsertBefore : (Int,Node[Unit]) -> Patch[Unit]))
+  ignore((Patch::InsertBefore : (Int, Node[Unit]) -> Patch[Unit]))
 }
 
 ///|
@@ -405,7 +405,7 @@ fn attrs_diff[Msg](
       AttrStyle(value) =>
         if new_map.contains(key) {
           // FIXME: avoid unwrap and guard let
-          guard let AttrStyle(value_new) = new_map.get(key).unwrap() 
+          guard let AttrStyle(value_new) = new_map.get(key).unwrap()
           if value != value_new {
             result.push(StyleAdd(key, value_new))
           }
