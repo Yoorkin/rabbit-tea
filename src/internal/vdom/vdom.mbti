@@ -8,9 +8,13 @@ fn attribute[Msg](String, String) -> Attribute[Msg]
 
 fn diff[Msg](Node[Msg], Node[Msg]) -> Patch[Msg]
 
+fn diff_pure[Msg](Node[Msg], Node[Msg], Array[Patch[Msg]], Int) -> Unit
+
 fn diff_without_key[Msg](Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]]
 
 fn do_diff[Msg](Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
+
+fn keyed_node[Msg](String, Array[Attribute[Msg]], Array[(String, Node[Msg])]) -> Node[Msg]
 
 fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
