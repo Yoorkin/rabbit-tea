@@ -24,7 +24,6 @@ impl DocumentFragment {
 
 type Element
 impl Element {
-  add_event_listener(Self, String, (Event) -> Unit) -> Unit
   append_children(Self, Self) -> Unit
   count_children(Self) -> Int
   get_attribute(Self, String) -> String
@@ -32,7 +31,6 @@ impl Element {
   get_property(Self, String) -> String
   remove_attribute(Self, String) -> Unit
   remove_children(Self, Self) -> Unit
-  remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   remove_property(Self, String) -> Unit
   remove_style(Self, String) -> Unit
   scroll_into_view(Self) -> Unit
@@ -45,13 +43,22 @@ impl Element {
 
 type Event
 impl Event {
+  client_x(Self) -> Int
+  client_y(Self) -> Int
+  offset_x(Self) -> Int
+  offset_y(Self) -> Int
   prevent_default(Self) -> Unit
+  screen_x(Self) -> Int
+  screen_y(Self) -> Int
   stop_propagation(Self) -> Unit
   target(Self) -> EventTarget
 }
 
 type EventTarget
 impl EventTarget {
+  add_event_listener(Self, String, (Event) -> Unit) -> Unit
+  dispatch_event(Self, Event) -> Unit
+  remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   value(Self) -> String
 }
 
@@ -76,6 +83,7 @@ impl Node {
   to_document(Self) -> Document
   to_document_fragment(Self) -> DocumentFragment
   to_element(Self) -> Element
+  to_event_target(Self) -> EventTarget
   to_text(Self) -> Text
 }
 
@@ -84,9 +92,8 @@ impl Text {
   to_node(Self) -> Node
 }
 
-pub type Window
+type Window
 impl Window {
-  add_event_listener(Self, String, (Event) -> Unit) -> Unit
   current_url(Self) -> String
   history_go_back(Self) -> Unit
   history_go_forward(Self) -> Unit
@@ -99,6 +106,7 @@ impl Window {
   scroll_to(Self, Int, Int) -> Unit
   scroll_to_bottom(Self) -> Unit
   scroll_to_top(Self) -> Unit
+  to_event_target(Self) -> EventTarget
 }
 
 // Type aliases

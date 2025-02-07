@@ -15,6 +15,9 @@ pub extern "js" fn to_element(self : Node) -> Element =
 pub extern "js" fn to_text(self : Node) -> Text =
   #| (x) => { if(x.nodeType===3) { return x; } else { throw new Error("not an TEXT_NODE") }; }
 
+///|
+pub extern "js" fn to_event_target(self : Node) -> EventTarget = "(x) => x"
+
 // -------------- convert types back to node -----------------
 ///|
 pub extern "js" fn Document::to_node(self : Document) -> Node = "(x) => x"

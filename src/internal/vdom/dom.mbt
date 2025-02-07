@@ -169,7 +169,10 @@ fn to_node[Msg, Model, View](
                 sandbox.update(msg)
               }
           }
-          element.add_event_listener(event, listener)
+          element
+          .to_node()
+          .to_event_target()
+          .add_event_listener(event, listener)
           node.listeners.push((event, listener))
         }
         Attribute((key, AttrString(value))) => element.set_attribute(key, value)
@@ -186,7 +189,10 @@ fn to_node[Msg, Model, View](
       // handle the click event.
       match (sandbox.get_on_url_request(), tag) {
         (Some(url_request), "a") =>
-          element.add_event_listener("click", fn(event) {
+          element
+          .to_node()
+          .to_event_target()
+          .add_event_listener("click", fn(event) {
             event.prevent_default()
             let href = element.get_property("href")
             guard let Ok(curr) = @url.parse?(@ffi.window().current_url())
@@ -253,7 +259,10 @@ pub fn patch[Msg, Model, View](
                 PropertyAdd(key, value) => element.set_property(key, value)
                 PropertyRemove(key) => element.remove_property(key)
                 EventRemove(key, listener) =>
-                  element.remove_event_listener(key, listener)
+                  element
+                  .to_node()
+                  .to_event_target()
+                  .remove_event_listener(key, listener)
                 EventAdd(key, handler) => {
                   let listener = match handler {
                     Normal(msg) => fn(_event) { sandbox.update(msg) }
@@ -269,7 +278,10 @@ pub fn patch[Msg, Model, View](
                         sandbox.update(msg)
                       }
                   }
-                  element.add_event_listener(key, listener)
+                  element
+                  .to_node()
+                  .to_event_target()
+                  .add_event_listener(key, listener)
                   new_listeners.push((key, listener))
                 }
               }

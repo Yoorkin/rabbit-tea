@@ -1,5 +1,5 @@
 ///|
-pub type Window
+type Window
 
 ///|
 pub extern "js" fn scroll_to(self : Window, x : Int, y : Int) =
@@ -52,8 +52,4 @@ pub extern "js" fn request_animination_frame(self : Window, f : () -> Unit) = "(
 pub extern "js" fn window() -> Window = "() => window"
 
 ///|
-pub extern "js" fn Window::add_event_listener(
-  self : Window,
-  event : String,
-  listener : Listener
-) = "(self,event,callback) => self.addEventListener(event, callback)"
+pub extern "js" fn Window::to_event_target(self : Window) -> EventTarget = "(x) => x"
