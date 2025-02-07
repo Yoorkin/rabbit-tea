@@ -50,20 +50,6 @@ pub extern "js" fn remove_style(self : Element, key : String) -> Unit = "(self,k
 pub extern "js" fn remove_attribute(self : Element, attr : String) -> Unit = "(self,attr) => self.removeAttribute(attr)"
 
 ///|
-pub extern "js" fn add_event_listener(
-  self : Element,
-  event : String,
-  listener : Listener
-) -> Unit = "(self,event,callback) => self.addEventListener(event, callback)"
-
-///|
-pub extern "js" fn remove_event_listener(
-  self : Element,
-  event : String,
-  listener : Listener
-) -> Unit = "(self,event,callback) => self.removeEventListener(event, callback)"
-
-///|
 pub extern "js" fn scroll_into_view(self : Element) -> Unit = "(self) => self.scrollIntoView()"
 
 ///|
