@@ -1,6 +1,14 @@
 package Yoorkin/rabbit-tea/internal/ffi
 
 // Values
+const DOM_KEY_LOCATION_LEFT : Int = 0x01
+
+const DOM_KEY_LOCATION_NUMPAD : Int = 0x03
+
+const DOM_KEY_LOCATION_RIGHT : Int = 0x02
+
+const DOM_KEY_LOCATION_STANDARD : Int = 0x00
+
 fn document() -> Document
 
 fn patch(Element) -> Unit
@@ -8,6 +16,28 @@ fn patch(Element) -> Unit
 fn window() -> Window
 
 // Types and methods
+type ClipboardEvent
+impl ClipboardEvent {
+  clipboard_data(Self) -> DataTransfer
+}
+
+type DataTransfer
+impl DataTransfer {
+  drop_effect(Self) -> String
+  effect_allowed(Self) -> String
+  items(Self) -> DataTransferItemList
+  set_drog_image(Self, Element, Int, Int) -> Unit
+}
+
+type DataTransferItemList
+impl DataTransferItemList {
+  add(Self, String, String) -> Unit
+  clear(Self) -> Unit
+  length(Self) -> Int
+  op_get(Self, Int) -> Unit
+  remove(Self, Int) -> Unit
+}
+
 type Document
 impl Document {
   create_document_fragment(Self) -> DocumentFragment
@@ -43,15 +73,11 @@ impl Element {
 
 type Event
 impl Event {
-  client_x(Self) -> Int
-  client_y(Self) -> Int
-  offset_x(Self) -> Int
-  offset_y(Self) -> Int
   prevent_default(Self) -> Unit
-  screen_x(Self) -> Int
-  screen_y(Self) -> Int
   stop_propagation(Self) -> Unit
   target(Self) -> EventTarget
+  to_clipboard_event(Self) -> KeyboardEvent
+  to_ui_event(Self) -> UIEvent
 }
 
 type EventTarget
@@ -60,6 +86,41 @@ impl EventTarget {
   dispatch_event(Self, Event) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
   value(Self) -> String
+}
+
+type FocusEvent
+impl FocusEvent {
+  related_target(Self) -> EventTarget
+}
+
+type InputEvent
+impl InputEvent {
+  data(Self) -> String
+  input_type(Self) -> String
+  is_composing(Self) -> Bool
+}
+
+type KeyboardEvent
+impl KeyboardEvent {
+  alt_key(Self) -> Bool
+  code(Self) -> String
+  ctrl_key(Self) -> Bool
+  is_composing(Self) -> Bool
+  key(Self) -> String
+  location(Self) -> Int
+  meta_key(Self) -> Bool
+  repeat(Self) -> Bool
+  shift_key(Self) -> Bool
+}
+
+type MouseEvent
+impl MouseEvent {
+  client_x(Self) -> Int
+  client_y(Self) -> Int
+  offset_x(Self) -> Int
+  offset_y(Self) -> Int
+  screen_x(Self) -> Int
+  screen_y(Self) -> Int
 }
 
 type Node
@@ -90,6 +151,15 @@ impl Node {
 type Text
 impl Text {
   to_node(Self) -> Node
+}
+
+type UIEvent
+impl UIEvent {
+  to_event(Self) -> Event
+  to_focus_event(Self) -> MouseEvent
+  to_input_event(Self) -> MouseEvent
+  to_keyboard_event(Self) -> KeyboardEvent
+  to_mouse_event(Self) -> MouseEvent
 }
 
 type Window
