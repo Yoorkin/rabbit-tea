@@ -176,7 +176,8 @@ fn to_node[Msg, Model, View](
           node.listeners.push((event, listener))
         }
         Attribute((key, AttrString(value))) => element.set_attribute(key, value)
-        Attribute((key, AttrStyle(value))) => element.set_style(key, value)
+        Attribute((key, AttrStyle(value))) =>
+          element.to_html_element().set_style(key, value)
         Attribute((key, AttrProperty(value))) =>
           element.set_property(key, value)
       })
@@ -254,8 +255,9 @@ pub fn patch[Msg, Model, View](
               match patch {
                 AttrRemove(key) => element.remove_attribute(key)
                 AttrAdd(key, value) => element.set_attribute(key, value)
-                StyleAdd(key, value) => element.set_style(key, value)
-                StyleRemove(key) => element.remove_style(key)
+                StyleAdd(key, value) =>
+                  element.to_html_element().set_style(key, value)
+                StyleRemove(key) => element.to_html_element().remove_style(key)
                 PropertyAdd(key, value) => element.set_property(key, value)
                 PropertyRemove(key) => element.remove_property(key)
                 EventRemove(key, listener) =>

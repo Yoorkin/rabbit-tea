@@ -16,11 +16,15 @@ pub extern "js" fn Event::target(self : Event) -> EventTarget = "(self) => self.
 
 ///|
 pub extern "js" fn Event::to_ui_event(self : Event) -> UIEvent =
-  #| (x) => x instanceof UIEvent ? x : throw new Error('not a UIEvent')
+  #| (x) => { 
+  #|   if (x instanceof UIEvent) { return x } else { throw new Error('not a UIEvent') } 
+  #| }
 
 ///|
 pub extern "js" fn Event::to_clipboard_event(self : Event) -> KeyboardEvent =
-  #| (x) => x instanceof ClipboardEvent ? x : throw new Error('not a KeyboardEvent')
+  #| (x) => { 
+  #|   if (x instanceof ClipboardEvent) { return x } else { throw new Error('not a KeyboardEvent') } 
+  #| }
 
 ///|
 pub extern "js" fn Event::prevent_default(self : Event) = "(self) => self.preventDefault()"
@@ -36,19 +40,27 @@ pub extern "js" fn UIEvent::to_event(self : UIEvent) -> Event = "(x) => x"
 
 ///|
 pub extern "js" fn UIEvent::to_mouse_event(self : UIEvent) -> MouseEvent =
-  #| (e) => e instanceof MouseEvent ? e : throw new Error('not a MouseEvent')
+  #| (e) => { 
+  #|   if (e instanceof MouseEvent) { e } else { throw new Error('not a MouseEvent') }
+  #| }
 
 ///|
 pub extern "js" fn UIEvent::to_input_event(self : UIEvent) -> MouseEvent =
-  #| (e) => e instanceof InputEvent ? e : throw new Error('not a InputEvent')
+  #| (e) => {
+  #|   if (e instanceof InputEvent) { e } else { throw new Error('not a InputEvent') }
+  #| }
 
 ///|
 pub extern "js" fn UIEvent::to_focus_event(self : UIEvent) -> MouseEvent =
-  #| (e) => e instanceof FocusEvent ? e : throw new Error('not a FocusEvent')
+  #| (e) => {
+  #|   if (e instanceof FocusEvent) { e } else { throw new Error('not a FocusEvent') }
+  #| }
 
 ///|
 pub extern "js" fn UIEvent::to_keyboard_event(self : UIEvent) -> KeyboardEvent =
-  #| (e) => e instanceof KeyboardEvent ? e : throw new Error('not a KeyboardEvent')
+  #| (e) => {
+  #|   if (e instanceof KeyboardEvent) { e } else { throw new Error('not a KeyboardEvent') }
+  #| }
 
 ///|
 type MouseEvent

@@ -62,12 +62,11 @@ impl Element {
   remove_attribute(Self, String) -> Unit
   remove_children(Self, Self) -> Unit
   remove_property(Self, String) -> Unit
-  remove_style(Self, String) -> Unit
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
   set_inner_html(Self, String) -> Unit
   set_property(Self, String, String) -> Unit
-  set_style(Self, String, String) -> Unit
+  to_html_element(Self) -> HTMLElement
   to_node(Self) -> Node
 }
 
@@ -91,6 +90,13 @@ impl EventTarget {
 type FocusEvent
 impl FocusEvent {
   related_target(Self) -> EventTarget
+}
+
+type HTMLElement
+impl HTMLElement {
+  remove_style(Self, String) -> Unit
+  set_style(Self, String, String) -> Unit
+  to_element(Self) -> Element
 }
 
 type InputEvent
