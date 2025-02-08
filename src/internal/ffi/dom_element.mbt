@@ -2,20 +2,14 @@
 type Element
 
 ///|
-pub extern "js" fn Element::to_html_element(self : Element) -> HTMLElement =
-  #| (x) => { 
-  #|   if (x instanceof HTMLElement){ return x } else { throw new Error('not a HTMLElement') } 
-  #| }
+pub extern "js" fn Element::to_html_element(
+  self : Element
+) -> @js.Nullable[HTMLElement] =
+  #| (x) => x instanceof HTMLElement ? x : null
 
 ///|
-pub extern "js" fn Element::count_children(self : Element) -> Int =
-  #| (self) => self.children.length
-
-///|
-pub extern "js" fn Element::get_children(
-  self : Element,
-  index : Int
-) -> Element = "(self, index) => self.children[index]"
+pub extern "js" fn Element::children(self : Element) -> Array[Element] =
+  #| (self) => self.children
 
 ///|
 pub extern "js" fn Element::append_children(

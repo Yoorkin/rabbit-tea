@@ -2,7 +2,8 @@
     "import": [
         { "path" : "Yoorkin/rabbit-tea/browser", "alias": "adapter" },
         "Yoorkin/rabbit-tea/internal/ffi",
-        "Yoorkin/rabbit-tea/url"
+        "Yoorkin/rabbit-tea/url",
+        "rami3l/js-ffi/js",
     ],
     "link": {
         "js": {

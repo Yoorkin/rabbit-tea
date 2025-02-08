@@ -15,16 +15,14 @@ type Event
 pub extern "js" fn Event::target(self : Event) -> EventTarget = "(self) => self.target"
 
 ///|
-pub extern "js" fn Event::to_ui_event(self : Event) -> UIEvent =
-  #| (x) => { 
-  #|   if (x instanceof UIEvent) { return x } else { throw new Error('not a UIEvent') } 
-  #| }
+pub extern "js" fn Event::to_ui_event(self : Event) -> @js.Nullable[UIEvent] =
+  #| (x) => x instanceof UIEvent ? x : null
 
 ///|
-pub extern "js" fn Event::to_clipboard_event(self : Event) -> KeyboardEvent =
-  #| (x) => { 
-  #|   if (x instanceof ClipboardEvent) { return x } else { throw new Error('not a KeyboardEvent') } 
-  #| }
+pub extern "js" fn Event::to_clipboard_event(
+  self : Event
+) -> @js.Nullable[KeyboardEvent] =
+  #| (x) => x instanceof ClipboardEvent ? x : null
 
 ///|
 pub extern "js" fn Event::prevent_default(self : Event) = "(self) => self.preventDefault()"
@@ -39,28 +37,28 @@ type UIEvent
 pub extern "js" fn UIEvent::to_event(self : UIEvent) -> Event = "(x) => x"
 
 ///|
-pub extern "js" fn UIEvent::to_mouse_event(self : UIEvent) -> MouseEvent =
-  #| (e) => { 
-  #|   if (e instanceof MouseEvent) { e } else { throw new Error('not a MouseEvent') }
-  #| }
+pub extern "js" fn UIEvent::to_mouse_event(
+  self : UIEvent
+) -> @js.Nullable[MouseEvent] =
+  #| (e) => e instanceof MouseEvent ? e : null
 
 ///|
-pub extern "js" fn UIEvent::to_input_event(self : UIEvent) -> MouseEvent =
-  #| (e) => {
-  #|   if (e instanceof InputEvent) { e } else { throw new Error('not a InputEvent') }
-  #| }
+pub extern "js" fn UIEvent::to_input_event(
+  self : UIEvent
+) -> @js.Nullable[MouseEvent] =
+  #| (e) => e instanceof InputEvent ? e : null
 
 ///|
-pub extern "js" fn UIEvent::to_focus_event(self : UIEvent) -> MouseEvent =
-  #| (e) => {
-  #|   if (e instanceof FocusEvent) { e } else { throw new Error('not a FocusEvent') }
-  #| }
+pub extern "js" fn UIEvent::to_focus_event(
+  self : UIEvent
+) -> @js.Nullable[MouseEvent] =
+  #| (e) => e instanceof FocusEvent ? e : null
 
 ///|
-pub extern "js" fn UIEvent::to_keyboard_event(self : UIEvent) -> KeyboardEvent =
-  #| (e) => {
-  #|   if (e instanceof KeyboardEvent) { e } else { throw new Error('not a KeyboardEvent') }
-  #| }
+pub extern "js" fn UIEvent::to_keyboard_event(
+  self : UIEvent
+) -> @js.Nullable[KeyboardEvent] =
+  #| (e) => e instanceof KeyboardEvent ? e : null
 
 ///|
 type MouseEvent

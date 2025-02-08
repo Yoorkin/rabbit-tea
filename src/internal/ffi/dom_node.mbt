@@ -39,7 +39,8 @@ pub extern "js" fn replace_child(self : Node, new : Node, old : Node) = "(p,n,o)
 pub extern "js" fn insert_before(self : Node, value : Node, before : Node) = "(p,value,before) => p.insertBefore(value,before)"
 
 // ---------- some specific node API --------------
-///|
+// Note: the childNodes property is a NodeList, not an array, so we can't use the Array type.
+///|  
 pub extern "js" fn nth_child(self : Node, index : Int) -> Node =
   #| (x,i) => { 
   #|   const r = x.childNodes[i]; 
@@ -49,6 +50,3 @@ pub extern "js" fn nth_child(self : Node, index : Int) -> Node =
 
 ///|
 pub extern "js" fn count_child(self : Node) -> Int = "(x) => x.childNodes.length"
-
-///|
-pub extern "js" fn print_node(self : Node) = "(x) => console.log(x)"

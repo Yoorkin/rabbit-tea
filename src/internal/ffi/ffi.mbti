@@ -1,5 +1,7 @@
 package Yoorkin/rabbit-tea/internal/ffi
 
+alias @rami3l/js-ffi/js as @js
+
 // Values
 const DOM_KEY_LOCATION_LEFT : Int = 0x01
 
@@ -43,7 +45,7 @@ impl Document {
   create_document_fragment(Self) -> DocumentFragment
   create_element(Self, String) -> Element
   create_text_node(Self, String) -> Element
-  get_element_by_id(Self, String) -> Element
+  get_element_by_id(Self, String) -> @js.Nullable[Element]
   to_node(Self) -> Node
 }
 
@@ -55,9 +57,8 @@ impl DocumentFragment {
 type Element
 impl Element {
   append_children(Self, Self) -> Unit
-  count_children(Self) -> Int
+  children(Self) -> Array[Self]
   get_attribute(Self, String) -> String
-  get_children(Self, Int) -> Self
   get_property(Self, String) -> String
   remove_attribute(Self, String) -> Unit
   remove_children(Self, Self) -> Unit
@@ -66,7 +67,7 @@ impl Element {
   set_attribute(Self, String, String) -> Unit
   set_inner_html(Self, String) -> Unit
   set_property(Self, String, String) -> Unit
-  to_html_element(Self) -> HTMLElement
+  to_html_element(Self) -> @js.Nullable[HTMLElement]
   to_node(Self) -> Node
 }
 
@@ -75,8 +76,8 @@ impl Event {
   prevent_default(Self) -> Unit
   stop_propagation(Self) -> Unit
   target(Self) -> EventTarget
-  to_clipboard_event(Self) -> KeyboardEvent
-  to_ui_event(Self) -> UIEvent
+  to_clipboard_event(Self) -> @js.Nullable[KeyboardEvent]
+  to_ui_event(Self) -> @js.Nullable[UIEvent]
 }
 
 type EventTarget
@@ -135,7 +136,6 @@ impl Node {
   count_child(Self) -> Int
   first_child(Self) -> Self
   insert_before(Self, Self, Self) -> Unit
-  is_null(Self) -> Bool
   last_child(Self) -> Self
   next_sibling(Self) -> Self
   node_name(Self) -> String
@@ -144,14 +144,13 @@ impl Node {
   nth_child(Self, Int) -> Self
   parent_node(Self) -> Self
   previous_sibling(Self) -> Self
-  print_node(Self) -> Unit
   remove_child(Self, Self) -> Unit
   replace_child(Self, Self, Self) -> Unit
-  to_document(Self) -> Document
-  to_document_fragment(Self) -> DocumentFragment
-  to_element(Self) -> Element
+  to_document(Self) -> @js.Nullable[Document]
+  to_document_fragment(Self) -> @js.Nullable[DocumentFragment]
+  to_element(Self) -> @js.Nullable[Element]
   to_event_target(Self) -> EventTarget
-  to_text(Self) -> Text
+  to_text(Self) -> @js.Nullable[Text]
 }
 
 type Text
@@ -162,10 +161,10 @@ impl Text {
 type UIEvent
 impl UIEvent {
   to_event(Self) -> Event
-  to_focus_event(Self) -> MouseEvent
-  to_input_event(Self) -> MouseEvent
-  to_keyboard_event(Self) -> KeyboardEvent
-  to_mouse_event(Self) -> MouseEvent
+  to_focus_event(Self) -> @js.Nullable[MouseEvent]
+  to_input_event(Self) -> @js.Nullable[MouseEvent]
+  to_keyboard_event(Self) -> @js.Nullable[KeyboardEvent]
+  to_mouse_event(Self) -> @js.Nullable[MouseEvent]
 }
 
 type Window

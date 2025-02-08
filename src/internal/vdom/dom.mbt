@@ -177,7 +177,7 @@ fn to_node[Msg, Model, View](
         }
         Attribute((key, AttrString(value))) => element.set_attribute(key, value)
         Attribute((key, AttrStyle(value))) =>
-          element.to_html_element().set_style(key, value)
+          element.to_html_element().get_exn().set_style(key, value)
         Attribute((key, AttrProperty(value))) =>
           element.set_property(key, value)
       })
@@ -250,14 +250,15 @@ pub fn patch[Msg, Model, View](
         match update {
           UpdateNode(index, attrs_patches, childs_patches, new_listeners) => {
             let node = current.nth_child(index)
-            let element = node.to_element()
+            let element = node.to_element().get_exn()
             for patch in attrs_patches {
               match patch {
                 AttrRemove(key) => element.remove_attribute(key)
                 AttrAdd(key, value) => element.set_attribute(key, value)
                 StyleAdd(key, value) =>
-                  element.to_html_element().set_style(key, value)
-                StyleRemove(key) => element.to_html_element().remove_style(key)
+                  element.to_html_element().get_exn().set_style(key, value)
+                StyleRemove(key) =>
+                  element.to_html_element().get_exn().remove_style(key)
                 PropertyAdd(key, value) => element.set_property(key, value)
                 PropertyRemove(key) => element.remove_property(key)
                 EventRemove(key, listener) =>
@@ -300,7 +301,7 @@ pub fn patch[Msg, Model, View](
     }
   }
 
-  let root = @ffi.document().get_element_by_id(mount).to_node()
+  let root = @ffi.document().get_element_by_id(mount).get_exn().to_node()
   aux(patches, root)
 }
 
