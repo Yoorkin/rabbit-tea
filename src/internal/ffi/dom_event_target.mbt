@@ -1,4 +1,11 @@
 ///|
+/// # Hireharchy related to the DOM EventTarget
+/// 
+/// ```
+/// EventTarget <-- Node <--+-- Element <-- HTMLElement <-- HTMLCanvasElement
+///                         +-- Document
+///                         +-- DocumentFragment
+/// ```
 type EventTarget
 
 ///|
