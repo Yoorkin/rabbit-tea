@@ -82,6 +82,10 @@ type HTMLElement
 pub extern "js" fn HTMLElement::to_element(self : HTMLElement) -> Element = "(x) => x"
 
 ///|
+pub extern "js" fn HTMLElement::to_html_canvas_element(self : HTMLElement) -> @js.Nullable[HTMLCanvasElement] = 
+ #| "(x) => x instanceof HTMLCanvasElement ? x : null"
+
+///|
 pub extern "js" fn HTMLElement::set_style(
   self : HTMLElement,
   key : String,
