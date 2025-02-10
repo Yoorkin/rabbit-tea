@@ -165,7 +165,7 @@ impl EventTarget {
   add_event_listener(Self, String, (Event) -> Unit) -> Unit
   dispatch_event(Self, Event) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
-  value(Self) -> String
+  to_node(Self) -> @js.Nullable[Node]
 }
 
 type FocusEvent
@@ -189,6 +189,12 @@ impl HTMLElement {
   set_style(Self, String, String) -> Unit
   to_element(Self) -> Element
   to_html_canvas_element(Self) -> @js.Nullable[HTMLCanvasElement]
+  to_html_input_element(Self) -> @js.Nullable[HTMLInputElement]
+}
+
+type HTMLInputElement
+impl HTMLInputElement {
+  value(Self) -> String
 }
 
 type ImageBitmapRenderingContext

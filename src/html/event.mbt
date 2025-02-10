@@ -5,12 +5,54 @@ pub fn on_click[Msg](msg : Msg) -> Attribute[Msg] {
 
 ///|
 pub fn on_input[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
-  @vdom.on("input", HandleEvent(fn(event) { event.target().value() |> msg }))
+  @vdom.on(
+    "input",
+    HandleEvent(fn(event) {
+      // TODO: eliminate to_option
+      let value : String = event
+        .target()
+        .to_node()
+        .to_option()
+        .unwrap()
+        .to_element()
+        .to_option()
+        .unwrap()
+        .to_html_element()
+        .to_option()
+        .unwrap()
+        .to_html_input_element()
+        .to_option()
+        .unwrap()
+        .value()
+      msg(value)
+    }),
+  )
 }
 
 ///|
 pub fn on_change[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
-  @vdom.on("change", HandleEvent(fn(event) { event.target().value() |> msg }))
+  @vdom.on(
+    "change",
+    HandleEvent(fn(event) {
+      // TODO: eliminate to_option
+      let value : String = event
+        .target()
+        .to_node()
+        .to_option()
+        .unwrap()
+        .to_element()
+        .to_option()
+        .unwrap()
+        .to_html_element()
+        .to_option()
+        .unwrap()
+        .to_html_input_element()
+        .to_option()
+        .unwrap()
+        .value()
+      msg(value)
+    }),
+  )
 }
 
 ///|

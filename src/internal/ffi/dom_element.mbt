@@ -82,8 +82,16 @@ type HTMLElement
 pub extern "js" fn HTMLElement::to_element(self : HTMLElement) -> Element = "(x) => x"
 
 ///|
-pub extern "js" fn HTMLElement::to_html_canvas_element(self : HTMLElement) -> @js.Nullable[HTMLCanvasElement] = 
- #| "(x) => x instanceof HTMLCanvasElement ? x : null"
+pub extern "js" fn HTMLElement::to_html_canvas_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLCanvasElement] =
+  #| "(x) => x instanceof HTMLCanvasElement ? x : null"
+
+///|
+pub extern "js" fn HTMLElement::to_html_input_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLInputElement] =
+  #| "(x) => x instanceof HTMLInputElement ? x : null"
 
 ///|
 pub extern "js" fn HTMLElement::set_style(
@@ -96,3 +104,9 @@ pub extern "js" fn HTMLElement::set_style(
 ///|
 pub extern "js" fn HTMLElement::remove_style(self : HTMLElement, key : String) =
   #| (self,key) => self.style[key] = ''
+
+///|
+type HTMLInputElement
+
+///|
+pub extern "js" fn HTMLInputElement::value(self : HTMLInputElement) -> String = "(self) => self.value"
