@@ -67,23 +67,23 @@ fn ol[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]
 
 fn on_change[Msg]((String) -> Msg) -> Attribute[Msg]
 
-fn on_click[Msg](Msg) -> Attribute[Msg]
+fn on_click[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_double_click[Msg](Msg) -> Attribute[Msg]
+fn on_double_click[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
 fn on_input[Msg]((String) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_down[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_down[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_enter[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_enter[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_leave[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_leave[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_out[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_out[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_over[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_over[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
-fn on_mouse_up[Msg](Msg) -> Attribute[Msg]
+fn on_mouse_up[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
 fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
@@ -110,7 +110,7 @@ fn u[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]])
 fn ul[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
 // Types and methods
-type Attribute
+type Attribute[Msg]
 
 pub(all) enum AutoComplete {
   On
@@ -142,7 +142,19 @@ pub(all) enum InputType {
   Week
 }
 
-type T
+type Mouse
+impl Mouse {
+  client_pos(Self) -> Pos
+  offset_pos(Self) -> Pos
+  screen_pos(Self) -> Pos
+}
+
+pub struct Pos {
+  x : Int
+  y : Int
+}
+
+type T[Msg]
 impl T {
   map[A, B](Self[A], (A) -> B) -> Self[B]
   to_virtual_dom[Msg](Self[Msg]) -> @vdom.Node[Msg]
