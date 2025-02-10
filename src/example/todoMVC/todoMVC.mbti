@@ -1,15 +1,8 @@
-package Yoorkin/rabbit-tea/main
+package Yoorkin/rabbit-tea/example/todoMVC
 
 // Values
 
 // Types and methods
-type CardModel
-
-type EditModel
-
-type EditMsg
-impl Show for EditMsg
-
 type Message
 impl Show for Message
 

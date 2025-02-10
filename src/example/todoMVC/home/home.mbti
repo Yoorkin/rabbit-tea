@@ -1,4 +1,4 @@
-package Yoorkin/rabbit-tea/example/home
+package Yoorkin/rabbit-tea/example/todoMVC/home
 
 alias @Yoorkin/rabbit-tea/browser as @browser
 alias @Yoorkin/rabbit-tea/html as @html
