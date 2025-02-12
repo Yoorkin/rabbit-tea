@@ -610,8 +610,10 @@ pub fn input[M](
 ///|
 pub fn external[Msg](
   node : @ffi.Node,
-  attrs : Ref[Array[Attribute[Msg]]?]
+  attrs : Ref[Array[Attribute[Msg]]?],
+  width~ : Int,
+  height~ : Int
 ) -> Html[Msg] {
   let attrs = attrs.map(fn(opt) { opt.map(fn(arr) { arr.map(fn(a) { a._ }) }) })
-  @vdom.external(node, attrs)
+  @vdom.external(node, attrs, width~, height~)
 }

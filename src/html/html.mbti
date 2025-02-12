@@ -28,7 +28,7 @@ fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]
 
 fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn external[Msg](@ffi.Node, Ref[Array[Attribute[Msg]]?]) -> T[Msg]
+fn external[Msg](@ffi.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> T[Msg]
 
 fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[T[M]]) -> T[M]
 

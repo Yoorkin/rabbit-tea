@@ -1,0 +1,12 @@
+{
+    "import": [
+        "Yoorkin/rabbit-tea/internal/ffi",
+        "rami3l/js-ffi/js",
+        "Yoorkin/rabbit-tea/html"
+    ],
+    "link": {
+        "js": {
+            "format": "iife"
+        }
+    }
+}
