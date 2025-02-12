@@ -12,6 +12,8 @@ fn diff_without_key[Msg](Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]
 
 fn do_diff[Msg](Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
 
+fn external[Msg](@ffi.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
+
 fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
 fn nothing[Msg]() -> Node[Msg]

@@ -462,28 +462,6 @@ pub fn iframe[M](
   )
 }
 
-///|
-pub fn canvas[M](
-  style~ : Array[String] = [],
-  id? : String,
-  class? : String,
-  width? : Int,
-  height? : Int
-) -> Html[M] {
-  new(
-    "canvas",
-    {},
-    style~,
-    class?,
-    id?,
-    optional_attrs={
-      "width": width.map(Int::to_string),
-      "height": height.map(Int::to_string),
-    },
-    [],
-  )
-}
-
 // ---- inputs ----
 
 ///|
@@ -627,4 +605,13 @@ pub fn input[M](
     class?,
     childrens,
   )
+}
+
+///|
+pub fn external[Msg](
+  node : @ffi.Node,
+  attrs : Ref[Array[Attribute[Msg]]?]
+) -> Html[Msg] {
+  let attrs = attrs.map(fn(opt) { opt.map(fn(arr) { arr.map(fn(a) { a._ }) }) })
+  @vdom.external(node, attrs)
 }
