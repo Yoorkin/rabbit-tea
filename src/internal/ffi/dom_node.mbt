@@ -44,7 +44,7 @@ pub extern "js" fn insert_before(self : Node, value : Node, before : Node) = "(p
 pub extern "js" fn nth_child(self : Node, index : Int) -> Node =
   #| (x,i) => { 
   #|   const r = x.childNodes[i]; 
-  #|   if (r === undefined) throw new Error(`nth_child: index ${i} out of bounds`);
+  #|   if (r === undefined) throw new Error(`nth_child: index ${i} out of bounds, length=${x.childNodes.length}`);
   #|   return r;
   #| }
 

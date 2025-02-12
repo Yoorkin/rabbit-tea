@@ -219,7 +219,7 @@ pub extern "js" fn CanvasRenderingContext2D::clear_rect(
   y : Double,
   w : Double,
   h : Double
-) = "(self,x,y,w,h) => self.clear_rect(x,y,w,h)"
+) = "(self,x,y,w,h) => self.clearRect(x,y,w,h)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::fill_rect(
@@ -228,7 +228,7 @@ pub extern "js" fn CanvasRenderingContext2D::fill_rect(
   y : Double,
   w : Double,
   h : Double
-) = "(self,x,y,w,h) => self.fill_rect(x,y,w,h)"
+) = "(self,x,y,w,h) => self.fillRect(x,y,w,h)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::stroke_rect(

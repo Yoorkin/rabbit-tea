@@ -76,6 +76,10 @@ pub extern "js" fn Element::set_inner_html(
 ) -> Unit = "(self,html) => self.innerHTML = html"
 
 ///|
+pub extern "js" fn Element::get_bounding_client_rect(self : Element) -> DOMRect =
+  #| (self) => self.getBoundingClientRect()
+
+///|
 type HTMLElement
 
 ///|
@@ -85,7 +89,7 @@ pub extern "js" fn HTMLElement::to_element(self : HTMLElement) -> Element = "(x)
 pub extern "js" fn HTMLElement::to_html_canvas_element(
   self : HTMLElement
 ) -> @js.Nullable[HTMLCanvasElement] =
-  #| "(x) => x instanceof HTMLCanvasElement ? x : null"
+  #| (x) => x instanceof HTMLCanvasElement ? x : null
 
 ///|
 pub extern "js" fn HTMLElement::to_html_input_element(

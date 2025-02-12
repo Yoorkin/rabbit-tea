@@ -103,6 +103,18 @@ impl ClipboardEvent {
 
 type DOMMatrix2DInit
 
+type DOMRect
+impl DOMRect {
+  get_bottom(Self) -> Double
+  get_height(Self) -> Double
+  get_left(Self) -> Double
+  get_right(Self) -> Double
+  get_top(Self) -> Double
+  get_width(Self) -> Double
+  get_x(Self) -> Double
+  get_y(Self) -> Double
+}
+
 type DataTransfer
 impl DataTransfer {
   drop_effect(Self) -> String
@@ -139,6 +151,7 @@ impl Element {
   append_children(Self, Self) -> Unit
   children(Self) -> Array[Self]
   get_attribute(Self, String) -> String
+  get_bounding_client_rect(Self) -> DOMRect
   get_property(Self, String) -> String
   remove_attribute(Self, String) -> Unit
   remove_children(Self, Self) -> Unit
