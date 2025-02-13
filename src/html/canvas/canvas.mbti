@@ -1,7 +1,7 @@
 package Yoorkin/rabbit-tea/html/canvas
 
+alias @Yoorkin/rabbit-tea/dom as @dom
 alias @Yoorkin/rabbit-tea/html as @html
-alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
 
 // Values
 fn new[Msg](width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
@@ -30,7 +30,7 @@ impl Context2D {
   set_line_width(Self, Double) -> Unit
   set_stroke_style(Self, Color) -> Unit
   stroke(Self) -> Unit
-  to_unsafe_js(Self) -> @ffi.CanvasRenderingContext2D
+  to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
 }
 
 type Model[Msg]

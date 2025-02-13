@@ -1,5 +1,5 @@
 ///|
-type Mouse @ffi.MouseEvent
+type Mouse @dom.MouseEvent
 
 ///|
 pub(all) struct Pos {

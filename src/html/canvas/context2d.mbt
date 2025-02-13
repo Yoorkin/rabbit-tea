@@ -1,10 +1,10 @@
 ///|
-type Context2D @ffi.CanvasRenderingContext2D
+type Context2D @dom.CanvasRenderingContext2D
 
 ///| Get the underlying `CanvasRenderingContext2D` js object.
 /// 
 /// This function is unsafe and should be used rarely.
-pub fn to_unsafe_js(self : Context2D) -> @ffi.CanvasRenderingContext2D {
+pub fn to_unsafe_js(self : Context2D) -> @dom.CanvasRenderingContext2D {
   self._
 }
 
