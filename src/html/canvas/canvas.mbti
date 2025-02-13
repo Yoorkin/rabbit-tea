@@ -1,0 +1,28 @@
+package Yoorkin/rabbit-tea/html/canvas
+
+alias @Yoorkin/rabbit-tea/html as @html
+
+// Values
+fn new[Msg](width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
+
+// Types and methods
+type Context2D
+impl Context2D {
+  begin_path(Self) -> Unit
+  fill_rect(Self, Double, Double, Double, Double) -> Unit
+  line_to(Self, Double, Double) -> Unit
+  move_to(Self, Double, Double) -> Unit
+  set_line_width(Self, Double) -> Unit
+  stroke(Self) -> Unit
+}
+
+type Model[Msg]
+impl Model {
+  context2d[Msg](Self[Msg]) -> Context2D
+  to_html[Msg](Self[Msg]) -> @html.T[Msg]
+}
+
+// Type aliases
+
+// Traits
+

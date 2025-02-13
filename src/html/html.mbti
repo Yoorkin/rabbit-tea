@@ -1,5 +1,6 @@
 package Yoorkin/rabbit-tea/html
 
+alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
 alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
 
 // Values
@@ -15,8 +16,6 @@ fn br[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
 
 fn button[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
-fn canvas[M](style~ : Array[String] = .., id? : String, class? : String, width? : Int, height? : Int) -> T[M]
-
 fn code[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
@@ -28,6 +27,8 @@ fn dl[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]
 fn dt[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
+
+fn external[Msg](@ffi.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> T[Msg]
 
 fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[T[M]]) -> T[M]
 
@@ -78,6 +79,8 @@ fn on_mouse_down[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 fn on_mouse_enter[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
 fn on_mouse_leave[Msg]((Mouse) -> Msg) -> Attribute[Msg]
+
+fn on_mouse_move[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
 fn on_mouse_out[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 

@@ -113,6 +113,11 @@ pub fn on_mouse_up[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
 }
 
 ///|
+pub fn on_mouse_move[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+  on_mouse("mousemove", msg)
+}
+
+///|
 pub fn on_mouse_enter[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseenter", msg)
 }

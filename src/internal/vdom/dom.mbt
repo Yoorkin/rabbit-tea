@@ -7,6 +7,12 @@ enum Node[Msg] {
     // Store the event listener used in real DOM
     listeners~ : Array[(String, @ffi.Listener)]
   )
+  ExternalNode(
+    @ffi.Node,
+    Ref[Array[Attribute[Msg]]?],
+    width~ : Int,
+    height~ : Int
+  )
   Text(String)
   Nothing
 }
@@ -21,6 +27,12 @@ pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
       let childrens = childrens.map(fn(x) { x.map(f) })
       Node(tag, attrs~, childrens~, listeners~)
     }
+    ExternalNode(node, attrs, width~, height~) => {
+      let attrs = attrs.map(fn(opt) {
+        opt.map(fn(attrs) { attrs.map(fn(x) { x.map(f) }) })
+      })
+      ExternalNode(node, attrs, width~, height~)
+    }
     Text(value) => Text(value)
     Nothing => Nothing
   }
@@ -33,6 +45,16 @@ pub fn node[Msg](
   childrens : Array[Node[Msg]]
 ) -> Node[Msg] {
   Node(tag, attrs~, childrens~, listeners=[])
+}
+
+///|
+pub fn external[Msg](
+  node : @ffi.Node,
+  attrs : Ref[Array[Attribute[Msg]]?],
+  width~ : Int,
+  height~ : Int
+) -> Node[Msg] {
+  ExternalNode(node, attrs, width~, height~)
 }
 
 ///| Create a plain text
@@ -77,6 +99,7 @@ fn is_same_type[Msg](x : Node[Msg], y : Node[Msg]) -> Bool {
     (Node(_), Node(_)) => true
     (Text(_), Text(_)) => true
     (Nothing, Nothing) => true
+    (ExternalNode(_), ExternalNode(_)) => true
     _ => false
   }
 }
@@ -150,37 +173,41 @@ fn to_node[Msg, Model, View](
   // to be passed around in API, very painful.
   // 
   // This function require a sandbox value, and use closure to eliminate the type parameter.
-  match self {
-    Node(tag, attrs~, childrens~, ..) as node => {
-      let element = @ffi.document().create_element(tag)
-      attrs.each(fn {
-        Attribute((event, AttrEvent(handler))) => {
-          let listener = match handler {
-            Normal(msg) => fn(_event) { sandbox.update(msg) }
-            HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
-            Custom(msg, stop_propagation~, prevent_default~) =>
-              fn(event : @ffi.Event) { // TODO: remove this annotation will cause type error, why?
-                if stop_propagation {
-                  event.stop_propagation()
-                }
-                if prevent_default {
-                  event.prevent_default()
-                }
-                sandbox.update(msg)
+  fn attach_attrs(
+    attrs : Array[Attribute[Msg]],
+    element : @ffi.Element,
+    generated_listeners : Array[(String, @ffi.Listener)]
+  ) {
+    attrs.each(fn {
+      Attribute((event, AttrEvent(handler))) => {
+        let listener = match handler {
+          Normal(msg) => fn(_event) { sandbox.update(msg) }
+          HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
+          Custom(msg, stop_propagation~, prevent_default~) =>
+            fn(event : @ffi.Event) { // TODO: remove this annotation will cause type error, why?
+              if stop_propagation {
+                event.stop_propagation()
               }
-          }
-          element
-          .to_node()
-          .to_event_target()
-          .add_event_listener(event, listener)
-          node.listeners.push((event, listener))
+              if prevent_default {
+                event.prevent_default()
+              }
+              sandbox.update(msg)
+            }
         }
-        Attribute((key, AttrString(value))) => element.set_attribute(key, value)
-        Attribute((key, AttrStyle(value))) =>
-          element.to_html_element().get_exn().set_style(key, value)
-        Attribute((key, AttrProperty(value))) =>
-          element.set_property(key, value)
-      })
+        element.to_node().to_event_target().add_event_listener(event, listener)
+        generated_listeners.push((event, listener))
+      }
+      Attribute((key, AttrString(value))) => element.set_attribute(key, value)
+      Attribute((key, AttrStyle(value))) =>
+        element.to_html_element().get_exn().set_style(key, value)
+      Attribute((key, AttrProperty(value))) => element.set_property(key, value)
+    })
+  }
+
+  match self {
+    Node(tag, attrs~, childrens~, listeners~) => {
+      let element = @ffi.document().create_element(tag)
+      attach_attrs(attrs, element, listeners)
       // NOTE:
       // This is important for those who want to write a router in the app. 
       // When the `a` tag is clicked, the href is parsed and wrapped in 
@@ -213,6 +240,22 @@ fn to_node[Msg, Model, View](
         element.to_node().append_child(to_node(child, sandbox))
       }
       element.to_node()
+    }
+    ExternalNode(node, attrs, width~, height~) => {
+      match attrs.val {
+        Some(xs) => {
+          attach_attrs(xs, node.to_element().to_option().unwrap(), [])
+          attrs.val = None
+        }
+        None => ()
+      }
+      let element = @ffi.document().create_element("div")
+      element.to_html_element().get_exn().set_style("width", width.to_string())
+      element
+      .to_html_element()
+      .get_exn()
+      .set_style("height", height.to_string())
+      element..append_children(node.to_element().to_option().unwrap()).to_node()
     }
     Text(value) => @ffi.document().create_text_node(value).to_node()
     Nothing => @ffi.document().create_text_node("").to_node()
@@ -488,6 +531,8 @@ pub fn diff_without_key[Msg](
               } else {
                 patches.push(Replace(index, y))
               }
+            (ExternalNode(_), ExternalNode(_)) =>
+              patches.push(Replace(index, y))
             (Text(value_a), Text(value_b)) =>
               if value_a != value_b {
                 patches.push(Update(UpdateText(index, value_b)))
