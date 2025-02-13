@@ -2,7 +2,7 @@
 type Mouse @ffi.MouseEvent
 
 ///|
-pub struct Pos {
+pub(all) struct Pos {
   x : Int
   y : Int
 }

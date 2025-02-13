@@ -152,7 +152,7 @@ impl Mouse {
   screen_pos(Self) -> Pos
 }
 
-pub struct Pos {
+pub(all) struct Pos {
   x : Int
   y : Int
 }
