@@ -5,10 +5,10 @@ enum Node[Msg] {
     attrs~ : Array[Attribute[Msg]],
     childrens~ : Array[Node[Msg]],
     // Store the event listener used in real DOM
-    listeners~ : Array[(String, @ffi.Listener)]
+    listeners~ : Array[(String, @dom.Listener)]
   )
   ExternalNode(
-    @ffi.Node,
+    @dom.Node,
     Ref[Array[Attribute[Msg]]?],
     width~ : Int,
     height~ : Int
@@ -49,7 +49,7 @@ pub fn node[Msg](
 
 ///|
 pub fn external[Msg](
-  node : @ffi.Node,
+  node : @dom.Node,
   attrs : Ref[Array[Attribute[Msg]]?],
   width~ : Int,
   height~ : Int
@@ -89,7 +89,7 @@ enum AttrValue[Msg] {
 ///|
 pub(all) enum Handler[Msg] {
   Normal(Msg)
-  HandleEvent((@ffi.Event) -> Msg)
+  HandleEvent((@dom.Event) -> Msg)
   Custom(Msg, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
 
@@ -165,7 +165,7 @@ pub fn style[Msg](key : String, value : String) -> Attribute[Msg] {
 fn to_node[Msg, Model, View](
   self : Node[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
-) -> @ffi.Node {
+) -> @dom.Node {
   // NOTE:
   // In Elm, the sandbox is a spacial type and handled in the runtime. But in Moonbit,
   // the sandbox is just a normal type and handled in the user code. Because any operation
@@ -175,8 +175,8 @@ fn to_node[Msg, Model, View](
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   fn attach_attrs(
     attrs : Array[Attribute[Msg]],
-    element : @ffi.Element,
-    generated_listeners : Array[(String, @ffi.Listener)]
+    element : @dom.Element,
+    generated_listeners : Array[(String, @dom.Listener)]
   ) {
     attrs.each(fn {
       Attribute((event, AttrEvent(handler))) => {
@@ -184,7 +184,7 @@ fn to_node[Msg, Model, View](
           Normal(msg) => fn(_event) { sandbox.update(msg) }
           HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
           Custom(msg, stop_propagation~, prevent_default~) =>
-            fn(event : @ffi.Event) { // TODO: remove this annotation will cause type error, why?
+            fn(event : @dom.Event) { // TODO: remove this annotation will cause type error, why?
               if stop_propagation {
                 event.stop_propagation()
               }
@@ -206,7 +206,7 @@ fn to_node[Msg, Model, View](
 
   match self {
     Node(tag, attrs~, childrens~, listeners~) => {
-      let element = @ffi.document().create_element(tag)
+      let element = @dom.document().create_element(tag)
       attach_attrs(attrs, element, listeners)
       // NOTE:
       // This is important for those who want to write a router in the app. 
@@ -223,7 +223,7 @@ fn to_node[Msg, Model, View](
           .add_event_listener("click", fn(event) {
             event.prevent_default()
             let href = element.get_property("href")
-            guard let Ok(curr) = @url.parse?(@ffi.window().current_url())
+            guard let Ok(curr) = @url.parse?(@dom.window().current_url())
             guard let Ok(next) = @url.parse?(href)
             let request = if curr.protocol == next.protocol &&
               curr.host == next.host &&
@@ -249,7 +249,7 @@ fn to_node[Msg, Model, View](
         }
         None => ()
       }
-      let element = @ffi.document().create_element("div")
+      let element = @dom.document().create_element("div")
       element.to_html_element().get_exn().set_style("width", width.to_string())
       element
       .to_html_element()
@@ -257,8 +257,8 @@ fn to_node[Msg, Model, View](
       .set_style("height", height.to_string())
       element..append_children(node.to_element().to_option().unwrap()).to_node()
     }
-    Text(value) => @ffi.document().create_text_node(value).to_node()
-    Nothing => @ffi.document().create_text_node("").to_node()
+    Text(value) => @dom.document().create_text_node(value).to_node()
+    Nothing => @dom.document().create_text_node("").to_node()
   }
 }
 
@@ -270,7 +270,7 @@ pub fn patch[Msg, Model, View](
   mount~ : String
 ) -> Unit {
   let patches = diff(old, self)
-  fn aux(patches : Patch[Msg], current : @ffi.Node) -> Unit {
+  fn aux(patches : Patch[Msg], current : @dom.Node) -> Unit {
     match patches {
       Drop(index, length) =>
         for i in 0..<length {
@@ -314,7 +314,7 @@ pub fn patch[Msg, Model, View](
                     Normal(msg) => fn(_event) { sandbox.update(msg) }
                     HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
                     Custom(msg, stop_propagation~, prevent_default~) =>
-                      fn(event : @ffi.Event) {
+                      fn(event : @dom.Event) {
                         if stop_propagation {
                           event.stop_propagation()
                         }
@@ -337,14 +337,14 @@ pub fn patch[Msg, Model, View](
             }
           }
           UpdateText(index, value) => {
-            let text_node = @ffi.document().create_text_node(value)
+            let text_node = @dom.document().create_text_node(value)
             current.replace_child(text_node.to_node(), current.nth_child(index))
           }
         }
     }
   }
 
-  let root = @ffi.document().get_element_by_id(mount).get_exn().to_node()
+  let root = @dom.document().get_element_by_id(mount).get_exn().to_node()
   aux(patches, root)
 }
 
@@ -356,7 +356,7 @@ enum AttrsUpdate[Msg] {
   StyleRemove(String)
   PropertyAdd(String, String)
   PropertyRemove(String)
-  EventRemove(String, @ffi.Listener)
+  EventRemove(String, @dom.Listener)
   EventAdd(String, Handler[Msg])
 }
 
@@ -383,7 +383,7 @@ enum Update[Msg] {
     Int,
     Array[AttrsUpdate[Msg]],
     Array[Patch[Msg]],
-    Array[(String, @ffi.Listener)]
+    Array[(String, @dom.Listener)]
   )
   UpdateText(Int, String)
 }
@@ -429,7 +429,7 @@ fn attrs_diff[Msg](
   new : Array[Attribute[Msg]],
   // We think the event is different although they never changed.
   // The listeners is used to remove the event listener when the attribute is removed.
-  listeners : Array[(String, @ffi.Listener)]
+  listeners : Array[(String, @dom.Listener)]
 ) -> Array[AttrsUpdate[Msg]] {
   let old_map = Map::from_iter(old.iter().map(fn(attr) { attr._ }))
   let new_map = Map::from_iter(new.iter().map(fn(attr) { attr._ }))
