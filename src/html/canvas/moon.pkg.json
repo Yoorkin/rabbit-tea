@@ -1,6 +1,6 @@
 {
     "import": [
-        "Yoorkin/rabbit-tea/internal/ffi",
+        "Yoorkin/rabbit-tea/dom",
         "rami3l/js-ffi/js",
         "Yoorkin/rabbit-tea/html"
     ],

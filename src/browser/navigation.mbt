@@ -6,22 +6,22 @@ pub(all) enum UrlRequest {
 
 ///| go back in history. This will cause page to reload.
 pub fn back[M]() -> Command[M] {
-  fn(_, _) { @ffi.window().history_go_back() }
+  fn(_, _) { @dom.window().history_go_back() }
 }
 
 ///| go forward in history. This will cause page to reload.
 pub fn forward[M]() -> Command[M] {
-  fn(_, _) { @ffi.window().history_go_forward() }
+  fn(_, _) { @dom.window().history_go_forward() }
 }
 
 ///| load a new url. This will cause page to reload.
 pub fn load[M](url : String) -> Command[M] {
-  fn(_, _) { @ffi.window().load_url(url) }
+  fn(_, _) { @dom.window().load_url(url) }
 }
 
 ///| reload the current url.
 pub fn reload[M]() -> Command[M] {
-  fn(_, _) { @ffi.window().reload_url() }
+  fn(_, _) { @dom.window().reload_url() }
 }
 
 ///| push a new url to history but not trigger a page load.
@@ -29,8 +29,8 @@ pub fn reload[M]() -> Command[M] {
 /// This will trigger the `url_changed` message.
 pub fn push_url[M](url : String) -> Command[M] {
   fn(events, _) {
-    @ffi.window().push_url(url)
-    guard let Ok(url) = @url.parse?(@ffi.window().current_url())
+    @dom.window().push_url(url)
+    guard let Ok(url) = @url.parse?(@dom.window().current_url())
     (events.on_url_changed)(url)
   }
 }
@@ -40,8 +40,8 @@ pub fn push_url[M](url : String) -> Command[M] {
 /// This will trigger the `url_changed` message.
 pub fn replace_url[M](url : String) -> Command[M] {
   fn(events, _) {
-    @ffi.window().replace_url(url)
-    guard let Ok(url) = @url.parse?(@ffi.window().current_url())
+    @dom.window().replace_url(url)
+    guard let Ok(url) = @url.parse?(@dom.window().current_url())
     (events.on_url_changed)(url)
   }
 }

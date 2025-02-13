@@ -190,6 +190,19 @@ pub extern "js" fn CanvasRenderingContext2D::set_stroke_style(
   #| (x,value) => x.strokeStyle = value
 
 ///|
+pub extern "js" fn CanvasRenderingContext2D::get_fill_style(
+  self : CanvasRenderingContext2D
+) -> @js.Union3[String, CanvasGradient, CanvasPattern] =
+  #| (x) => x.fillStyle
+
+///|
+pub extern "js" fn CanvasRenderingContext2D::set_fill_style(
+  self : CanvasRenderingContext2D,
+  value : @js.Union3[String, CanvasGradient, CanvasPattern]
+) =
+  #| (x,value) => x.fillStyle = value
+
+///|
 pub extern "js" fn CanvasRenderingContext2D::create_linear_gradient(
   self : CanvasRenderingContext2D,
   x0 : Double,

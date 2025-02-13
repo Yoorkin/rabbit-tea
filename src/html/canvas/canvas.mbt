@@ -1,6 +1,6 @@
 ///|
 struct Model[Msg] {
-  element : @ffi.HTMLCanvasElement
+  element : @dom.HTMLCanvasElement
   wrapper : @html.T[Msg]
 }
 
@@ -20,7 +20,7 @@ pub fn new[Msg](
   mouseenter? : (@html.Mouse) -> Msg,
   mouseleave? : (@html.Mouse) -> Msg
 ) -> Model[Msg] {
-  let canvas = @ffi.document().create_element("canvas")
+  let canvas = @dom.document().create_element("canvas")
   let attributes = {
     let attrs = [
       @html.attribute("width", width.to_string()),

@@ -1,8 +1,8 @@
 ///|
-type Mouse @ffi.MouseEvent
+type Mouse @dom.MouseEvent
 
 ///|
-pub struct Pos {
+pub(all) struct Pos {
   x : Int
   y : Int
 }

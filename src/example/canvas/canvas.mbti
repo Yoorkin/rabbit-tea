@@ -3,6 +3,8 @@ package Yoorkin/rabbit-tea/example/canvas
 // Values
 
 // Types and methods
+type Drawing
+
 type Message
 
 type Model

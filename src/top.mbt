@@ -33,7 +33,7 @@ pub fn startup[Model, Message](
   view~ : (Model) -> @html.Html[Message],
   mount~ : String = "app"
 ) -> Unit {
-  @ffi.document()
+  @dom.document()
   .get_element_by_id(mount)
   .get_exn()
   .set_inner_html("<div></div>")
@@ -64,7 +64,7 @@ pub fn application[Model, Msg](
   url_request? : (@browser.UrlRequest) -> Msg,
   mount~ : String = "app"
 ) -> Unit {
-  @ffi.document()
+  @dom.document()
   .get_element_by_id(mount)
   .get_exn()
   .set_inner_html("<div></div>")
@@ -77,7 +77,7 @@ pub fn application[Model, Msg](
     curr_dom = new_dom
   }
 
-  guard let Ok(url) = @url.parse?(@ffi.window().current_url())
+  guard let Ok(url) = @url.parse?(@dom.window().current_url())
   let (cmd, model) = initialize(url)
   sandbox = Some(
     @browser.Sandbox::new(

@@ -609,7 +609,7 @@ pub fn input[M](
 
 ///|
 pub fn external[Msg](
-  node : @ffi.Node,
+  node : @dom.Node,
   attrs : Ref[Array[Attribute[Msg]]?],
   width~ : Int,
   height~ : Int

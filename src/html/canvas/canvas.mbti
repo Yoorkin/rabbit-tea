@@ -1,19 +1,36 @@
 package Yoorkin/rabbit-tea/html/canvas
 
+alias @Yoorkin/rabbit-tea/dom as @dom
 alias @Yoorkin/rabbit-tea/html as @html
 
 // Values
 fn new[Msg](width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
 
 // Types and methods
+pub(all) enum Color {
+  RGB(Int, Int, Int)
+  RGBA(Int, Int, Int, Int)
+  Black
+  White
+}
+impl Color {
+  to_string(Self) -> String
+}
+impl Show for Color
+
 type Context2D
 impl Context2D {
   begin_path(Self) -> Unit
+  clear_rect(Self, Double, Double, Double, Double) -> Unit
   fill_rect(Self, Double, Double, Double, Double) -> Unit
+  fill_text(Self, String, Double, Double) -> Unit
   line_to(Self, Double, Double) -> Unit
   move_to(Self, Double, Double) -> Unit
+  set_fill_style(Self, Color) -> Unit
   set_line_width(Self, Double) -> Unit
+  set_stroke_style(Self, Color) -> Unit
   stroke(Self) -> Unit
+  to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
 }
 
 type Model[Msg]

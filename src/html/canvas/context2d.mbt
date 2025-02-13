@@ -1,5 +1,12 @@
 ///|
-type Context2D @ffi.CanvasRenderingContext2D
+type Context2D @dom.CanvasRenderingContext2D
+
+///| Get the underlying `CanvasRenderingContext2D` js object.
+/// 
+/// This function is unsafe and should be used rarely.
+pub fn to_unsafe_js(self : Context2D) -> @dom.CanvasRenderingContext2D {
+  self._
+}
 
 ///|
 pub fn begin_path(self : Context2D) -> Unit {
@@ -27,6 +34,34 @@ pub fn stroke(self : Context2D) -> Unit {
 }
 
 ///|
+pub(all) enum Color {
+  RGB(Int, Int, Int)
+  RGBA(Int, Int, Int, Int)
+  Black
+  White
+} derive(Show)
+
+///|
+pub fn to_string(self : Color) -> String {
+  match self {
+    RGB(r, g, b) => "rgb(\{r}, \{g}, \{b})"
+    RGBA(r, g, b, a) => "rgba(\{r}, \{g}, \{b}, \{a})"
+    Black => "black"
+    White => "white"
+  }
+}
+
+///|
+pub fn set_stroke_style(self : Context2D, color : Color) -> Unit {
+  self._.set_stroke_style(@js.Union3::from0(color.to_string()))
+}
+
+///|
+pub fn set_fill_style(self : Context2D, color : Color) -> Unit {
+  self._.set_fill_style(@js.Union3::from0(color.to_string()))
+}
+
+///|
 pub fn fill_rect(
   self : Context2D,
   x : Double,
@@ -35,4 +70,25 @@ pub fn fill_rect(
   height : Double
 ) -> Unit {
   self._.fill_rect(x, y, width, height)
+}
+
+///|
+pub fn clear_rect(
+  self : Context2D,
+  x : Double,
+  y : Double,
+  width : Double,
+  height : Double
+) -> Unit {
+  self._.clear_rect(x, y, width, height)
+}
+
+///|
+pub fn fill_text(
+  self : Context2D,
+  text : String,
+  x : Double,
+  y : Double
+) -> Unit {
+  self._.fill_text(text, x, y)
 }

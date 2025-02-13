@@ -1,7 +1,7 @@
 package Yoorkin/rabbit-tea/internal/vdom
 
 alias @Yoorkin/rabbit-tea/browser as @browser
-alias @Yoorkin/rabbit-tea/internal/ffi as @ffi
+alias @Yoorkin/rabbit-tea/dom as @dom
 
 // Values
 fn attribute[Msg](String, String) -> Attribute[Msg]
@@ -12,7 +12,7 @@ fn diff_without_key[Msg](Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]
 
 fn do_diff[Msg](Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
 
-fn external[Msg](@ffi.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
+fn external[Msg](@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
 
 fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
@@ -38,7 +38,7 @@ type AttrsUpdate[Msg]
 
 pub(all) enum Handler[Msg] {
   Normal(Msg)
-  HandleEvent((@ffi.Event) -> Msg)
+  HandleEvent((@dom.Event) -> Msg)
   Custom(Msg, Bool, Bool)
 }
 impl Handler {
