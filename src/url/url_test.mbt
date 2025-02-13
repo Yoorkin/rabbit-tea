@@ -1,3 +1,4 @@
+///|
 test "basic_url" {
   let a = "http://localhost:5173/abcd"
   inspect!(
@@ -40,6 +41,7 @@ test "basic_url" {
   )
 }
 
+///|
 test "special url" {
   inspect!(
     @url.parse?("localhost:8080/abcd"),
@@ -49,6 +51,7 @@ test "special url" {
   )
 }
 
+///|
 test "no_port" {
   inspect!(
     @url.parse?("https://example.com/path/to/somewhere?query#fragment"),
@@ -58,6 +61,7 @@ test "no_port" {
   )
 }
 
+///|
 test "no_query" {
   inspect!(
     @url.parse?("https://example.com:8080/path/to/somewhere#fragment"),
@@ -67,6 +71,7 @@ test "no_query" {
   )
 }
 
+///|
 test "no_fragment" {
   inspect!(
     @url.parse?("https://example.com:8080/path/to/somewhere?query"),

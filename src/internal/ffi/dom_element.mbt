@@ -2,20 +2,14 @@
 type Element
 
 ///|
-pub extern "js" fn Element::to_html_element(self : Element) -> HTMLElement =
-  #| (x) => { 
-  #|   if (x instanceof HTMLElement){ return x } else { throw new Error('not a HTMLElement') } 
-  #| }
+pub extern "js" fn Element::to_html_element(
+  self : Element
+) -> @js.Nullable[HTMLElement] =
+  #| (x) => x instanceof HTMLElement ? x : null
 
 ///|
-pub extern "js" fn Element::count_children(self : Element) -> Int =
-  #| (self) => self.children.length
-
-///|
-pub extern "js" fn Element::get_children(
-  self : Element,
-  index : Int
-) -> Element = "(self, index) => self.children[index]"
+pub extern "js" fn Element::children(self : Element) -> Array[Element] =
+  #| (self) => self.children
 
 ///|
 pub extern "js" fn Element::append_children(
@@ -82,10 +76,26 @@ pub extern "js" fn Element::set_inner_html(
 ) -> Unit = "(self,html) => self.innerHTML = html"
 
 ///|
+pub extern "js" fn Element::get_bounding_client_rect(self : Element) -> DOMRect =
+  #| (self) => self.getBoundingClientRect()
+
+///|
 type HTMLElement
 
 ///|
 pub extern "js" fn HTMLElement::to_element(self : HTMLElement) -> Element = "(x) => x"
+
+///|
+pub extern "js" fn HTMLElement::to_html_canvas_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLCanvasElement] =
+  #| (x) => x instanceof HTMLCanvasElement ? x : null
+
+///|
+pub extern "js" fn HTMLElement::to_html_input_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLInputElement] =
+  #| "(x) => x instanceof HTMLInputElement ? x : null"
 
 ///|
 pub extern "js" fn HTMLElement::set_style(
@@ -98,3 +108,9 @@ pub extern "js" fn HTMLElement::set_style(
 ///|
 pub extern "js" fn HTMLElement::remove_style(self : HTMLElement, key : String) =
   #| (self,key) => self.style[key] = ''
+
+///|
+type HTMLInputElement
+
+///|
+pub extern "js" fn HTMLInputElement::value(self : HTMLInputElement) -> String = "(self) => self.value"

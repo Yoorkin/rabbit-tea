@@ -2,14 +2,16 @@
 /// # Hireharchy related to the DOM EventTarget
 /// 
 /// ```
-/// EventTarget <-- Node <--+-- Element <-- HTMLElement <-- HTMLCanvasElement
-///                         +-- Document
+/// EventTarget <-- Node <--+-- Document
 ///                         +-- DocumentFragment
+///                         +-- Element <-- HTMLElement <--+-- HTMLCanvasElement
+///                                                        +-- HTMLInputElement
 /// ```
 type EventTarget
 
 ///|
-pub extern "js" fn value(self : EventTarget) -> String = "(self) => self.value"
+pub extern "js" fn to_node(self : EventTarget) -> @js.Nullable[Node] =
+  #| (x) => x instanceof Node ? x : null
 
 ///|
 pub extern "js" fn add_event_listener(

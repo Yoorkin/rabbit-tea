@@ -4,6 +4,7 @@
     "Yoorkin/rabbit-tea/internal/vdom",
     "Yoorkin/rabbit-tea/browser",
     "Yoorkin/rabbit-tea/url",
-    "Yoorkin/rabbit-tea/internal/ffi"
+    "Yoorkin/rabbit-tea/internal/ffi",
+    "rami3l/js-ffi/js"
   ]
 }

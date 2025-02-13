@@ -33,7 +33,10 @@ pub fn startup[Model, Message](
   view~ : (Model) -> @html.Html[Message],
   mount~ : String = "app"
 ) -> Unit {
-  @ffi.document().get_element_by_id(mount).set_inner_html("<div></div>")
+  @ffi.document()
+  .get_element_by_id(mount)
+  .get_exn()
+  .set_inner_html("<div></div>")
   let mut sandbox = None
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Message]) {
@@ -61,7 +64,10 @@ pub fn application[Model, Msg](
   url_request? : (@browser.UrlRequest) -> Msg,
   mount~ : String = "app"
 ) -> Unit {
-  @ffi.document().get_element_by_id(mount).set_inner_html("<div></div>")
+  @ffi.document()
+  .get_element_by_id(mount)
+  .get_exn()
+  .set_inner_html("<div></div>")
   let mut sandbox = None
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Msg]) {

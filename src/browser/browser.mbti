@@ -32,7 +32,7 @@ fn scroll_to_top[M]() -> Command[M]
 fn task[M](M) -> Command[M]
 
 // Types and methods
-pub(all) type Command (PredefinedEvent, (M) -> Unit) -> Unit
+pub(all) type Command[M] (PredefinedEvent, (M) -> Unit) -> Unit
 impl Command {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
@@ -42,7 +42,7 @@ pub(all) struct PredefinedEvent {
   on_url_request : (UrlRequest) -> Unit
 }
 
-type Sandbox
+type Sandbox[Msg, Model, View]
 impl Sandbox {
   get_on_url_changed[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
   get_on_url_request[Msg, Model, View](Self[Msg, Model, View]) -> ((UrlRequest) -> Msg)?
