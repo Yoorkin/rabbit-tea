@@ -519,7 +519,7 @@ pub extern "js" fn CanvasRenderingContext2D::round_rect(
   y : Double,
   w : Double,
   h : Double,
-  // FIXME: support other types like DOMPointInit or sequence<doiuble | DomPointInit>
+  // FIXME: support other types like DOMPointInit or sequence<double | DomPointInit>
   radius : Double
 ) = "(self,x,y,w,h,radius) => self.roundRect(x,y,w,h,radius)"
 
