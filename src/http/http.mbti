@@ -18,7 +18,7 @@ pub(all) enum Body {
   Empty
 }
 
-pub(all) enum Expecting {
+pub(all) enum Expecting[Msg, Model] {
   Json((Result[Model, String]) -> Msg, (Json) -> Result[Model, String])
   Text((Result[String, String]) -> Msg)
 }

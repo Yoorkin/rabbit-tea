@@ -25,16 +25,16 @@ fn style[Msg](String, String) -> Attribute[Msg]
 fn text[Msg](String) -> Node[Msg]
 
 // Types and methods
-type AttrValue
+type AttrValue[Msg]
 
-type Attribute
+type Attribute[Msg]
 impl Attribute {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
 
-type AttrsUpdate
+type AttrsUpdate[Msg]
 
-pub(all) enum Handler {
+pub(all) enum Handler[Msg] {
   Normal(Msg)
   HandleEvent((@ffi.Event) -> Msg)
   Custom(Msg, Bool, Bool)
@@ -43,15 +43,15 @@ impl Handler {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
 
-type Node
+type Node[Msg]
 impl Node {
   map[A, B](Self[A], (A) -> B) -> Self[B]
   patch[Msg, Model, View](Self[Msg], Self[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 }
 
-type Patch
+type Patch[Msg]
 
-type Update
+type Update[Msg]
 
 // Type aliases
 

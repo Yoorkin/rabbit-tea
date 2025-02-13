@@ -327,6 +327,7 @@ enum Patch[Msg] {
   Update(Update[Msg])
 }
 
+///|
 test {
   // TODO: this is used to suppress unused warnings. Remove this later.
   ignore((Patch::Remove : (Int) -> Patch[Unit]))
