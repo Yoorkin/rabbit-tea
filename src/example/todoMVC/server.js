@@ -86,7 +86,7 @@ app.listen(port, () => {
 
 // Serve example.js
 app.get('/main.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../target/js/release/build/example/example.js'));
+    res.sendFile(path.join(__dirname, '../../../target/js/release/build/example/todoMVC/todoMVC.js'));
 });
 
 // Serve index.html
