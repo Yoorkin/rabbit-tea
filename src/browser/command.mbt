@@ -37,7 +37,7 @@ pub fn task[M](message : M) -> Command[M] {
 
 ///|
 pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Command[M] {
-  Command(fn(predef, update) { @js.async_run(fn() { update(msg(f!!())) }) })
+  Command(fn(_, update) { @js.async_run(fn() { update(msg(f!!())) }) })
 }
 
 ///|
@@ -45,7 +45,7 @@ pub fn attempt[A, E : Error, M](
   msg : (Result[A, E]) -> M,
   f : async () -> A!E
 ) -> Command[M] {
-  Command(fn(predef, update) {
+  Command(fn(_, update) {
     @js.async_run(fn() {
       let msg = try {
         f!!()
