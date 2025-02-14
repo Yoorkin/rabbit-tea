@@ -7,9 +7,13 @@ alias @Yoorkin/rabbit-tea/url as @url
 // Values
 fn application[Model, Msg](initialize~ : (@url.Url) -> (@browser.Command[Msg], Model), update~ : (Msg, Model) -> (@browser.Command[Msg], Model), view~ : (Model) -> @html.T[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@browser.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
 
+fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> @browser.Command[M]
+
 fn batch[M](Array[@browser.Command[M]]) -> @browser.Command[M]
 
 fn none[M]() -> @browser.Command[M]
+
+fn perform[A, M]((A) -> M, () -> A) -> @browser.Command[M]
 
 fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Command[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String = ..) -> Unit
 

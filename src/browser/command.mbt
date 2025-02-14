@@ -34,3 +34,27 @@ pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
 pub fn task[M](message : M) -> Command[M] {
   Command(fn(_, update) { update(message) })
 }
+
+///|
+pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Command[M] {
+  Command(fn(_, update) { @js.async_run(fn() { update(msg(f!!())) }) })
+}
+
+///|
+pub fn attempt[A, E : Error, M](
+  msg : (Result[A, E]) -> M,
+  f : async () -> A!E
+) -> Command[M] {
+  Command(fn(_, update) {
+    @js.async_run(fn() {
+      let msg = try {
+        f!!()
+      } catch {
+        e => msg(Err(e))
+      } else {
+        r => msg(Ok(r))
+      }
+      update(msg)
+    })
+  })
+}
