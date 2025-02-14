@@ -3,6 +3,8 @@ package Yoorkin/rabbit-tea/browser
 alias @Yoorkin/rabbit-tea/url as @url
 
 // Values
+fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Command[M]
+
 fn back[M]() -> Command[M]
 
 fn batch[M](Array[Command[M]]) -> Command[M]
@@ -12,6 +14,8 @@ fn forward[M]() -> Command[M]
 fn load[M](String) -> Command[M]
 
 fn none[M]() -> Command[M]
+
+fn perform[A, M]((A) -> M, () -> A) -> Command[M]
 
 fn push_url[M](String) -> Command[M]
 

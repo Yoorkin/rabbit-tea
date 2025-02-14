@@ -16,6 +16,19 @@ pub fn task[M](message : M) -> Command[M] {
   @browser.task(message)
 }
 
+///|
+pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Command[M] {
+  @browser.perform(msg, f)
+}
+
+///|
+pub fn attempt[A, E : Error, M](
+  msg : (Result[A, E]) -> M,
+  f : async () -> A!E
+) -> Command[M] {
+  @browser.attempt(msg, f)
+}
+
 ///| Start the application.
 /// 
 /// - `model` is the state of your application.
