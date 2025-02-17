@@ -30,7 +30,7 @@ fn em[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]
 
 fn external[Msg](@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> T[Msg]
 
-fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, Array[T[M]]) -> T[M]
+fn form[M](style~ : Array[String] = .., id? : String, class? : String, action? : String, name? : String, Array[T[M]]) -> T[M]
 
 fn h1[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
@@ -54,17 +54,17 @@ fn iframe[M](style~ : Array[String] = .., id? : String, class? : String, src? : 
 
 fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[T[M]]) -> T[M]
 
-fn input[M](input_type~ : InputType = .., name? : String, value? : String, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M, input? : (String) -> M) -> T[M]
+fn input[M](input_type~ : InputType = .., name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M, input? : (String) -> M) -> T[M]
 
-fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[T[M]]) -> T[M]
+fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, form? : String, Array[T[M]]) -> T[M]
 
-fn li[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
+fn li[M](style~ : Array[String] = .., value? : Int, id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
 fn node[Msg](String, Array[Attribute[Msg]], Array[T[Msg]]) -> T[Msg]
 
 fn nothing[M]() -> T[M]
 
-fn ol[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
+fn ol[M](style~ : Array[String] = .., reverse? : Bool, start? : Int, id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn on_change[Msg]((String) -> Msg) -> Attribute[Msg]
 
