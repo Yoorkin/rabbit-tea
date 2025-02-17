@@ -355,7 +355,7 @@ pub fn ul[M](
 /// If you want to change the type of the list, you should use the `list-style-type` property in CSS.
 pub fn ol[M](
   style~ : Array[String] = [],
-  reverse? : Bool,
+  reversed? : Bool,
   start? : Int,
   id? : String,
   class? : String,
@@ -368,7 +368,7 @@ pub fn ol[M](
     class?,
     id?,
     optional_attrs={
-      "reversed": reverse.map(Bool::to_string),
+      "reversed": reversed.map(Bool::to_string),
       "start": start.map(Int::to_string),
     },
     childrens,
@@ -554,13 +554,12 @@ pub fn label[M](
   id? : String,
   class? : String,
   for_? : String,
-  form? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "label",
     {},
-    optional_attrs={ "for": for_, "form": form },
+    optional_attrs={ "for": for_ },
     style~,
     class?,
     id?,
