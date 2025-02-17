@@ -617,3 +617,141 @@ pub fn external[Msg](
   let attrs = attrs.map(fn(opt) { opt.map(fn(arr) { arr.map(fn(a) { a._ }) }) })
   @vdom.external(node, attrs, width~, height~)
 }
+
+// table
+
+///|
+pub fn table[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("table", {}, style~, id?, class?, [])
+}
+
+///|
+pub fn caption[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("caption", {}, style~, id?, class?, [])
+}
+
+///|
+pub fn thead[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("thead", {}, style~, id?, class?, [])
+}
+
+///|
+pub fn tbody[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("tbody", {}, style~, id?, class?, [])
+}
+
+///|
+pub fn col[M](
+  style~ : Array[String] = [],
+  id? : String,
+  span? : Int,
+  class? : String
+) -> Html[M] {
+  new(
+    "col",
+    {},
+    style~,
+    id?,
+    class?,
+    optional_attrs={ "span": span.map(Int::to_string) },
+    [],
+  )
+}
+
+///|
+pub fn col_group[M](
+  style~ : Array[String] = [],
+  id? : String,
+  span? : Int,
+  class? : String
+) -> Html[M] {
+  new(
+    "col_group",
+    {},
+    style~,
+    id?,
+    class?,
+    optional_attrs={ "span": span.map(Int::to_string) },
+    [],
+  )
+}
+
+///|
+pub fn tr[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("tr", {}, style~, id?, class?, [])
+}
+
+///|
+pub fn td[M](
+  style~ : Array[String] = [],
+  id? : String,
+  colspan? : Int,
+  rowspan? : Int,
+  headers? : String,
+  class? : String,
+) -> Html[M] {
+  new("td", {}, style~, id?, class?, optional_attrs={
+    "colspan": colspan.map(Int::to_string),
+    "rowspan": rowspan.map(Int::to_string),
+    "headers": headers,
+  },
+    [],
+  )
+}
+
+///|
+pub fn th[M](
+  style~ : Array[String] = [],
+  id? : String,
+  abbr? : String,
+  colspan? : Int,
+  rowspan? : Int,
+  headers? : String,
+  scope? : String,
+  class? : String
+) -> Html[M] {
+  new(
+    "th",
+    {},
+    style~,
+    id?,
+    class?,
+    optional_attrs={
+      "abbr": abbr,
+      "colspan": colspan.map(Int::to_string),
+      "rowspan": rowspan.map(Int::to_string),
+      "headers": headers,
+      "scope": scope,
+    },
+    [],
+  )
+}
+
+///|
+pub fn tfoot[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String
+) -> Html[M] {
+  new("tfoot", {}, style~, id?, class?, [])
+}
