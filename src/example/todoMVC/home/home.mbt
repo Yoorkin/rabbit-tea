@@ -60,16 +60,21 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
 ///|
 fn decode_cards(json : Json) -> Result[Array[CardModel], String] {
   match json {
-    { "cards": Array(elems) } => {
+    { "cards": Array(elems), .. } => {
       let cards = elems.filter_map(fn {
         {
           "title"? : Some(String(""))
           | None,
           "content": String(content),
           "id": Number(id),
+          ..
         } => Some(Card(content, id=id.to_int()))
-        { "title": String(title), "content": String(content), "id": Number(id) } =>
-          Some(TitleCard(title~, content~, id=id.to_int()))
+        {
+          "title": String(title),
+          "content": String(content),
+          "id": Number(id),
+          ..
+        } => Some(TitleCard(title~, content~, id=id.to_int()))
         _ => None
       })
       Ok(cards)
