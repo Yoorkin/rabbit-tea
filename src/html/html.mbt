@@ -451,9 +451,9 @@ pub fn img[M](
       "src": src,
       "alt": alt,
       "title": title,
-      "width": width.map(fn(n) { n.to_string() }),
-      "height": height.map(fn(n) { n.to_string() }),
-      "border": border.map(fn(n) { n.to_string() }),
+      "width": width.map(fn(x) { x.to_string() }),
+      "height": height.map(fn(x) { x.to_string() }),
+      "border": border.map(fn(x) { x.to_string() }),
     },
     childrens,
   )
@@ -478,8 +478,8 @@ pub fn iframe[M](
     optional_attrs={
       "src": src,
       "title": title,
-      "width": width.map(fn(n) { n.to_string() }),
-      "height": height.map(fn(n) { n.to_string() }),
+      "width": width.map(fn(x) { x.to_string() }),
+      "height": height.map(fn(x) { x.to_string() }),
     },
     [],
   )

@@ -56,7 +56,7 @@ fn img[M](style~ : Array[String] = .., id? : String, class? : String, src? : Str
 
 fn input[M](input_type~ : InputType = .., name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style~ : Array[String] = .., max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, childrens~ : Array[T[M]] = .., change? : (String) -> M, input? : (String) -> M) -> T[M]
 
-fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, form? : String, Array[T[M]]) -> T[M]
+fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : String, Array[T[M]]) -> T[M]
 
 fn li[M](style~ : Array[String] = .., value? : Int, id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
@@ -64,7 +64,7 @@ fn node[Msg](String, Array[Attribute[Msg]], Array[T[Msg]]) -> T[Msg]
 
 fn nothing[M]() -> T[M]
 
-fn ol[M](style~ : Array[String] = .., reverse? : Bool, start? : Int, id? : String, class? : String, Array[T[M]]) -> T[M]
+fn ol[M](style~ : Array[String] = .., reversed? : Bool, start? : Int, id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn on_change[Msg]((String) -> Msg) -> Attribute[Msg]
 
