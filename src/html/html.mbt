@@ -428,9 +428,9 @@ pub fn img[M](
       "src": src,
       "alt": alt,
       "title": title,
-      "width": width.map(Int::to_string),
-      "height": height.map(Int::to_string),
-      "border": border.map(Int::to_string),
+      "width": width.map(fn(n) { n.to_string() }),
+      "height": height.map(fn(n) { n.to_string() }),
+      "border": border.map(fn(n) { n.to_string() }),
     },
     childrens,
   )
@@ -455,8 +455,8 @@ pub fn iframe[M](
     optional_attrs={
       "src": src,
       "title": title,
-      "width": width.map(Int::to_string),
-      "height": height.map(Int::to_string),
+      "width": width.map(fn(n) { n.to_string() }),
+      "height": height.map(fn(n) { n.to_string() }),
     },
     [],
   )
@@ -669,7 +669,7 @@ pub fn col[M](
     style~,
     id?,
     class?,
-    optional_attrs={ "span": span.map(Int::to_string) },
+    optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
     [],
   )
 }
@@ -687,7 +687,7 @@ pub fn col_group[M](
     style~,
     id?,
     class?,
-    optional_attrs={ "span": span.map(Int::to_string) },
+    optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
     [],
   )
 }
@@ -708,13 +708,19 @@ pub fn td[M](
   colspan? : Int,
   rowspan? : Int,
   headers? : String,
-  class? : String,
+  class? : String
 ) -> Html[M] {
-  new("td", {}, style~, id?, class?, optional_attrs={
-    "colspan": colspan.map(Int::to_string),
-    "rowspan": rowspan.map(Int::to_string),
-    "headers": headers,
-  },
+  new(
+    "td",
+    {},
+    style~,
+    id?,
+    class?,
+    optional_attrs={
+      "colspan": colspan.map(fn(n) { n.to_string() }),
+      "rowspan": rowspan.map(fn(n) { n.to_string() }),
+      "headers": headers,
+    },
     [],
   )
 }
@@ -738,8 +744,8 @@ pub fn th[M](
     class?,
     optional_attrs={
       "abbr": abbr,
-      "colspan": colspan.map(Int::to_string),
-      "rowspan": rowspan.map(Int::to_string),
+      "colspan": colspan.map(fn(n) { n.to_string() }),
+      "rowspan": rowspan.map(fn(n) { n.to_string() }),
       "headers": headers,
       "scope": scope,
     },
