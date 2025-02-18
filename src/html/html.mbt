@@ -675,14 +675,14 @@ pub fn col[M](
 }
 
 ///|
-pub fn col_group[M](
+pub fn colgroup[M](
   style~ : Array[String] = [],
   id? : String,
   span? : Int,
   class? : String
 ) -> Html[M] {
   new(
-    "col_group",
+    "colgroup",
     {},
     style~,
     id?,
@@ -726,6 +726,14 @@ pub fn td[M](
 }
 
 ///|
+pub(all) enum Scope {
+  Row
+  Col
+  RowGroup
+  ColGroup
+}
+
+///|
 pub fn th[M](
   style~ : Array[String] = [],
   id? : String,
@@ -733,7 +741,7 @@ pub fn th[M](
   colspan? : Int,
   rowspan? : Int,
   headers? : String,
-  scope? : String,
+  scope? : Scope,
   class? : String
 ) -> Html[M] {
   new(
@@ -747,7 +755,14 @@ pub fn th[M](
       "colspan": colspan.map(fn(n) { n.to_string() }),
       "rowspan": rowspan.map(fn(n) { n.to_string() }),
       "headers": headers,
-      "scope": scope,
+      "scope": scope.map(fn(s) {
+        match s {
+          Row => "row"
+          Col => "col"
+          RowGroup => "rowgroup"
+          ColGroup => "colgroup"
+        }
+      }),
     },
     [],
   )

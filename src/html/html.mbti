@@ -22,7 +22,7 @@ fn code[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M
 
 fn col[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String) -> T[M]
 
-fn col_group[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String) -> T[M]
+fn colgroup[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String) -> T[M]
 
 fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
@@ -122,7 +122,7 @@ fn text[Msg](String) -> T[Msg]
 
 fn tfoot[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
 
-fn th[M](style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : String, class? : String) -> T[M]
+fn th[M](style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String) -> T[M]
 
 fn thead[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
 
@@ -175,6 +175,13 @@ impl Mouse {
 pub(all) struct Pos {
   x : Int
   y : Int
+}
+
+pub(all) enum Scope {
+  Row
+  Col
+  RowGroup
+  ColGroup
 }
 
 type T[Msg]
