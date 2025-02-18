@@ -428,9 +428,9 @@ pub fn img[M](
       "src": src,
       "alt": alt,
       "title": title,
-      "width": width.map(Int::to_string),
-      "height": height.map(Int::to_string),
-      "border": border.map(Int::to_string),
+      "width": width.map(fn(x) { x.to_string() }),
+      "height": height.map(fn(x) { x.to_string() }),
+      "border": border.map(fn(x) { x.to_string() }),
     },
     childrens,
   )
@@ -455,8 +455,8 @@ pub fn iframe[M](
     optional_attrs={
       "src": src,
       "title": title,
-      "width": width.map(Int::to_string),
-      "height": height.map(Int::to_string),
+      "width": width.map(fn(x) { x.to_string() }),
+      "height": height.map(fn(x) { x.to_string() }),
     },
     [],
   )

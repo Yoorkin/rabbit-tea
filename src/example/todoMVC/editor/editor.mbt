@@ -39,7 +39,7 @@ pub fn load(index : Int?) -> (@tea.Command[Msg], Model) {
 ///|
 pub fn decode_card(data : Json) -> Result[Card, String] {
   match data {
-    { "title": String(title), "content": String(content), "id": Number(id) } =>
+    { "title": String(title), "content": String(content), "id": Number(id), .. } =>
       Ok({ title, content, id: Some(id.to_int()) })
     _ => Err("Invalid card data")
   }
