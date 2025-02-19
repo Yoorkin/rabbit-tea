@@ -351,26 +351,49 @@ pub fn ul[M](
 }
 
 ///|
+/// Notice that the `type` attribute for `ol` is not important for the browser now.
+/// If you want to change the type of the list, you should use the `list-style-type` property in CSS.
 pub fn ol[M](
   style~ : Array[String] = [],
+  reversed? : Bool,
+  start? : Int,
   id? : String,
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ol", {}, style~, class?, id?, childrens)
+  new(
+    "ol",
+    {},
+    style~,
+    class?,
+    id?,
+    optional_attrs={
+      "reversed": reversed.map(Bool::to_string),
+      "start": start.map(fn(n) { n.to_string() }),
+    },
+    childrens,
+  )
 }
 
 ///|
 pub fn li[M](
   style~ : Array[String] = [],
+  value? : Int,
   id? : String,
   class? : String,
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("li", {}, style~, class?, id?, childrens, events={
-    "click": click.map(fn(m) { m }),
-  })
+  new(
+    "li",
+    {},
+    style~,
+    class?,
+    id?,
+    optional_attrs={ "value": value.map(fn(n) { n.to_string() }) },
+    childrens,
+    events={ "click": click.map(fn(m) { m }) },
+  )
 }
 
 ///|
@@ -511,6 +534,7 @@ pub fn form[M](
   id? : String,
   class? : String,
   action? : String,
+  name? : String,
   children : Array[Html[M]]
 ) -> Html[M] {
   new(
@@ -519,7 +543,7 @@ pub fn form[M](
     style~,
     id?,
     class?,
-    optional_attrs={ "action": action },
+    optional_attrs={ "action": action, "name": name },
     children,
   )
 }
@@ -548,12 +572,22 @@ pub fn input[M](
   input_type~ : InputType = Text,
   name? : String,
   value? : String,
+  checked? : Bool,
   read_only? : Bool,
   multiple? : Bool,
   accept? : String,
   placeholder? : String,
   auto_complete? : AutoComplete,
   style~ : Array[String] = [],
+  max? : Int,
+  min? : Int,
+  step? : Int,
+  maxlength? : Int,
+  minlength? : Int,
+  pattern? : String,
+  size? : Int,
+  width? : Int,
+  height? : Int,
   id? : String,
   class? : String,
   childrens~ : Array[Html[M]] = [],
@@ -594,9 +628,19 @@ pub fn input[M](
     optional_attrs={
       "name": name,
       "value": value,
+      "checked": checked.map(Bool::to_string),
       "readonly": read_only.map(Bool::to_string),
       "multiple": multiple.map(Bool::to_string),
       "accept": accept,
+      "max": max.map(fn(n) { n.to_string() }),
+      "min": min.map(fn(n) { n.to_string() }),
+      "step": step.map(fn(n) { n.to_string() }),
+      "maxlength": maxlength.map(fn(n) { n.to_string() }),
+      "minlength": minlength.map(fn(n) { n.to_string() }),
+      "pattern": pattern,
+      "size": size.map(fn(n) { n.to_string() }),
+      "width": width.map(fn(n) { n.to_string() }),
+      "height": height.map(fn(n) { n.to_string() }),
       "placeholder": placeholder,
     },
     optional_attributes=[change.map(on_change), input.map(on_input)],
