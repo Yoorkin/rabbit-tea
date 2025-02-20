@@ -95,7 +95,7 @@ pub extern "js" fn HTMLElement::to_html_canvas_element(
 pub extern "js" fn HTMLElement::to_html_input_element(
   self : HTMLElement
 ) -> @js.Nullable[HTMLInputElement] =
-  #| "(x) => x instanceof HTMLInputElement ? x : null"
+  #| (x) => x instanceof HTMLInputElement ? x : null
 
 ///|
 pub extern "js" fn HTMLElement::set_style(
