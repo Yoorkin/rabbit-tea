@@ -55,12 +55,17 @@ pub fn parse(url : String) -> Url!Error {
     [remain] => (Other(""), remain)
     _ => fail!("Invalid protocol")
   }
-  let (mid, remain) = match remain.split("?").collect() {
+  let (mid, query_and_fragment) = match remain.split("?").collect() {
     [mid, remain] => (mid, remain)
     [mid] => (mid, "")
     _ => fail!("Invalid host")
   }
-  let (mid, path) = match mid.split("/").collect() {
+  let (mid_part, fragment1) = match mid.split("#").collect() {
+    [mid, fragment] => (mid, Some(fragment))
+    [mid] => (mid, None)
+    _ => fail!("Invalid fragment")
+  }
+  let (mid, path) = match mid_part.split("/").collect() {
     [mid] => (mid, "")
     [mid, .. paths] =>
       (mid, String::concat(paths.iter().collect(), separator="/"))
@@ -80,11 +85,21 @@ pub fn parse(url : String) -> Url!Error {
     [host] => (host, None)
     _ => fail!("Invalid host")
   }
-  let (query, fragment) = match remain.split("#").collect() {
+  let (query, fragment2) = match query_and_fragment.split("#").collect() {
     [query, fragment] => (Some(query), Some(fragment))
-    [query] => (Some(query), None)
+    [query] => if query.is_empty() {
+      (None, None)
+    } else {
+      (Some(query), None)
+    }
     [] => (None, None)
     _ => fail!("Invalid query")
+  }
+  let fragment = match (fragment1, fragment2) {
+    (Some(f1), Some(f2)) => Some(f1 + "#" + f2)
+    (Some(f), None) => Some(f)
+    (None, Some(f)) => Some(f)
+    (None, None) => None
   }
   { protocol, host, port, path, query, fragment }
 }

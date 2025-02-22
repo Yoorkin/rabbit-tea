@@ -66,7 +66,7 @@ test "no_query" {
   inspect!(
     @url.parse?("https://example.com:8080/path/to/somewhere#fragment"),
     content=
-      #|Ok({protocol: Https, host: "example.com", port: Some(8080), path: "path/to/somewhere#fragment", query: None, fragment: None})
+      #|Ok({protocol: Https, host: "example.com", port: Some(8080), path: "path/to/somewhere", query: None, fragment: Some("fragment")})
     ,
   )
 }
