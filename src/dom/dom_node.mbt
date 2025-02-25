@@ -1,5 +1,5 @@
 ///|
-type Node
+extern type Node
 
 // ---------- node API --------------
 ///|

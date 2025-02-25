@@ -7,7 +7,7 @@
 ///                         +-- Element <-- HTMLElement <--+-- HTMLCanvasElement
 ///                                                        +-- HTMLInputElement
 /// ```
-type EventTarget
+extern type EventTarget
 
 ///|
 pub extern "js" fn to_node(self : EventTarget) -> @js.Nullable[Node] =

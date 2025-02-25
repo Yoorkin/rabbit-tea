@@ -1,2 +1,2 @@
 ///|
-type Text
+extern type Text
