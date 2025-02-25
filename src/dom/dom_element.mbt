@@ -1,5 +1,5 @@
 ///|
-type Element
+extern type Element
 
 ///|
 pub extern "js" fn Element::to_html_element(
@@ -80,7 +80,7 @@ pub extern "js" fn Element::get_bounding_client_rect(self : Element) -> DOMRect 
   #| (self) => self.getBoundingClientRect()
 
 ///|
-type HTMLElement
+extern type HTMLElement
 
 ///|
 pub extern "js" fn HTMLElement::to_element(self : HTMLElement) -> Element = "(x) => x"
@@ -110,7 +110,7 @@ pub extern "js" fn HTMLElement::remove_style(self : HTMLElement, key : String) =
   #| (self,key) => self.style[key] = ''
 
 ///|
-type HTMLInputElement
+extern type HTMLInputElement
 
 ///|
 pub extern "js" fn HTMLInputElement::value(self : HTMLInputElement) -> String = "(self) => self.value"

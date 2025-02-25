@@ -1,5 +1,5 @@
 ///|
-type HTMLCanvasElement
+extern type HTMLCanvasElement
 
 ///|
 pub extern "js" fn HTMLCanvasElement::to_html_element(
@@ -30,7 +30,7 @@ pub extern "js" fn HTMLCanvasElement::get_context(
      ] = "(x, id) => x.getContext(id)"
 
 ///|
-type CanvasRenderingContext2D
+extern type CanvasRenderingContext2D
 
 ///|
 extern "js" fn checked_to_canvas_rendering_context_2d(
@@ -49,16 +49,16 @@ pub impl @js.Cast for CanvasRenderingContext2D with from(value) {
 }
 
 ///|
-type ImageBitmapRenderingContext
+extern type ImageBitmapRenderingContext
 
 ///|
-type WebGLRenderingContext
+extern type WebGLRenderingContext
 
 ///|
-type WebGL2RenderingContext
+extern type WebGL2RenderingContext
 
 ///|
-type GPUCanvasContext
+extern type GPUCanvasContext
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::save(
@@ -437,10 +437,10 @@ pub extern "js" fn CanvasRenderingContext2D::set_line_width(
 ) = "(self,value) => self.lineWidth = value"
 
 ///|
-type CanvasLineCap
+extern type CanvasLineCap
 
 ///|
-type CanvasLineJoin
+extern type CanvasLineJoin
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_line_cap(
@@ -561,7 +561,7 @@ pub extern "js" fn CanvasRenderingContext2D::ellipse(
 ) = "(self,x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise) => self.ellipse(x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise)"
 
 ///|
-type CanvasGradient
+extern type CanvasGradient
 
 ///|
 pub extern "js" fn CanvasGradient::add_color_stop(
@@ -571,7 +571,7 @@ pub extern "js" fn CanvasGradient::add_color_stop(
 ) = "(self,offset,color) => self.addColorStop(offset,color)"
 
 ///|
-type CanvasPattern
+extern type CanvasPattern
 
 ///|
 pub extern "js" fn CanvasPattern::set_transform(
@@ -580,12 +580,12 @@ pub extern "js" fn CanvasPattern::set_transform(
 ) = "(self,transform) => self.setTransform(transform)"
 
 ///|
-type DOMMatrix2DInit
+extern type DOMMatrix2DInit
 
 // TODO: add TextMetrics
 
 ///|
-type ImageDataSettings
+extern type ImageDataSettings
 
 ///| Possible values are "srgb" and "display-p3".
 pub typealias PredefinedColorSpace = String
@@ -596,7 +596,7 @@ pub extern "js" fn ImageDataSettings::new(
 ) -> ImageDataSettings = "(colorSpace) => ({colorSpace: colorSpace})"
 
 ///|
-type ImageData
+extern type ImageData
 
 ///|
 pub extern "js" fn ImageData::new(
@@ -630,7 +630,7 @@ pub extern "js" fn ImageData::get_color_space(
 ) -> PredefinedColorSpace = "(self) => self.colorSpace"
 
 ///|
-type Path2D
+extern type Path2D
 
 ///|
 pub extern "js" fn Path2D::new(
@@ -645,4 +645,4 @@ pub extern "js" fn Path2D::add_path(
 ) = "(self,path,transform) => self.addPath(path,transform)"
 
 ///|
-type Uint8ClampedArray
+extern type Uint8ClampedArray

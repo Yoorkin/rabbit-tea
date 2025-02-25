@@ -87,11 +87,7 @@ pub fn parse(url : String) -> Url!Error {
   }
   let (query, fragment2) = match query_and_fragment.split("#").collect() {
     [query, fragment] => (Some(query), Some(fragment))
-    [query] => if query.is_empty() {
-      (None, None)
-    } else {
-      (Some(query), None)
-    }
+    [query] => if query.is_empty() { (None, None) } else { (Some(query), None) }
     [] => (None, None)
     _ => fail!("Invalid query")
   }
