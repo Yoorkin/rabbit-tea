@@ -668,36 +668,40 @@ pub fn external[Msg](
 pub fn table[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("table", {}, style~, id?, class?, [])
+  new("table", {}, style~, id?, class?, childrens)
 }
 
 ///|
 pub fn caption[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("caption", {}, style~, id?, class?, [])
+  new("caption", {}, style~, id?, class?, childrens)
 }
 
 ///|
 pub fn thead[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("thead", {}, style~, id?, class?, [])
+  new("thead", {}, style~, id?, class?, childrens)
 }
 
 ///|
 pub fn tbody[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tbody", {}, style~, id?, class?, [])
+  new("tbody", {}, style~, id?, class?, childrens)
 }
 
 ///|
@@ -705,7 +709,8 @@ pub fn col[M](
   style~ : Array[String] = [],
   id? : String,
   span? : Int,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "col",
@@ -714,7 +719,7 @@ pub fn col[M](
     id?,
     class?,
     optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
-    [],
+    childrens,
   )
 }
 
@@ -723,7 +728,8 @@ pub fn colgroup[M](
   style~ : Array[String] = [],
   id? : String,
   span? : Int,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "colgroup",
@@ -732,7 +738,7 @@ pub fn colgroup[M](
     id?,
     class?,
     optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
-    [],
+    childrens,
   )
 }
 
@@ -740,9 +746,10 @@ pub fn colgroup[M](
 pub fn tr[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tr", {}, style~, id?, class?, [])
+  new("tr", {}, style~, id?, class?, childrens)
 }
 
 ///|
@@ -752,7 +759,8 @@ pub fn td[M](
   colspan? : Int,
   rowspan? : Int,
   headers? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "td",
@@ -765,7 +773,7 @@ pub fn td[M](
       "rowspan": rowspan.map(fn(n) { n.to_string() }),
       "headers": headers,
     },
-    [],
+    childrens,
   )
 }
 
@@ -786,7 +794,8 @@ pub fn th[M](
   rowspan? : Int,
   headers? : String,
   scope? : Scope,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
   new(
     "th",
@@ -808,7 +817,7 @@ pub fn th[M](
         }
       }),
     },
-    [],
+    childrens,
   )
 }
 
@@ -816,7 +825,8 @@ pub fn th[M](
 pub fn tfoot[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String
+  class? : String,
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tfoot", {}, style~, id?, class?, [])
+  new("tfoot", {}, style~, id?, class?, childrens)
 }
