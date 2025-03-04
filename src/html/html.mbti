@@ -16,13 +16,13 @@ fn br[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
 
 fn button[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
-fn caption[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn caption[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn code[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn col[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String) -> T[M]
+fn col[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String, Array[T[M]]) -> T[M]
 
-fn colgroup[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String) -> T[M]
+fn colgroup[M](style~ : Array[String] = .., id? : String, span? : Int, class? : String, Array[T[M]]) -> T[M]
 
 fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
@@ -110,23 +110,23 @@ fn sub[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]
 
 fn sup[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn table[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn table[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn target[Msg](Target) -> Attribute[Msg]
 
-fn tbody[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn tbody[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn td[M](style~ : Array[String] = .., id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String) -> T[M]
+fn td[M](style~ : Array[String] = .., id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn text[Msg](String) -> T[Msg]
 
-fn tfoot[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn tfoot[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn th[M](style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String) -> T[M]
+fn th[M](style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, Array[T[M]]) -> T[M]
 
-fn thead[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn thead[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
-fn tr[M](style~ : Array[String] = .., id? : String, class? : String) -> T[M]
+fn tr[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn u[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
