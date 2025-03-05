@@ -27,14 +27,10 @@ fn style[Msg](String, String) -> Attribute[Msg]
 fn text[Msg](String) -> Node[Msg]
 
 // Types and methods
-type AttrValue[Msg]
-
 type Attribute[Msg]
 impl Attribute {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
-
-type AttrsUpdate[Msg]
 
 pub(all) enum Handler[Msg] {
   Normal(Msg)
@@ -52,8 +48,6 @@ impl Node {
 }
 
 type Patch[Msg]
-
-type Update[Msg]
 
 // Type aliases
 

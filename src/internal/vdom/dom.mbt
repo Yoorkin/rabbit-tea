@@ -71,7 +71,7 @@ pub fn nothing[Msg]() -> Node[Msg] {
 type Attribute[Msg] (String, AttrValue[Msg])
 
 ///|
-enum AttrValue[Msg] {
+priv enum AttrValue[Msg] {
   AttrEvent(Handler[Msg])
   AttrStyle(String)
   AttrString(String)
@@ -223,8 +223,8 @@ fn to_node[Msg, Model, View](
           .add_event_listener("click", fn(event) {
             event.prevent_default()
             let href = element.get_property("href")
-            guard let Ok(curr) = @url.parse?(@dom.window().current_url())
-            guard let Ok(next) = @url.parse?(href)
+            guard @url.parse?(@dom.window().current_url()) is Ok(curr)
+            guard @url.parse?(href) is Ok(next)
             let request = if curr.protocol == next.protocol &&
               curr.host == next.host &&
               curr.port == next.port {
@@ -349,7 +349,7 @@ pub fn patch[Msg, Model, View](
 }
 
 ///|
-enum AttrsUpdate[Msg] {
+priv enum AttrsUpdate[Msg] {
   AttrRemove(String)
   AttrAdd(String, String)
   StyleAdd(String, String)
@@ -378,7 +378,7 @@ test {
 }
 
 ///|
-enum Update[Msg] {
+priv enum Update[Msg] {
   UpdateNode(
     Int,
     Array[AttrsUpdate[Msg]],
@@ -391,8 +391,8 @@ enum Update[Msg] {
 ///|
 /// Now the root node must be a Node
 pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
-  guard let Node(_, attrs=attrs_old, listeners~, ..) = root_old
-  guard let Node(_, attrs=attrs_new, ..) = root_new
+  guard root_old is Node(_, attrs=attrs_old, listeners~, ..)
+  guard root_new is Node(_, attrs=attrs_new, ..)
   Update(
     UpdateNode(
       0,
@@ -444,7 +444,7 @@ fn attrs_diff[Msg](
       AttrStyle(value) =>
         if new_map.contains(key) {
           // FIXME: avoid unwrap and guard let
-          guard let AttrStyle(value_new) = new_map.get(key).unwrap()
+          guard new_map.get(key).unwrap() is AttrStyle(value_new)
           if value != value_new {
             result.push(StyleAdd(key, value_new))
           }
@@ -454,7 +454,7 @@ fn attrs_diff[Msg](
       AttrString(value) =>
         if new_map.contains(key) {
           // FIXME: avoid unwrap and guard let
-          guard let AttrString(value_new) = new_map.get(key).unwrap()
+          guard new_map.get(key).unwrap() is AttrString(value_new)
           if value != value_new {
             result.push(AttrAdd(key, value_new))
           }
@@ -464,7 +464,7 @@ fn attrs_diff[Msg](
       AttrProperty(value) =>
         if new_map.contains(key) {
           // FIXME: avoid unwrap and guard let
-          guard let AttrProperty(value_new) = new_map.get(key).unwrap()
+          guard new_map.get(key).unwrap() is AttrProperty(value_new)
           if value != value_new {
             result.push(PropertyAdd(key, value_new))
           }
