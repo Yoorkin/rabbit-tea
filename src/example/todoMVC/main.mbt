@@ -59,16 +59,16 @@ fn route(url : @url.Url) -> (@tea.Command[Message], Model) {
       @home.load() |> update_with(Model::Home, Message::GotHomeMsg)
     ["new"] =>
       @editor.load(None) |> update_with(Model::Editor, Message::GotEditorMsg)
-    ["cards", id] => {
-      guard let Ok(id) = @strconv.parse_int?(id) else {
-        err => {
+    ["cards", id] =>
+      match @strconv.parse_int?(id) {
+        Ok(id) =>
+          @editor.load(Some(id))
+          |> update_with(Model::Editor, Message::GotEditorMsg)
+        Err(err) => {
           println("error parsing id \{err}")
           (@tea.none(), NotFound)
         }
       }
-      @editor.load(Some(id))
-      |> update_with(Model::Editor, Message::GotEditorMsg)
-    }
     _ => (@tea.none(), NotFound)
   }
 }

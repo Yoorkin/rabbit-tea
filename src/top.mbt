@@ -53,7 +53,7 @@ pub fn startup[Model, Message](
   let mut sandbox = None
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Message]) {
-    guard let Some(sandbox) = sandbox
+    guard sandbox is Some(sandbox)
     let new_dom = html.to_virtual_dom()
     new_dom.patch(curr_dom, sandbox, mount~)
     curr_dom = new_dom
@@ -84,13 +84,13 @@ pub fn application[Model, Msg](
   let mut sandbox = None
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Msg]) {
-    guard let Some(sandbox) = sandbox
+    guard sandbox is Some(sandbox)
     let new_dom = html.to_virtual_dom()
     new_dom.patch(curr_dom, sandbox, mount~)
     curr_dom = new_dom
   }
 
-  guard let Ok(url) = @url.parse?(@dom.window().current_url())
+  guard @url.parse?(@dom.window().current_url()) is Ok(url)
   let (cmd, model) = initialize(url)
   sandbox = Some(
     @browser.Sandbox::new(

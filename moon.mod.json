@@ -1,8 +1,8 @@
 {
-  "name": "Yoorkin//rabbit-tea",
-  "version": "0.6.9",
+  "name": "Yoorkin/rabbit-tea",
+  "version": "0.6.10",
   "deps": {
-    "rami3l/js-ffi": "0.1.6"
+    "rami3l/js-ffi": "0.1.7"
   },
   "readme": "README.md",
   "repository": "https://github.com/Yoorkin/rabbit-tea",

@@ -30,7 +30,7 @@ pub fn reload[M]() -> Command[M] {
 pub fn push_url[M](url : String) -> Command[M] {
   fn(events, _) {
     @dom.window().push_url(url)
-    guard let Ok(url) = @url.parse?(@dom.window().current_url())
+    guard @url.parse?(@dom.window().current_url()) is Ok(url)
     (events.on_url_changed)(url)
   }
 }
@@ -41,7 +41,7 @@ pub fn push_url[M](url : String) -> Command[M] {
 pub fn replace_url[M](url : String) -> Command[M] {
   fn(events, _) {
     @dom.window().replace_url(url)
-    guard let Ok(url) = @url.parse?(@dom.window().current_url())
+    guard @url.parse?(@dom.window().current_url()) is Ok(url)
     (events.on_url_changed)(url)
   }
 }
