@@ -11,7 +11,85 @@ const DOM_KEY_LOCATION_RIGHT : Int = 0x02
 
 const DOM_KEY_LOCATION_STANDARD : Int = 0x00
 
+fn add_event_listener(EventTarget, String, (Event) -> Unit) -> Unit
+
+fn append_child(Node, Node) -> Unit
+
+fn count_child(Node) -> Int
+
+fn create_document_fragment(Document) -> DocumentFragment
+
+fn create_element(Document, String) -> Element
+
+fn create_text_node(Document, String) -> Element
+
+fn current_url(Window) -> String
+
+fn dispatch_event(EventTarget, Event) -> Unit
+
 fn document() -> Document
+
+fn first_child(Node) -> Node
+
+fn get_element_by_id(Document, String) -> @js.Nullable[Element]
+
+fn history_go_back(Window) -> Unit
+
+fn history_go_forward(Window) -> Unit
+
+fn insert_before(Node, Node, Node) -> Unit
+
+fn last_child(Node) -> Node
+
+fn load_url(Window, String) -> Unit
+
+fn next_sibling(Node) -> Node
+
+fn node_name(Node) -> String
+
+fn node_type(Node) -> Int
+
+fn node_value(Node) -> String
+
+fn nth_child(Node, Int) -> Node
+
+fn parent_node(Node) -> Node
+
+fn previous_sibling(Node) -> Node
+
+fn push_url(Window, String) -> Unit
+
+fn reload_url(Window) -> Unit
+
+fn remove_child(Node, Node) -> Unit
+
+fn remove_event_listener(EventTarget, String, (Event) -> Unit) -> Unit
+
+fn replace_child(Node, Node, Node) -> Unit
+
+fn replace_url(Window, String) -> Unit
+
+fn request_animination_frame(Window, () -> Unit) -> Unit
+
+fn scroll_by(Window, Int, Int) -> Unit
+
+fn scroll_to(Window, Int, Int) -> Unit
+
+fn scroll_to_bottom(Window) -> Unit
+
+fn scroll_to_top(Window) -> Unit
+
+fn to_document(Node) -> @js.Nullable[Document]
+
+fn to_document_fragment(Node) -> @js.Nullable[DocumentFragment]
+
+fn to_element(Node) -> @js.Nullable[Element]
+
+fn to_event_target(Node) -> EventTarget
+
+fn to_node(EventTarget) -> @js.Nullable[Node]
+
+fn to_text(Node) -> @js.Nullable[Text]
 
 fn window() -> Window
 

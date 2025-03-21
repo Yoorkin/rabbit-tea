@@ -14,11 +14,15 @@ fn do_diff[Msg](Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
 
 fn external[Msg](@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
 
+fn map[A, B](Node[A], (A) -> B) -> Node[B]
+
 fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
 fn nothing[Msg]() -> Node[Msg]
 
 fn on[Msg](String, Handler[Msg]) -> Attribute[Msg]
+
+fn patch[Msg, Model, View](Node[Msg], Node[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 
 fn property[Msg](String, String) -> Attribute[Msg]
 

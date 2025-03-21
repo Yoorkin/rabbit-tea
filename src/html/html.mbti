@@ -66,6 +66,8 @@ fn label[M](style~ : Array[String] = .., id? : String, class? : String, for_? : 
 
 fn li[M](style~ : Array[String] = .., value? : Int, id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
+fn map[A, B](T[A], (A) -> B) -> T[B]
+
 fn node[Msg](String, Array[Attribute[Msg]], Array[T[Msg]]) -> T[Msg]
 
 fn nothing[M]() -> T[M]
@@ -125,6 +127,8 @@ fn tfoot[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[
 fn th[M](style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, Array[T[M]]) -> T[M]
 
 fn thead[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
+
+fn to_virtual_dom[Msg](T[Msg]) -> @vdom.Node[Msg]
 
 fn tr[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
