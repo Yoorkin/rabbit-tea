@@ -3,6 +3,8 @@ package Yoorkin/rabbit-tea/url
 // Values
 fn parse(String) -> Url!
 
+fn to_string(Url) -> String
+
 // Types and methods
 pub(all) enum Protocol {
   Http

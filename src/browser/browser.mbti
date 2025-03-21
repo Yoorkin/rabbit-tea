@@ -11,13 +11,25 @@ fn batch[M](Array[Command[M]]) -> Command[M]
 
 fn forward[M]() -> Command[M]
 
+fn get_on_url_changed[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.Url) -> Msg)?
+
+fn get_on_url_request[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((UrlRequest) -> Msg)?
+
+fn get_predefined_event[Msg, Model, View](Sandbox[Msg, Model, View]) -> PredefinedEvent
+
+fn launch[M, Model, View](Sandbox[M, Model, View], Command[M]) -> Unit
+
 fn load[M](String) -> Command[M]
+
+fn map[A, B](Command[A], (A) -> B) -> Command[B]
 
 fn none[M]() -> Command[M]
 
 fn perform[A, M]((A) -> M, () -> A) -> Command[M]
 
 fn push_url[M](String) -> Command[M]
+
+fn refersh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
 
 fn reload[M]() -> Command[M]
 
@@ -34,6 +46,8 @@ fn scroll_to_pos[M](Int, Int) -> Command[M]
 fn scroll_to_top[M]() -> Command[M]
 
 fn task[M](M) -> Command[M]
+
+fn update[Msg, Model, View](Sandbox[Msg, Model, View], Msg) -> Unit
 
 // Types and methods
 pub(all) type Command[M] (PredefinedEvent, (M) -> Unit) -> Unit
