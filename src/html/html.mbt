@@ -41,8 +41,7 @@ fn new[Msg](
     _, None => ()
   })
   match style {
-    Some(style) =>
-      attrs.push(attribute("style", String::concat(style, separator=";")))
+    Some(style) => attrs.push(attribute("style", style.join(";")))
     None => ()
   }
   match class {
@@ -236,18 +235,37 @@ pub fn span[M](
   new("span", {}, style~, class?, id?, childrens)
 }
 
-///|
+///| Create `a` element.
+/// 
+/// The `escape` parameter is an optional boolean that determines whether the link 
+/// should be escaped. By default, it is set to `false`. 
+/// 
+/// When `escape` is set to `true`, clicking the escaped link will cause the browser 
+/// to immediately navigate to the `href` target, bypassing any interception logic. 
+/// As a result, the `UrlRequest` message will not be triggered.
 pub fn a[M](
   style~ : Array[String] = [],
   id? : String,
   class? : String,
   href~ : String,
   target~ : Target = Self,
-  childrens : Array[Html[M]]
+  childrens : Array[Html[M]],
+  escape~ : Bool = false
 ) -> Html[M] {
-  new("a", { "href": href }, style~, class?, id?, childrens, attributes=[
-    attribute("target", target.to_string()),
-  ])
+  let attrs = [
+    @vdom.attribute("href", href),
+    @vdom.attribute("target", target.to_string()),
+  ]
+  if style.length() > 0 {
+    attrs.push(@vdom.attribute("style", style.join(";")))
+  }
+  if class is Some(class) {
+    attrs.push(@vdom.attribute("class", class))
+  }
+  if id is Some(id) {
+    attrs.push(@vdom.attribute("id", id))
+  }
+  @vdom.link(attrs, childrens.map(fn(x) { x._ }), escape~)
 }
 
 ///|
