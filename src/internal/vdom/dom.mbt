@@ -48,6 +48,23 @@ pub fn node[Msg](
 }
 
 ///|
+const ESCAPED_LINK_TAG = "RABBIT-TEA-ESCAPED-LINK"
+
+///|
+const NORMAL_LINK_TAG = "a"
+
+///| Create a link node.
+/// The `escape` parameter is used to create a link that will not trigger the `url_request` message.
+pub fn link[Msg](
+  attrs : Array[Attribute[Msg]],
+  childrens : Array[Node[Msg]],
+  escape~ : Bool = false
+) -> Node[Msg] {
+  let tag = if escape { ESCAPED_LINK_TAG } else { NORMAL_LINK_TAG }
+  node(tag, attrs, childrens)
+}
+
+///|
 pub fn external[Msg](
   node : @dom.Node,
   attrs : Ref[Array[Attribute[Msg]]?],
@@ -206,8 +223,6 @@ fn to_node[Msg, Model, View](
 
   match self {
     Node(tag, attrs~, childrens~, listeners~) => {
-      let element = @dom.document().create_element(tag)
-      attach_attrs(attrs, element, listeners)
       // NOTE:
       // This is important for those who want to write a router in the app. 
       // When the `a` tag is clicked, the href is parsed and wrapped in 
@@ -215,8 +230,10 @@ fn to_node[Msg, Model, View](
       //
       // If the `url_request` message was not provided, let the browser 
       // handle the click event.
-      match (sandbox.get_on_url_request(), tag) {
-        (Some(url_request), "a") =>
+      let element = match (sandbox.get_on_url_request(), tag) {
+        (Some(url_request), NORMAL_LINK_TAG) => {
+          let element = @dom.document().create_element(tag)
+          attach_attrs(attrs, element, listeners)
           element
           .to_node()
           .to_event_target()
@@ -234,7 +251,20 @@ fn to_node[Msg, Model, View](
             }
             sandbox.update(url_request(request))
           })
-        _ => ()
+          element
+        }
+        // We allow user to create a escaped link, which will not trigger the url_request message.
+        // This is useful when user want to create a link that jump to another site directly.
+        (_, ESCAPED_LINK_TAG) => {
+          let element = @dom.document().create_element("a")
+          attach_attrs(attrs, element, listeners)
+          element
+        }
+        _ => {
+          let element = @dom.document().create_element(tag)
+          attach_attrs(attrs, element, listeners)
+          element
+        }
       }
       for child in childrens {
         element.to_node().append_child(to_node(child, sandbox))
