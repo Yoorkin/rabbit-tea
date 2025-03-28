@@ -1,13 +1,3 @@
-// README: 
-// This example demonstrates how to manually wrap an async JS FFI in Moonbit. 
-// 
-// This example is particularly useful when the functionality is not 
-// yet available in the rabbit-tea library. Ideally, the Core library should 
-// provide basic async utilities, but in this early stage, we need to implement 
-// the wrapping ourselves. 
-// 
-// If you are looking for HTTP request functionality, you can use the `rabbit-tea/http` package.
-
 ///|
 enum Message {
   TimeUp(String)
