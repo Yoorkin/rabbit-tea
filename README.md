@@ -1,6 +1,6 @@
 # Rabbit-TEA
 
-Web framework inspired by The Elm Architecture.
+A declarative and functional web UI framework inspired by The Elm Architecture.
 
 ## Features
 
