@@ -24,16 +24,16 @@ fn view(model : Model) -> @html.Html[Message] {
 
 ///|
 fn update_with[SubModel, SubMsg](
-  pair : (@tea.Command[SubMsg], SubModel),
+  pair : (@tea.Cmd[SubMsg], SubModel),
   to_model : (SubModel) -> Model,
   to_msg : (SubMsg) -> Message
-) -> (@tea.Command[Message], Model) {
+) -> (@tea.Cmd[Message], Model) {
   let (cmd, model) = pair
   (cmd.map(to_msg), to_model(model))
 }
 
 ///|
-fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
+fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
   match (msg, model) {
     (GotHomeMsg(msg), Home(model)) =>
       @home.update(msg, model) |> update_with(Model::Home, Message::GotHomeMsg)
@@ -51,7 +51,7 @@ fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
 }
 
 ///|
-fn route(url : @url.Url) -> (@tea.Command[Message], Model) {
+fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
   let paths = url.path.split("/").collect()
   println("routing to \{url.to_string()}, path \{paths}")
   match paths {

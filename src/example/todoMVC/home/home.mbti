@@ -6,9 +6,9 @@ import(
 )
 
 // Values
-fn load() -> (@browser.Command[Msg], Model)
+fn load() -> (@browser.Cmd[Msg], Model)
 
-fn update(Msg, Model) -> (@browser.Command[Msg], Model)
+fn update(Msg, Model) -> (@browser.Cmd[Msg], Model)
 
 fn view(Model) -> @html.T[Msg]
 

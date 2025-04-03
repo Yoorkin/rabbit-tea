@@ -22,7 +22,7 @@ enum Msg {
 } derive(Show)
 
 ///|
-pub fn load(index : Int?) -> (@tea.Command[Msg], Model) {
+pub fn load(index : Int?) -> (@tea.Cmd[Msg], Model) {
   match index {
     None => (@tea.none(), Editing({ title: "", content: "", id: None }))
     Some(index) =>
@@ -46,7 +46,7 @@ pub fn decode_card(data : Json) -> Result[Card, String] {
 }
 
 ///|
-pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
+pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
   match (msg, model) {
     (GotCardData(card), _) =>
       match card {

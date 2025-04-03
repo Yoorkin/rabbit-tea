@@ -21,7 +21,7 @@ enum Drawing {
 }
 
 ///|
-fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
+fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
   match msg {
     Clear => {
       model.canvas.context2d().clear_rect(0.0, 0.0, 500.0, 500.0)

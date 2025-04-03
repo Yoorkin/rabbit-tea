@@ -1,7 +1,7 @@
 ///|
 struct Sandbox[Msg, Model, View] {
   mut model : Model
-  update : (Msg, Model) -> (Command[Msg], Model)
+  update : (Msg, Model) -> (Cmd[Msg], Model)
   view : (Model) -> View
   after_update : (View) -> Unit
   on_url_changed : ((@url.Url) -> Msg)?
@@ -64,7 +64,7 @@ pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
 ///|
 pub fn Sandbox::new[Model, Msg, View](
   model : Model,
-  update : (Msg, Model) -> (Command[Msg], Model),
+  update : (Msg, Model) -> (Cmd[Msg], Model),
   view : (Model) -> View,
   after_update~ : (View) -> Unit,
   url_changed? : (@url.Url) -> Msg,

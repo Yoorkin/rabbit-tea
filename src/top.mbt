@@ -1,33 +1,8 @@
 ///|
-pub typealias Command[M] = @browser.Command[M]
+pub typealias @browser.(Cmd[M], Command[M])
 
 ///|
-pub fn none[M]() -> Command[M] {
-  @browser.none()
-}
-
-///|
-pub fn batch[M](xs : Array[Command[M]]) -> Command[M] {
-  @browser.batch(xs)
-}
-
-///|
-pub fn task[M](message : M) -> Command[M] {
-  @browser.task(message)
-}
-
-///|
-pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Command[M] {
-  @browser.perform(msg, f)
-}
-
-///|
-pub fn attempt[A, E : Error, M](
-  msg : (Result[A, E]) -> M,
-  f : async () -> A!E
-) -> Command[M] {
-  @browser.attempt(msg, f)
-}
+pub fnalias @browser.(none, batch, task, perform, attempt)
 
 ///| Start the application.
 /// 
@@ -42,7 +17,7 @@ pub fn attempt[A, E : Error, M](
 /// To start the application with router, you can use the `application` function.
 pub fn startup[Model, Message](
   model~ : Model,
-  update~ : (Message, Model) -> (Command[Message], Model),
+  update~ : (Message, Model) -> (Cmd[Message], Model),
   view~ : (Model) -> @html.Html[Message],
   mount~ : String = "app"
 ) -> Unit {
@@ -70,8 +45,8 @@ pub fn startup[Model, Message](
 /// - `initialize` will be called when the application is started. 
 /// 
 pub fn application[Model, Msg](
-  initialize~ : (@url.Url) -> (Command[Msg], Model),
-  update~ : (Msg, Model) -> (Command[Msg], Model),
+  initialize~ : (@url.Url) -> (Cmd[Msg], Model),
+  update~ : (Msg, Model) -> (Cmd[Msg], Model),
   view~ : (Model) -> @html.Html[Msg],
   url_changed? : (@url.Url) -> Msg,
   url_request? : (@browser.UrlRequest) -> Msg,
