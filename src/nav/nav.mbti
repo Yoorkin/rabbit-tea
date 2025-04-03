@@ -1,0 +1,44 @@
+package "Yoorkin/rabbit-tea/nav"
+
+import(
+  "Yoorkin/rabbit-tea/cmd"
+  "Yoorkin/rabbit-tea/url"
+)
+
+// Values
+fn back[M]() -> @cmd.Cmd[M]
+
+fn forward[M]() -> @cmd.Cmd[M]
+
+fn load[M](String) -> @cmd.Cmd[M]
+
+fn push_url[M](String) -> @cmd.Cmd[M]
+
+fn reload[M]() -> @cmd.Cmd[M]
+
+#deprecated
+fn replace_url[M](String) -> @cmd.Cmd[M]
+
+fn scroll_by_pos[M](Int, Int) -> @cmd.Cmd[M]
+
+fn scroll_to[M](String) -> @cmd.Cmd[M]
+
+fn scroll_to_bottom[M]() -> @cmd.Cmd[M]
+
+fn scroll_to_pos[M](Int, Int) -> @cmd.Cmd[M]
+
+fn scroll_to_top[M]() -> @cmd.Cmd[M]
+
+// Types and methods
+pub(all) enum UrlRequest {
+  Internal(@url.Url)
+  External(String)
+}
+impl Compare for UrlRequest
+impl Eq for UrlRequest
+impl Show for UrlRequest
+
+// Type aliases
+
+// Traits
+

@@ -5,8 +5,9 @@
         "path": "Yoorkin/rabbit-tea",
         "alias": "tea"
       },
+      "Yoorkin/rabbit-tea/cmd",
       "Yoorkin/rabbit-tea/html",
-      "Yoorkin/rabbit-tea/browser",
+      "Yoorkin/rabbit-tea/nav",
       "Yoorkin/rabbit-tea/url",
       "Yoorkin/rabbit-tea/example/todoMVC/home",
       "Yoorkin/rabbit-tea/example/todoMVC/editor"

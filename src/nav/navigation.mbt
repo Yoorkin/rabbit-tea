@@ -28,7 +28,7 @@ pub fn reload[M]() -> Cmd[M] {
 /// 
 /// This will trigger the `url_changed` message.
 pub fn push_url[M](url : String) -> Cmd[M] {
-  fn(events, _) {
+  fn(events : @cmd.PredefinedEvent, _) {
     @dom.window().push_url(url)
     guard @url.parse?(@dom.window().current_url()) is Ok(url)
     (events.on_url_changed)(url)
@@ -38,8 +38,9 @@ pub fn push_url[M](url : String) -> Cmd[M] {
 ///| Change the url but not trigger a page load.
 /// 
 /// This will trigger the `url_changed` message.
+#deprecated("use @nav.replace_url() insead")
 pub fn replace_url[M](url : String) -> Cmd[M] {
-  fn(events, _) {
+  fn(events : @cmd.PredefinedEvent, _) {
     @dom.window().replace_url(url)
     guard @url.parse?(@dom.window().current_url()) is Ok(url)
     (events.on_url_changed)(url)

@@ -2,9 +2,10 @@
   "import": [
     "Yoorkin/rabbit-tea/html",
     "Yoorkin/rabbit-tea/internal/vdom",
-    "Yoorkin/rabbit-tea/browser",
+    "Yoorkin/rabbit-tea/internal/browser",
     "Yoorkin/rabbit-tea/url",
     "Yoorkin/rabbit-tea/dom",
+    "Yoorkin/rabbit-tea/cmd",
     "rami3l/js-ffi/js"
   ]
 }

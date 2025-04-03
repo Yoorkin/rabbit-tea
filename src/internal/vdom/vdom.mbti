@@ -1,8 +1,8 @@
 package "Yoorkin/rabbit-tea/internal/vdom"
 
 import(
-  "Yoorkin/rabbit-tea/browser"
   "Yoorkin/rabbit-tea/dom"
+  "Yoorkin/rabbit-tea/internal/browser"
 )
 
 // Values

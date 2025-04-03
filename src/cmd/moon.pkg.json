@@ -1,0 +1,6 @@
+{
+  "import": [
+    "Yoorkin/rabbit-tea/url",
+    "rami3l/js-ffi/js"
+  ]
+}

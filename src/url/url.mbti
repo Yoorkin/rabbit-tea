@@ -30,6 +30,14 @@ impl Compare for Url
 impl Eq for Url
 impl Show for Url
 
+pub(all) enum UrlRequest {
+  Internal(Url)
+  External(String)
+}
+impl Compare for UrlRequest
+impl Eq for UrlRequest
+impl Show for UrlRequest
+
 // Type aliases
 
 // Traits

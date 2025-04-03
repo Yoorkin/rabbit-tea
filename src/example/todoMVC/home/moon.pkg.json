@@ -6,7 +6,7 @@
       },
       "Yoorkin/rabbit-tea/html",
       "Yoorkin/rabbit-tea/http",
-      "Yoorkin/rabbit-tea/browser",
+      "Yoorkin/rabbit-tea/nav",
       "Yoorkin/rabbit-tea/example/todoMVC/views"
     ]
 }

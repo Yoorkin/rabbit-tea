@@ -1,0 +1,36 @@
+package "Yoorkin/rabbit-tea/internal/browser"
+
+import(
+  "Yoorkin/rabbit-tea/cmd"
+  "Yoorkin/rabbit-tea/url"
+)
+
+// Values
+fn get_on_url_changed[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.Url) -> Msg)?
+
+fn get_on_url_request[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
+
+fn get_predefined_event[Msg, Model, View](Sandbox[Msg, Model, View]) -> @cmd.PredefinedEvent
+
+fn launch[M, Model, View](Sandbox[M, Model, View], @cmd.Cmd[M]) -> Unit
+
+fn refersh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
+
+fn update[Msg, Model, View](Sandbox[Msg, Model, View], Msg) -> Unit
+
+// Types and methods
+type Sandbox[Msg, Model, View]
+impl Sandbox {
+  get_on_url_changed[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
+  get_on_url_request[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
+  get_predefined_event[Msg, Model, View](Self[Msg, Model, View]) -> @cmd.PredefinedEvent
+  launch[M, Model, View](Self[M, Model, View], @cmd.Cmd[M]) -> Unit
+  new[Model, Msg, View](Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
+  refersh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
+  update[Msg, Model, View](Self[Msg, Model, View], Msg) -> Unit
+}
+
+// Type aliases
+
+// Traits
+

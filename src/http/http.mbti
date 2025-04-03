@@ -1,17 +1,17 @@
 package "Yoorkin/rabbit-tea/http"
 
 import(
-  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/cmd"
 )
 
 // Values
-fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
+fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
+fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
+fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
+fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
 // Types and methods
 pub(all) enum Body {

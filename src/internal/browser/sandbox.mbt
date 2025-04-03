@@ -1,26 +1,19 @@
 ///|
 struct Sandbox[Msg, Model, View] {
   mut model : Model
-  update : (Msg, Model) -> (Cmd[Msg], Model)
+  update : (Msg, Model) -> (@cmd.Cmd[Msg], Model)
   view : (Model) -> View
   after_update : (View) -> Unit
   on_url_changed : ((@url.Url) -> Msg)?
-  on_url_request : ((UrlRequest) -> Msg)?
-  mut predefined : PredefinedEvent?
-}
-
-///| 
-// used by vdom
-pub(all) struct PredefinedEvent {
-  on_url_changed : (@url.Url) -> Unit
-  on_url_request : (UrlRequest) -> Unit
+  on_url_request : ((@url.UrlRequest) -> Msg)?
+  mut predefined : @cmd.PredefinedEvent?
 }
 
 ///|
 // used by vdom
 pub fn get_predefined_event[Msg, Model, View](
   self : Sandbox[Msg, Model, View]
-) -> PredefinedEvent {
+) -> @cmd.PredefinedEvent {
   self.predefined.unwrap()
 }
 
@@ -35,7 +28,7 @@ pub fn get_on_url_changed[Msg, Model, View](
 ///|
 pub fn get_on_url_request[Msg, Model, View](
   self : Sandbox[Msg, Model, View]
-) -> ((UrlRequest) -> Msg)? {
+) -> ((@url.UrlRequest) -> Msg)? {
   self.on_url_request
 }
 
@@ -64,11 +57,11 @@ pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
 ///|
 pub fn Sandbox::new[Model, Msg, View](
   model : Model,
-  update : (Msg, Model) -> (Cmd[Msg], Model),
+  update : (Msg, Model) -> (@cmd.Cmd[Msg], Model),
   view : (Model) -> View,
   after_update~ : (View) -> Unit,
   url_changed? : (@url.Url) -> Msg,
-  url_request? : (UrlRequest) -> Msg
+  url_request? : (@url.UrlRequest) -> Msg
 ) -> Sandbox[Msg, Model, View] {
   let sandbox = {
     model,
@@ -93,6 +86,9 @@ pub fn Sandbox::new[Model, Msg, View](
     guard @url.parse?(@dom.window().current_url()) is Ok(url)
     on_url_changed(url)
   })
-  sandbox.predefined = Some({ on_url_changed, on_url_request })
+  sandbox.predefined = Some(@cmd.PredefinedEvent::{
+    on_url_changed,
+    on_url_request,
+  })
   sandbox
 }

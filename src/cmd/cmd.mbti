@@ -1,0 +1,35 @@
+package "Yoorkin/rabbit-tea/cmd"
+
+import(
+  "Yoorkin/rabbit-tea/url"
+)
+
+// Values
+fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Cmd[M]
+
+fn batch[M](Array[Cmd[M]]) -> Cmd[M]
+
+fn map[A, B](Cmd[A], (A) -> B) -> Cmd[B]
+
+fn none[M]() -> Cmd[M]
+
+fn perform[A, M]((A) -> M, () -> A) -> Cmd[M]
+
+fn task[M](M) -> Cmd[M]
+
+// Types and methods
+pub(all) type Cmd[M] (PredefinedEvent, (M) -> Unit) -> Unit
+impl Cmd {
+  map[A, B](Self[A], (A) -> B) -> Self[B]
+}
+
+pub(all) struct PredefinedEvent {
+  on_url_changed : (@url.Url) -> Unit
+  on_url_request : (@url.UrlRequest) -> Unit
+}
+
+// Type aliases
+pub typealias Command[M] = Cmd[M]
+
+// Traits
+

@@ -1,32 +1,32 @@
 package "Yoorkin/rabbit-tea"
 
 import(
-  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/html"
   "Yoorkin/rabbit-tea/url"
 )
 
 // Values
-fn application[Model, Msg](initialize~ : (@url.Url) -> (@browser.Cmd[Msg], Model), update~ : (Msg, Model) -> (@browser.Cmd[Msg], Model), view~ : (Model) -> @html.T[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@browser.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
+fn application[Model, Msg](initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.T[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
 
-fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> @browser.Cmd[M]
+fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> @cmd.Cmd[M]
 
-fn batch[M](Array[@browser.Cmd[M]]) -> @browser.Cmd[M]
+fn batch[M](Array[@cmd.Cmd[M]]) -> @cmd.Cmd[M]
 
-fn none[M]() -> @browser.Cmd[M]
+fn none[M]() -> @cmd.Cmd[M]
 
-fn perform[A, M]((A) -> M, () -> A) -> @browser.Cmd[M]
+fn perform[A, M]((A) -> M, () -> A) -> @cmd.Cmd[M]
 
-fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@browser.Cmd[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String = ..) -> Unit
+fn startup[Model, Message](model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String = ..) -> Unit
 
-fn task[M](M) -> @browser.Cmd[M]
+fn task[M](M) -> @cmd.Cmd[M]
 
 // Types and methods
 
 // Type aliases
-pub typealias Cmd[M] = @browser.Cmd[M]
+pub typealias Cmd[M] = @cmd.Cmd[M]
 
-pub typealias Command[M] = @browser.Cmd[M]
+pub typealias Command[M] = @cmd.Cmd[M]
 
 // Traits
 

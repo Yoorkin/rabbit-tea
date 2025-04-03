@@ -1,3 +1,10 @@
+///| 
+// used by vdom
+pub(all) struct PredefinedEvent {
+  on_url_changed : (@url.Url) -> Unit
+  on_url_request : (@url.UrlRequest) -> Unit
+}
+
 ///|
 pub(all) type Cmd[M] (PredefinedEvent, (M) -> Unit) -> Unit
 
@@ -11,16 +18,6 @@ pub fn map[A, B](self : Cmd[A], f : (A) -> B) -> Cmd[B] {
     let Cmd(f) = self
     f(predef, update)
   })
-}
-
-///| Launch commands. It may trigger the update function.
-pub fn launch[M, Model, View](
-  self : Sandbox[M, Model, View],
-  cmd : Cmd[M]
-) -> Unit {
-  let f = cmd._
-  let update = fn(m) { self.update(m) }
-  f(self.predefined.unwrap(), update)
 }
 
 ///|
