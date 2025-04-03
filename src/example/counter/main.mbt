@@ -5,7 +5,7 @@ fnalias @tea.none
 fnalias @html.(h1, div, text, button)
 
 ///|
-typealias @tea.Command[M]
+typealias @tea.Cmd[M]
 
 ///|
 typealias @html.Html[M]
@@ -20,7 +20,7 @@ enum Msg {
 }
 
 ///|
-fn update(msg : Msg, model : Model) -> (Command[Msg], Model) {
+fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
   match msg {
     Increment => (none(), model + 1)
     Decrement => (none(), model - 1)

@@ -5,13 +5,13 @@ import(
 )
 
 // Values
-fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Command[M]
+fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Cmd[M]
 
-fn back[M]() -> Command[M]
+fn back[M]() -> Cmd[M]
 
-fn batch[M](Array[Command[M]]) -> Command[M]
+fn batch[M](Array[Cmd[M]]) -> Cmd[M]
 
-fn forward[M]() -> Command[M]
+fn forward[M]() -> Cmd[M]
 
 fn get_on_url_changed[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.Url) -> Msg)?
 
@@ -19,41 +19,41 @@ fn get_on_url_request[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((UrlReque
 
 fn get_predefined_event[Msg, Model, View](Sandbox[Msg, Model, View]) -> PredefinedEvent
 
-fn launch[M, Model, View](Sandbox[M, Model, View], Command[M]) -> Unit
+fn launch[M, Model, View](Sandbox[M, Model, View], Cmd[M]) -> Unit
 
-fn load[M](String) -> Command[M]
+fn load[M](String) -> Cmd[M]
 
-fn map[A, B](Command[A], (A) -> B) -> Command[B]
+fn map[A, B](Cmd[A], (A) -> B) -> Cmd[B]
 
-fn none[M]() -> Command[M]
+fn none[M]() -> Cmd[M]
 
-fn perform[A, M]((A) -> M, () -> A) -> Command[M]
+fn perform[A, M]((A) -> M, () -> A) -> Cmd[M]
 
-fn push_url[M](String) -> Command[M]
+fn push_url[M](String) -> Cmd[M]
 
 fn refersh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
 
-fn reload[M]() -> Command[M]
+fn reload[M]() -> Cmd[M]
 
-fn replace_url[M](String) -> Command[M]
+fn replace_url[M](String) -> Cmd[M]
 
-fn scroll_by_pos[M](Int, Int) -> Command[M]
+fn scroll_by_pos[M](Int, Int) -> Cmd[M]
 
-fn scroll_to[M](String) -> Command[M]
+fn scroll_to[M](String) -> Cmd[M]
 
-fn scroll_to_bottom[M]() -> Command[M]
+fn scroll_to_bottom[M]() -> Cmd[M]
 
-fn scroll_to_pos[M](Int, Int) -> Command[M]
+fn scroll_to_pos[M](Int, Int) -> Cmd[M]
 
-fn scroll_to_top[M]() -> Command[M]
+fn scroll_to_top[M]() -> Cmd[M]
 
-fn task[M](M) -> Command[M]
+fn task[M](M) -> Cmd[M]
 
 fn update[Msg, Model, View](Sandbox[Msg, Model, View], Msg) -> Unit
 
 // Types and methods
-pub(all) type Command[M] (PredefinedEvent, (M) -> Unit) -> Unit
-impl Command {
+pub(all) type Cmd[M] (PredefinedEvent, (M) -> Unit) -> Unit
+impl Cmd {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
 
@@ -67,8 +67,8 @@ impl Sandbox {
   get_on_url_changed[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
   get_on_url_request[Msg, Model, View](Self[Msg, Model, View]) -> ((UrlRequest) -> Msg)?
   get_predefined_event[Msg, Model, View](Self[Msg, Model, View]) -> PredefinedEvent
-  launch[M, Model, View](Self[M, Model, View], Command[M]) -> Unit
-  new[Model, Msg, View](Model, (Msg, Model) -> (Command[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (UrlRequest) -> Msg) -> Self[Msg, Model, View]
+  launch[M, Model, View](Self[M, Model, View], Cmd[M]) -> Unit
+  new[Model, Msg, View](Model, (Msg, Model) -> (Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (UrlRequest) -> Msg) -> Self[Msg, Model, View]
   refersh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
   update[Msg, Model, View](Self[Msg, Model, View], Msg) -> Unit
 }
@@ -82,6 +82,7 @@ impl Eq for UrlRequest
 impl Show for UrlRequest
 
 // Type aliases
+pub typealias Command[M] = Cmd[M]
 
 // Traits
 

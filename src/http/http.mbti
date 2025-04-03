@@ -5,13 +5,13 @@ import(
 )
 
 // Values
-fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
 
-fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
 
-fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
 
-fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]
+fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @browser.Cmd[Msg]
 
 // Types and methods
 pub(all) enum Body {

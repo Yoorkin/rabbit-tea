@@ -17,7 +17,7 @@ pub async fn suspend[T](f : ((T) -> Unit) -> Unit) -> T = "%async.suspend"
 extern "js" fn set_timeout(f : () -> Unit, ms : Int) = "(f,ms) => setTimeout(f, ms)"
 
 ///|
-fn update(msg : Message, model : Model) -> (@tea.Command[Message], Model) {
+fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
   match msg {
     TimeUp(text) => (@tea.none(), { text: "TimeUp \{text}" })
     Clear => (@tea.none(), { text: "" })

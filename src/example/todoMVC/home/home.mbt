@@ -11,7 +11,7 @@ pub struct Model {
 } derive(Show)
 
 ///|
-pub fn load() -> (@tea.Command[Msg], Model) {
+pub fn load() -> (@tea.Cmd[Msg], Model) {
   (
     @http.get("/api/cards", expect=Json(Msg::GotCardsData, decode_cards)),
     { cards: [] },
@@ -32,7 +32,7 @@ pub fn view(model : Model) -> @html.Html[Msg] {
 }
 
 ///|
-pub fn update(msg : Msg, model : Model) -> (@tea.Command[Msg], Model) {
+pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
   match msg {
     DeleteAll => {
       let cmds = @tea.batch(
