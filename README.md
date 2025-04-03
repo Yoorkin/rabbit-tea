@@ -54,8 +54,8 @@ fn main {
 
 For more examples, see the `src/example` directory.
 
-# Getting started with TailwindCSS
+# Getting started 
 
-see [rabbit-tea-tailwind template](https://github.com/Yoorkin/rabbit-tea-tailwind)
+To get started, you can use the [Rabbit-TEA template](https://github.com/Yoorkin/rabbit-tea-tailwind).
 
-
+It also includes instructions for debugging your code with Rabbit-TEA.
