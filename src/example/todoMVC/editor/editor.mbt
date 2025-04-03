@@ -86,7 +86,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
             expect=Json(Msg::ReqResult, Result::Ok),
           )
       }
-      let exit = @browser.push_url("/home")
+      let exit = @nav.push_url("/home")
       (@tea.batch([save, exit]), model)
     }
     _ => (@tea.none(), model)

@@ -61,7 +61,7 @@ fn request[Msg, Model](
   http_method : String,
   expect~ : Expecting[Msg, Model],
   body~ : Body
-) -> @browser.Cmd[Msg] {
+) -> @cmd.Cmd[Msg] {
   let launch = fn(_predef, fulfill) {
     let has_body = match body {
       Empty => false
@@ -106,7 +106,7 @@ fn request[Msg, Model](
 pub fn get[Msg, Model](
   url : String,
   expect~ : Expecting[Msg, Model]
-) -> @browser.Cmd[Msg] {
+) -> @cmd.Cmd[Msg] {
   request(url, "GET", expect~, body=Empty)
 }
 
@@ -114,7 +114,7 @@ pub fn get[Msg, Model](
 pub fn delete[Msg, Model](
   url : String,
   expect~ : Expecting[Msg, Model]
-) -> @browser.Cmd[Msg] {
+) -> @cmd.Cmd[Msg] {
   request(url, "DELETE", expect~, body=Empty)
 }
 
@@ -123,7 +123,7 @@ pub fn post[Msg, Model](
   url : String,
   body : Body,
   expect~ : Expecting[Msg, Model]
-) -> @browser.Cmd[Msg] {
+) -> @cmd.Cmd[Msg] {
   request(url, "POST", body~, expect~)
 }
 
@@ -132,6 +132,6 @@ pub fn patch[Msg, Model](
   url : String,
   body : Body,
   expect~ : Expecting[Msg, Model]
-) -> @browser.Cmd[Msg] {
+) -> @cmd.Cmd[Msg] {
   request(url, "PATCH", body~, expect~)
 }

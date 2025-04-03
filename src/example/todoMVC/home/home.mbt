@@ -43,7 +43,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
               expect=Json(Msg::ReqResult, Result::Ok),
             )
           }),
-          @browser.push_url("/home"),
+          @nav.push_url("/home"),
         ],
       )
       (cmds, model)

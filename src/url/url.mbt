@@ -1,3 +1,9 @@
+///|
+pub(all) enum UrlRequest {
+  Internal(Url)
+  External(String)
+} derive(Show, Eq, Compare)
+
 ///| Url
 /// 
 /// ```text

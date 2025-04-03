@@ -1,14 +1,14 @@
 package "Yoorkin/rabbit-tea/example/todoMVC/home"
 
 import(
-  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/html"
 )
 
 // Values
-fn load() -> (@browser.Cmd[Msg], Model)
+fn load() -> (@cmd.Cmd[Msg], Model)
 
-fn update(Msg, Model) -> (@browser.Cmd[Msg], Model)
+fn update(Msg, Model) -> (@cmd.Cmd[Msg], Model)
 
 fn view(Model) -> @html.T[Msg]
 

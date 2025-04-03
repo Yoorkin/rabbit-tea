@@ -1,16 +1,16 @@
 package "Yoorkin/rabbit-tea/example/todoMVC/editor"
 
 import(
-  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/html"
 )
 
 // Values
 fn decode_card(Json) -> Result[Card, String]
 
-fn load(Int?) -> (@browser.Cmd[Msg], Model)
+fn load(Int?) -> (@cmd.Cmd[Msg], Model)
 
-fn update(Msg, Model) -> (@browser.Cmd[Msg], Model)
+fn update(Msg, Model) -> (@cmd.Cmd[Msg], Model)
 
 fn view(Model) -> @html.T[Msg]
 

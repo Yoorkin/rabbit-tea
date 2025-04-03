@@ -245,7 +245,7 @@ fn to_node[Msg, Model, View](
             let request = if curr.protocol == next.protocol &&
               curr.host == next.host &&
               curr.port == next.port {
-              @adapter.Internal(next)
+              @url.Internal(next)
             } else {
               External(href)
             }

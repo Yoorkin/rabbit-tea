@@ -2,7 +2,7 @@
 enum Message {
   GotHomeMsg(@home.Msg)
   GotEditorMsg(@editor.Msg)
-  LinkClicked(@browser.UrlRequest)
+  LinkClicked(@url.UrlRequest)
   UrlChanged(@url.Url)
 } derive(Show)
 
@@ -42,8 +42,8 @@ fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
       |> update_with(Model::Editor, Message::GotEditorMsg)
     (LinkClicked(request), _) =>
       match request {
-        Internal(url) => (@browser.push_url(url.to_string()), model)
-        External(url) => (@browser.load(url), model)
+        Internal(url) => (@nav.push_url(url.to_string()), model)
+        External(url) => (@nav.load(url), model)
       }
     (UrlChanged(url), _) => route(url)
     _ => (@tea.none(), model)
@@ -69,7 +69,7 @@ fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
           (@tea.none(), NotFound)
         }
       }
-    _ => (@tea.none(), NotFound)
+    _ => (@cmd.none(), NotFound)
   }
 }
 

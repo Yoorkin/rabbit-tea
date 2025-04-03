@@ -1,8 +1,8 @@
 ///|
-pub typealias @browser.(Cmd[M], Command[M])
+pub typealias @cmd.(Cmd[M], Command[M])
 
 ///|
-pub fnalias @browser.(none, batch, task, perform, attempt)
+pub fnalias @cmd.(none, batch, task, perform, attempt)
 
 ///| Start the application.
 /// 
@@ -49,7 +49,7 @@ pub fn application[Model, Msg](
   update~ : (Msg, Model) -> (Cmd[Msg], Model),
   view~ : (Model) -> @html.Html[Msg],
   url_changed? : (@url.Url) -> Msg,
-  url_request? : (@browser.UrlRequest) -> Msg,
+  url_request? : (@url.UrlRequest) -> Msg,
   mount~ : String = "app"
 ) -> Unit {
   @dom.document()
