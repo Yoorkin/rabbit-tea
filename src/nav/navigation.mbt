@@ -1,30 +1,27 @@
-///|
-pub(all) enum UrlRequest {
-  Internal(@url.Url)
-  External(String)
-} derive(Show, Eq, Compare)
-
-///| go back in history. This will cause page to reload.
+///| Create a command to go back in history. 
+/// This will cause the page to reload.
 pub fn back[M]() -> Cmd[M] {
   fn(_, _) { @dom.window().history_go_back() }
 }
 
-///| go forward in history. This will cause page to reload.
+///| Create a command to go forward in history. 
+/// This will cause the page to reload.
 pub fn forward[M]() -> Cmd[M] {
   fn(_, _) { @dom.window().history_go_forward() }
 }
 
-///| load a new url. This will cause page to reload.
+///| Create a command to load a new URL. 
+/// This will cause the page to reload.
 pub fn load[M](url : String) -> Cmd[M] {
   fn(_, _) { @dom.window().load_url(url) }
 }
 
-///| reload the current url.
+///| Create a command to reload the current url.
 pub fn reload[M]() -> Cmd[M] {
   fn(_, _) { @dom.window().reload_url() }
 }
 
-///| push a new url to history but not trigger a page load.
+///| Create a command to push a new URL to history but not trigger a page load.
 /// 
 /// This will trigger the `url_changed` message.
 pub fn push_url[M](url : String) -> Cmd[M] {
@@ -35,10 +32,9 @@ pub fn push_url[M](url : String) -> Cmd[M] {
   }
 }
 
-///| Change the url but not trigger a page load.
+///| Create a command to change the URL but not trigger a page load.
 /// 
 /// This will trigger the `url_changed` message.
-#deprecated("use @nav.replace_url() insead")
 pub fn replace_url[M](url : String) -> Cmd[M] {
   fn(events : @cmd.PredefinedEvent, _) {
     @dom.window().replace_url(url)
