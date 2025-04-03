@@ -18,14 +18,17 @@ fn perform[A, M]((A) -> M, () -> A) -> Cmd[M]
 fn task[M](M) -> Cmd[M]
 
 // Types and methods
-pub(all) type Cmd[M] (PredefinedEvent, (M) -> Unit) -> Unit
+pub(all) type Cmd[M] (Events[M]) -> Unit
 impl Cmd {
   map[A, B](Self[A], (A) -> B) -> Self[B]
 }
 
-pub(all) struct PredefinedEvent {
-  on_url_changed : (@url.Url) -> Unit
-  on_url_request : (@url.UrlRequest) -> Unit
+type Events[M]
+impl Events {
+  new[M]((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (M) -> Unit) -> Self[M]
+  trigger_update[M](Self[M], M) -> Unit
+  trigger_url_changed[M](Self[M], @url.Url) -> Unit
+  trigger_url_request[M](Self[M], @url.UrlRequest) -> Unit
 }
 
 // Type aliases

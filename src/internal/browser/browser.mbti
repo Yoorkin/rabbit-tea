@@ -10,7 +10,7 @@ fn get_on_url_changed[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.Url
 
 fn get_on_url_request[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
 
-fn get_predefined_event[Msg, Model, View](Sandbox[Msg, Model, View]) -> @cmd.PredefinedEvent
+fn get_predefined_events[Msg, Model, View](Sandbox[Msg, Model, View]) -> @cmd.Events[Msg]
 
 fn launch[M, Model, View](Sandbox[M, Model, View], @cmd.Cmd[M]) -> Unit
 
@@ -23,7 +23,7 @@ type Sandbox[Msg, Model, View]
 impl Sandbox {
   get_on_url_changed[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
   get_on_url_request[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
-  get_predefined_event[Msg, Model, View](Self[Msg, Model, View]) -> @cmd.PredefinedEvent
+  get_predefined_events[Msg, Model, View](Self[Msg, Model, View]) -> @cmd.Events[Msg]
   launch[M, Model, View](Self[M, Model, View], @cmd.Cmd[M]) -> Unit
   new[Model, Msg, View](Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
   refersh[Msg, Model, View](Self[Msg, Model, View]) -> Unit

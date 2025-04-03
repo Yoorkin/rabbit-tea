@@ -6,14 +6,14 @@ struct Sandbox[Msg, Model, View] {
   after_update : (View) -> Unit
   on_url_changed : ((@url.Url) -> Msg)?
   on_url_request : ((@url.UrlRequest) -> Msg)?
-  mut predefined : @cmd.PredefinedEvent?
+  mut predefined : @cmd.Events[Msg]?
 }
 
 ///|
 // used by vdom
-pub fn get_predefined_event[Msg, Model, View](
+pub fn get_predefined_events[Msg, Model, View](
   self : Sandbox[Msg, Model, View]
-) -> @cmd.PredefinedEvent {
+) -> @cmd.Events[Msg] {
   self.predefined.unwrap()
 }
 
@@ -86,9 +86,10 @@ pub fn Sandbox::new[Model, Msg, View](
     guard @url.parse?(@dom.window().current_url()) is Ok(url)
     on_url_changed(url)
   })
-  sandbox.predefined = Some(@cmd.PredefinedEvent::{
-    on_url_changed,
-    on_url_request,
-  })
+  sandbox.predefined = Some(
+    @cmd.Events::new(on_url_changed, on_url_request, fn(msg) {
+      sandbox.update(msg)
+    }),
+  )
   sandbox
 }

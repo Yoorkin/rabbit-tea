@@ -1,6 +1,6 @@
 {
   "name": "Yoorkin/rabbit-tea",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "deps": {
     "rami3l/js-ffi": "0.1.7"
   },

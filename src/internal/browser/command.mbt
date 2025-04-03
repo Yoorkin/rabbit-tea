@@ -4,6 +4,5 @@ pub fn launch[M, Model, View](
   cmd : @cmd.Cmd[M]
 ) -> Unit {
   let f = cmd._
-  let update = fn(m) { self.update(m) }
-  f(self.predefined.unwrap(), update)
+  f(self.predefined.unwrap())
 }
