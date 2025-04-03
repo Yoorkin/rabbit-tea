@@ -62,7 +62,7 @@ fn request[Msg, Model](
   expect~ : Expecting[Msg, Model],
   body~ : Body
 ) -> @cmd.Cmd[Msg] {
-  let launch = fn(_predef, fulfill) {
+  let launch = fn(events : @cmd.Events[Msg]) {
     let has_body = match body {
       Empty => false
       _ => true
@@ -83,9 +83,11 @@ fn request[Msg, Model](
             } catch {
               _ => Err("Json parse error")
             }
-            fulfill(f(result.bind(decoder)))
+            events.trigger_update(f(result.bind(decoder)))
           },
-          failed=fn(msg) { fulfill(f(Err("Http request failed:\{msg}"))) },
+          failed=fn(msg) {
+            events.trigger_update(f(Err("Http request failed:\{msg}")))
+          },
         )
       Text(f) =>
         js_request(
@@ -94,8 +96,10 @@ fn request[Msg, Model](
           has_body~,
           body~,
           content_type~,
-          succeed=fn(str) { fulfill(f(Ok(str))) },
-          failed=fn(msg) { fulfill(f(Err("Http request failed:\{msg}"))) },
+          succeed=fn(str) { events.trigger_update(f(Ok(str))) },
+          failed=fn(msg) {
+            events.trigger_update(f(Err("Http request failed:\{msg}")))
+          },
         )
     }
   }

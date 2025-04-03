@@ -1,37 +1,85 @@
-///| 
-pub(all) struct PredefinedEvent {
+///| Store the events that can be triggered by the command.
+struct Events[M] {
   on_url_changed : (@url.Url) -> Unit
   on_url_request : (@url.UrlRequest) -> Unit
+  on_update : (M) -> Unit
 }
 
-///|
-pub(all) type Cmd[M] (PredefinedEvent, (M) -> Unit) -> Unit
+///| Used by the runtime.
+pub fn Events::new[M](
+  on_url_changed : (@url.Url) -> Unit,
+  on_url_request : (@url.UrlRequest) -> Unit,
+  on_update : (M) -> Unit
+) -> Events[M] {
+  { on_url_changed, on_url_request, on_update }
+}
+
+///| Trigger the update function with `url_changed` message config by the user.
+pub fn Events::trigger_url_changed[M](self : Events[M], url : @url.Url) -> Unit {
+  (self.on_url_changed)(url)
+}
+
+///| Trigger the update function with `url_request` message config by the user.
+pub fn Events::trigger_url_request[M](
+  self : Events[M],
+  url : @url.UrlRequest
+) -> Unit {
+  (self.on_url_request)(url)
+}
+
+///| Trigger the update function with message `msg`.
+pub fn Events::trigger_update[M](self : Events[M], msg : M) -> Unit {
+  (self.on_update)(msg)
+}
+
+///| The command type, represents a task that can be executed.
+/// 
+/// You can define your own command to interoperate Rabbit-Tea with the outside JS world.
+/// 
+/// Before implementing your own command, check the existing commands in the `nav` and `http` packages.
+/// 
+/// # Example 
+/// 
+/// ```
+/// fn delay[M](msg : M, ms : Int) -> Cmd[M] {
+///   Cmd(fn(events){
+///     set_timeout(fn(){ events.trigger_update(msg) }, ms)
+///   })
+/// } 
+/// 
+/// extern "js" fn set_timeout(f : () -> Unit, ms : Int) = "(f,ms) => setTimeout(f, ms)"
+/// ```
+pub(all) type Cmd[M] (Events[M]) -> Unit
 
 ///|
 pub typealias Command[M] = Cmd[M]
 
 ///| Map the messages in the command to another type.
 pub fn map[A, B](self : Cmd[A], f : (A) -> B) -> Cmd[B] {
-  Cmd(fn(predef, update) {
-    let update = fn(msg) { update(f(msg)) }
+  Cmd(fn(events) {
+    let predef = {
+      on_url_changed: events.on_url_changed,
+      on_url_request: events.on_url_request,
+      on_update: fn(msg) { (events.on_update)(f(msg)) },
+    }
     let Cmd(f) = self
-    f(predef, update)
+    f(predef)
   })
 }
 
 ///| Create a command that does nothing.
 pub fn none[M]() -> Cmd[M] {
-  Cmd(fn { _, _ => () })
+  Cmd(fn { _ => () })
 }
 
 ///| Create a command that runs multiple commands.
 pub fn batch[M](xs : Array[Cmd[M]]) -> Cmd[M] {
-  Cmd(fn(predef, update) { xs.each(fn { Cmd(f) => f(predef, update) }) })
+  Cmd(fn(events) { xs.each(fn { Cmd(f) => f(events) }) })
 }
 
 ///| Create a command that trigger another update for the given message.
 pub fn task[M](message : M) -> Cmd[M] {
-  Cmd(fn(_, update) { update(message) })
+  Cmd(fn(events) { events.trigger_update(message) })
 }
 
 ///| Create a command that runs an async function.
@@ -39,7 +87,7 @@ pub fn task[M](message : M) -> Cmd[M] {
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
 pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Cmd[M] {
-  Cmd(fn(_, update) { @js.async_run(fn() { update(msg(f!!())) }) })
+  Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f!!())) }) })
 }
 
 ///| Create a command that runs an async function and handles errors.
@@ -50,7 +98,7 @@ pub fn attempt[A, E : Error, M](
   msg : (Result[A, E]) -> M,
   f : async () -> A!E
 ) -> Cmd[M] {
-  Cmd(fn(_, update) {
+  Cmd(fn(events) {
     @js.async_run(fn() {
       let msg = try {
         f!!()
@@ -59,7 +107,7 @@ pub fn attempt[A, E : Error, M](
       } else {
         r => msg(Ok(r))
       }
-      update(msg)
+      events.trigger_update(msg)
     })
   })
 }
