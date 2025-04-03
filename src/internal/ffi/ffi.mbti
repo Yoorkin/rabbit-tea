@@ -1,4 +1,4 @@
-package Yoorkin/rabbit-tea/internal/ffi
+package "Yoorkin/rabbit-tea/internal/ffi"
 
 // Values
 

@@ -42,7 +42,7 @@ jobs:
 
       - name: moon info
         run: |
-          moon info
+          moon info --target js
           git diff --exit-code
 
       - name: format diff

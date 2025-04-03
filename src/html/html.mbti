@@ -1,7 +1,9 @@
-package Yoorkin/rabbit-tea/html
+package "Yoorkin/rabbit-tea/html"
 
-alias @Yoorkin/rabbit-tea/dom as @dom
-alias @Yoorkin/rabbit-tea/internal/vdom as @vdom
+import(
+  "Yoorkin/rabbit-tea/dom"
+  "Yoorkin/rabbit-tea/internal/vdom"
+)
 
 // Values
 fn a[M](style~ : Array[String] = .., id? : String, class? : String, href~ : String, target~ : Target = .., Array[T[M]], escape~ : Bool = ..) -> T[M]

@@ -1,7 +1,9 @@
-package Yoorkin/rabbit-tea/example/todoMVC/editor
+package "Yoorkin/rabbit-tea/example/todoMVC/editor"
 
-alias @Yoorkin/rabbit-tea/browser as @browser
-alias @Yoorkin/rabbit-tea/html as @html
+import(
+  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/html"
+)
 
 // Values
 fn decode_card(Json) -> Result[Card, String]

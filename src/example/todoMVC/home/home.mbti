@@ -1,7 +1,9 @@
-package Yoorkin/rabbit-tea/example/todoMVC/home
+package "Yoorkin/rabbit-tea/example/todoMVC/home"
 
-alias @Yoorkin/rabbit-tea/browser as @browser
-alias @Yoorkin/rabbit-tea/html as @html
+import(
+  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/html"
+)
 
 // Values
 fn load() -> (@browser.Command[Msg], Model)

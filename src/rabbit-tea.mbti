@@ -1,8 +1,10 @@
-package Yoorkin/rabbit-tea
+package "Yoorkin/rabbit-tea"
 
-alias @Yoorkin/rabbit-tea/browser as @browser
-alias @Yoorkin/rabbit-tea/html as @html
-alias @Yoorkin/rabbit-tea/url as @url
+import(
+  "Yoorkin/rabbit-tea/browser"
+  "Yoorkin/rabbit-tea/html"
+  "Yoorkin/rabbit-tea/url"
+)
 
 // Values
 fn application[Model, Msg](initialize~ : (@url.Url) -> (@browser.Command[Msg], Model), update~ : (Msg, Model) -> (@browser.Command[Msg], Model), view~ : (Model) -> @html.T[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@browser.UrlRequest) -> Msg, mount~ : String = ..) -> Unit

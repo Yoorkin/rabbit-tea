@@ -1,7 +1,9 @@
-package Yoorkin/rabbit-tea/html/canvas
+package "Yoorkin/rabbit-tea/html/canvas"
 
-alias @Yoorkin/rabbit-tea/dom as @dom
-alias @Yoorkin/rabbit-tea/html as @html
+import(
+  "Yoorkin/rabbit-tea/dom"
+  "Yoorkin/rabbit-tea/html"
+)
 
 // Values
 fn begin_path(Context2D) -> Unit

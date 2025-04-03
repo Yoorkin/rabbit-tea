@@ -1,4 +1,4 @@
-package Yoorkin/rabbit-tea/url
+package "Yoorkin/rabbit-tea/url"
 
 // Values
 fn parse(String) -> Url!
