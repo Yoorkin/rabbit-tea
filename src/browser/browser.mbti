@@ -1,6 +1,8 @@
-package Yoorkin/rabbit-tea/browser
+package "Yoorkin/rabbit-tea/browser"
 
-alias @Yoorkin/rabbit-tea/url as @url
+import(
+  "Yoorkin/rabbit-tea/url"
+)
 
 // Values
 fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Command[M]

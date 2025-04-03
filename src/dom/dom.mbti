@@ -1,6 +1,8 @@
-package Yoorkin/rabbit-tea/dom
+package "Yoorkin/rabbit-tea/dom"
 
-alias @rami3l/js-ffi/js as @js
+import(
+  "rami3l/js-ffi/js"
+)
 
 // Values
 const DOM_KEY_LOCATION_LEFT : Int = 0x01

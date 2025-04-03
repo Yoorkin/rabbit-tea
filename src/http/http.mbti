@@ -1,6 +1,8 @@
-package Yoorkin/rabbit-tea/http
+package "Yoorkin/rabbit-tea/http"
 
-alias @Yoorkin/rabbit-tea/browser as @browser
+import(
+  "Yoorkin/rabbit-tea/browser"
+)
 
 // Values
 fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @browser.Command[Msg]

@@ -1,6 +1,8 @@
-package Yoorkin/rabbit-tea/example/todoMVC/views
+package "Yoorkin/rabbit-tea/example/todoMVC/views"
 
-alias @Yoorkin/rabbit-tea/html as @html
+import(
+  "Yoorkin/rabbit-tea/html"
+)
 
 // Values
 fn button[M](String, href? : String, click? : M) -> @html.T[M]

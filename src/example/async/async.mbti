@@ -1,4 +1,4 @@
-package Yoorkin/rabbit-tea/example/async
+package "Yoorkin/rabbit-tea/example/async"
 
 // Values
 fn suspend[T](((T) -> Unit) -> Unit) -> T
