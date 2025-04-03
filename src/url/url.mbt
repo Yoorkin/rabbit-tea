@@ -1,4 +1,6 @@
-///|
+///| Represent the URL change request from the user, trigger by `@html.a` tag.
+/// The `Internal` means the target URL is in the same domain.
+/// The `External` means the target URL is in another site.
 pub(all) enum UrlRequest {
   Internal(Url)
   External(String)

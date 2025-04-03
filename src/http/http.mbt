@@ -1,4 +1,4 @@
-///|
+///| 
 pub typealias Decoder[Model] = (Json) -> Result[Model, String]
 
 ///|
@@ -102,7 +102,7 @@ fn request[Msg, Model](
   Cmd(launch)
 }
 
-///|
+///| Create a command to send a GET request.
 pub fn get[Msg, Model](
   url : String,
   expect~ : Expecting[Msg, Model]
@@ -110,7 +110,7 @@ pub fn get[Msg, Model](
   request(url, "GET", expect~, body=Empty)
 }
 
-///|
+///| Create a command to send a PUT request.
 pub fn delete[Msg, Model](
   url : String,
   expect~ : Expecting[Msg, Model]
@@ -118,7 +118,7 @@ pub fn delete[Msg, Model](
   request(url, "DELETE", expect~, body=Empty)
 }
 
-///|
+///| Create a command to send a POST request.
 pub fn post[Msg, Model](
   url : String,
   body : Body,
@@ -127,7 +127,7 @@ pub fn post[Msg, Model](
   request(url, "POST", body~, expect~)
 }
 
-///|
+///| Create a command to send a PATCH request.
 pub fn patch[Msg, Model](
   url : String,
   body : Body,
