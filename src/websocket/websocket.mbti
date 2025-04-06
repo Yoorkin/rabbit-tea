@@ -1,0 +1,31 @@
+package "Yoorkin/rabbit-tea/websocket"
+
+import(
+  "Yoorkin/rabbit-tea/cmd"
+)
+
+// Values
+fn close[M](Socket, code? : Int, reason? : String) -> @cmd.Cmd[M]
+
+fn send[M](Socket, String) -> @cmd.Cmd[M]
+
+fn websocket[M]((Respone) -> M, String) -> @cmd.Cmd[M]
+
+// Types and methods
+pub(all) enum Respone {
+  Open(Socket)
+  Message(Socket, data~ : String)
+  Error(Socket)
+  Close(Socket, code~ : Int, reason~ : String, was_clean~ : Bool)
+}
+
+type Socket
+impl Socket {
+  close[M](Self, code? : Int, reason? : String) -> @cmd.Cmd[M]
+  send[M](Self, String) -> @cmd.Cmd[M]
+}
+
+// Type aliases
+
+// Traits
+

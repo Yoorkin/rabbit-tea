@@ -1,0 +1,7 @@
+{
+    "import": [
+        "Yoorkin/rabbit-tea/cmd",
+        "Yoorkin/rabbit-tea/dom",
+        "rami3l/js-ffi/js"
+    ]
+}
