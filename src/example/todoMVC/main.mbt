@@ -81,5 +81,5 @@ fn main {
     view~,
     url_request=Message::LinkClicked,
     url_changed=Message::UrlChanged,
-  )
+  ) |> ignore
 }

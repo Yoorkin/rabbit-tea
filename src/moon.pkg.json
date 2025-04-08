@@ -6,6 +6,7 @@
     "Yoorkin/rabbit-tea/url",
     "Yoorkin/rabbit-tea/dom",
     "Yoorkin/rabbit-tea/cmd",
-    "rami3l/js-ffi/js"
+    "rami3l/js-ffi/js",
+    "Yoorkin/rabbit-tea/internal/devtool"
   ]
 }

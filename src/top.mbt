@@ -20,7 +20,7 @@ pub fn startup[Model, Message](
   update~ : (Message, Model) -> (Cmd[Message], Model),
   view~ : (Model) -> @html.Html[Message],
   mount~ : String = "app"
-) -> Unit {
+) -> App[Message, Model, @html.Html[Message]] {
   @dom.document()
   .get_element_by_id(mount)
   .get_exn()
@@ -35,7 +35,20 @@ pub fn startup[Model, Message](
   }
 
   sandbox = Some(@browser.Sandbox::new(model, update, view, after_update~))
-  sandbox.unwrap().refersh()
+  sandbox.unwrap()..refersh()
+}
+
+///|
+type App[Msg, Model, View] @browser.Sandbox[Msg, Model, View]
+
+///|
+pub fn enable_devtool[Msg, Model, View](
+  self : App[Msg, Model, View]
+) -> Unit {
+  println("Enable devtool")
+  let devtool = @devtool.connect()
+  devtool.subscribe(fn(model) { self._..set_model(model).refersh() })
+  self._.set_devtool(devtool)
 }
 
 ///| Start the application with initial URL. 
@@ -51,7 +64,7 @@ pub fn application[Model, Msg](
   url_changed? : (@url.Url) -> Msg,
   url_request? : (@url.UrlRequest) -> Msg,
   mount~ : String = "app"
-) -> Unit {
+) -> App[Msg, Model, @html.Html[Msg]] {
   @dom.document()
   .get_element_by_id(mount)
   .get_exn()
@@ -77,5 +90,5 @@ pub fn application[Model, Msg](
       url_changed?,
     ),
   )
-  sandbox.unwrap().launch(cmd)
+  sandbox.unwrap()..launch(cmd)
 }

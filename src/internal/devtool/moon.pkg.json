@@ -1,0 +1,11 @@
+{
+    "link": {
+        "js": {
+            "format": "iife"
+        }
+    },
+    "import": [
+        "rami3l/js-ffi/js"
+    ]
+
+}

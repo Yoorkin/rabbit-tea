@@ -40,5 +40,5 @@ fn view(model : Model) -> @html.Html[Message] {
 /// see README.md to getting started.
 fn main {
   let model = { text: "" }
-  @tea.startup(model~, update~, view~)
+  @tea.startup(model~, update~, view~) |> ignore
 }

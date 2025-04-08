@@ -11,7 +11,10 @@ typealias @tea.Cmd[M]
 typealias @html.Html[M]
 
 ///|
-typealias Model = Int
+struct Model {
+  count : Int
+  title : String
+}
 
 ///|
 enum Msg {
@@ -21,16 +24,25 @@ enum Msg {
 
 ///|
 fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
+  fn f() {
+    if model.count % 2 == 1 {
+      "Even"
+    } else {
+      "Odd"
+    }
+  }
+
   match msg {
-    Increment => (none(), model + 1)
-    Decrement => (none(), model - 1)
+    Increment => (none(), { title: f(), count: model.count + 1 })
+    Decrement => (none(), { title: f(), count: model.count - 1 })
   }
 }
 
 ///|
 fn view(model : Model) -> Html[Msg] {
   div([
-    h1([text(model.to_string())]),
+    h1([text(model.count.to_string())]),
+    h1([text(model.title)]),
     button(click=Msg::Increment, [text("+")]),
     button(click=Msg::Decrement, [text("-")]),
   ])
@@ -39,6 +51,6 @@ fn view(model : Model) -> Html[Msg] {
 ///| NOTE: This program is only available in the js backend, 
 /// see README.md to getting started.
 fn main {
-  let model = 0
-  @tea.startup(model~, update~, view~)
+  let model = { count: 0, title: "" }
+  @tea.startup(model~, update~, view~).enable_devtool()
 }

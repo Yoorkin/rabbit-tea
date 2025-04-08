@@ -79,5 +79,5 @@ fn main {
       mouseup=fn(_) { Message::MouseUp },
     ),
   }
-  @tea.startup(model~, update~, view~)
+  @tea.startup(model~, update~, view~) |> ignore
 }

@@ -7,6 +7,22 @@ struct Sandbox[Msg, Model, View] {
   on_url_changed : ((@url.Url) -> Msg)?
   on_url_request : ((@url.UrlRequest) -> Msg)?
   mut predefined : @cmd.Events[Msg]?
+  mut dev_tool : @devtool.DevTool?
+}
+
+///|
+pub fn set_devtool[Msg, Model, View](
+  self : Sandbox[Msg, Model, View],
+  dev_tool : @devtool.DevTool
+) -> Unit {
+  self.dev_tool = Some(dev_tool)
+}
+
+pub fn set_model[Msg, Model, View](
+  self : Sandbox[Msg, Model, View],
+  model : Model
+) -> Unit {
+  self.model = model
 }
 
 ///|
@@ -39,6 +55,9 @@ pub fn update[Msg, Model, View](
 ) -> Unit {
   let (cmd, model) = (self.update)(message, self.model)
   self.model = model
+  if self.dev_tool is Some(dev_tool) {
+    dev_tool.send(message, model)
+  }
   let view = (self.view)(self.model)
   (self.after_update)(view)
   // TODO: 
@@ -71,6 +90,7 @@ pub fn Sandbox::new[Model, Msg, View](
     on_url_changed: url_changed,
     on_url_request: url_request,
     predefined: None,
+    dev_tool: None,
   }
   let on_url_changed = match url_changed {
     Some(f) => fn(url) { sandbox.update(f(url)) }
