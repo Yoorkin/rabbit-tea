@@ -239,7 +239,7 @@ impl Element {
   scroll_into_view(Self) -> Unit
   set_attribute(Self, String, String) -> Unit
   set_inner_html(Self, String) -> Unit
-  set_property(Self, String, String) -> Unit
+  set_property(Self, String, @js.Value) -> Unit
   to_html_element(Self) -> @js.Nullable[HTMLElement]
   to_node(Self) -> Node
 }
@@ -283,10 +283,16 @@ impl HTMLElement {
   to_element(Self) -> Element
   to_html_canvas_element(Self) -> @js.Nullable[HTMLCanvasElement]
   to_html_input_element(Self) -> @js.Nullable[HTMLInputElement]
+  to_html_select_element(Self) -> @js.Nullable[HTMLSelectElement]
 }
 
 type HTMLInputElement
 impl HTMLInputElement {
+  value(Self) -> String
+}
+
+type HTMLSelectElement
+impl HTMLSelectElement {
   value(Self) -> String
 }
 

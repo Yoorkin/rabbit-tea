@@ -100,7 +100,7 @@ priv enum AttrValue[Msg] {
   // they have the same name. For example, if you set the `href` by `setAttribute`, the
   // `href` will be the value you specified, but by property, the value will be 
   // resolved to an absolute URL. 
-  AttrProperty(String)
+  AttrProperty(@variant.Variant)
 }
 
 ///|
@@ -169,7 +169,7 @@ pub fn attribute[Msg](key : String, value : String) -> Attribute[Msg] {
 }
 
 ///| Create an property
-pub fn property[Msg](key : String, value : String) -> Attribute[Msg] {
+pub fn property[Msg](key : String, value : @variant.Variant) -> Attribute[Msg] {
   (key, AttrProperty(value))
 }
 
@@ -217,7 +217,8 @@ fn to_node[Msg, Model, View](
       Attribute((key, AttrString(value))) => element.set_attribute(key, value)
       Attribute((key, AttrStyle(value))) =>
         element.to_html_element().get_exn().set_style(key, value)
-      Attribute((key, AttrProperty(value))) => element.set_property(key, value)
+      Attribute((key, AttrProperty(value))) =>
+        element.set_property(key, variant_to_js_value(value))
     })
   }
 
@@ -293,6 +294,16 @@ fn to_node[Msg, Model, View](
 }
 
 ///|
+pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
+  match value {
+    String(value) => @js.Value::cast_from(value)
+    Floating(value) => @js.Value::cast_from(value)
+    Integer(value) => @js.Value::cast_from(value)
+    Boolean(value) => @js.Value::cast_from(value)
+  }
+}
+
+///|
 pub fn patch[Msg, Model, View](
   self : Node[Msg],
   old : Node[Msg],
@@ -332,7 +343,8 @@ pub fn patch[Msg, Model, View](
                   element.to_html_element().get_exn().set_style(key, value)
                 StyleRemove(key) =>
                   element.to_html_element().get_exn().remove_style(key)
-                PropertyAdd(key, value) => element.set_property(key, value)
+                PropertyAdd(key, value) =>
+                  element.set_property(key, variant_to_js_value(value))
                 PropertyRemove(key) => element.remove_property(key)
                 EventRemove(key, listener) =>
                   element
@@ -384,7 +396,7 @@ priv enum AttrsUpdate[Msg] {
   AttrAdd(String, String)
   StyleAdd(String, String)
   StyleRemove(String)
-  PropertyAdd(String, String)
+  PropertyAdd(String, @variant.Variant)
   PropertyRemove(String)
   EventRemove(String, @dom.Listener)
   EventAdd(String, Handler[Msg])

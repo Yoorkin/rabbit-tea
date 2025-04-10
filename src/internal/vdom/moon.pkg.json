@@ -3,6 +3,7 @@
         { "path" : "Yoorkin/rabbit-tea/internal/browser", "alias": "adapter" },
         "Yoorkin/rabbit-tea/dom",
         "Yoorkin/rabbit-tea/url",
+        "Yoorkin/rabbit-tea/variant",
         "rami3l/js-ffi/js"
     ],
     "link": {

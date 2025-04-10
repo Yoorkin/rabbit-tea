@@ -17,7 +17,7 @@ pub fn to_virtual_dom[Msg](self : Html[Msg]) -> @vdom.Node[Msg] {
   node("root", [], [self])._
 }
 
-///|
+///| NOTE: This helper function is deprecated. Use `node` instead.
 fn new[Msg](
   tag : String,
   attrs : Map[String, String],
@@ -667,6 +667,71 @@ pub fn input[M](
     class?,
     childrens,
   )
+}
+
+///|
+pub fn select[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String,
+  disabled? : Bool,
+  name? : String,
+  change? : (String) -> M,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  // TODO: support more attribute for select tag
+  let attrs = []
+  if style.length() > 0 {
+    attrs.push(attribute("style", style.join(";")))
+  }
+  if id is Some(id) {
+    attrs.push(attribute("id", id))
+  }
+  if class is Some(class) {
+    attrs.push(attribute("class", class))
+  }
+  if disabled is Some(value) {
+    attrs.push(property("disabled", Boolean(value)))
+  }
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  if change is Some(to_msg) {
+    attrs.push(on_change(to_msg))
+  }
+  node("select", attrs, childrens)
+}
+
+///|
+pub fn option[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String,
+  disabled? : Bool,
+  value? : String,
+  selected~ : Bool = false,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  // TODO: support more attribute for option tag
+
+  let attrs = []
+  if style.length() > 0 {
+    attrs.push(attribute("style", style.join(";")))
+  }
+  if id is Some(id) {
+    attrs.push(attribute("id", id))
+  }
+  if class is Some(class) {
+    attrs.push(attribute("class", class))
+  }
+  if disabled is Some(value) {
+    attrs.push(property("disabled", Boolean(value)))
+  }
+  if value is Some(value) {
+    attrs.push(attribute("value", value))
+  }
+  attrs.push(property("selected", Boolean(selected)))
+  node("option", attrs, childrens)
 }
 
 ///|

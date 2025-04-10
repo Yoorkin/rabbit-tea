@@ -12,10 +12,15 @@ pub fn attribute[Msg](key : String, value : String) -> Attribute[Msg] {
 }
 
 ///|
+pub fn property[M](key : String, value : @variant.Variant) -> Attribute[M] {
+  @vdom.property(key, value)
+}
+
+///|
 pub fn href[Msg](value : String) -> Attribute[Msg] {
   // Note: `href` will be the value you specified, but by property, the value 
   // will be resolved to an absolute URL.
-  @vdom.property("href", value)
+  @vdom.property("href", @variant.String(value))
 }
 
 ///|

@@ -1,0 +1,20 @@
+package "Yoorkin/rabbit-tea/variant"
+
+// Values
+
+// Types and methods
+pub(all) enum Variant {
+  Boolean(Bool)
+  Integer(Int)
+  Floating(Double)
+  String(String)
+}
+impl Compare for Variant
+impl Eq for Variant
+impl Hash for Variant
+impl Show for Variant
+
+// Type aliases
+
+// Traits
+
