@@ -4,6 +4,7 @@ import(
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/internal/browser"
   "Yoorkin/rabbit-tea/variant"
+  "rami3l/js-ffi/js"
 )
 
 // Values
@@ -34,6 +35,8 @@ fn property[Msg](String, @variant.Variant) -> Attribute[Msg]
 fn style[Msg](String, String) -> Attribute[Msg]
 
 fn text[Msg](String) -> Node[Msg]
+
+fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Types and methods
 type Attribute[Msg]

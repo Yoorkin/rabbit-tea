@@ -2,7 +2,7 @@
 fnalias @tea.none
 
 ///|
-fnalias @html.(h1, div, text, button, select, option)
+fnalias @html.(h1, div, text, select, option)
 
 ///|
 typealias @tea.Cmd[M]

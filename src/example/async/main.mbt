@@ -1,4 +1,7 @@
 ///|
+fnalias @html.(text, button, div)
+
+///|
 enum Message {
   TimeUp(String)
   Clear

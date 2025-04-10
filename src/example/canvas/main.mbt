@@ -1,4 +1,7 @@
 ///|
+fnalias @html.(div, text, button)
+
+///|
 enum Message {
   Clear
   DrawPoint(@html.Mouse)
