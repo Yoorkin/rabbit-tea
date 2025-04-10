@@ -3,6 +3,7 @@ package "Yoorkin/rabbit-tea/internal/vdom"
 import(
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/internal/browser"
+  "Yoorkin/rabbit-tea/variant"
 )
 
 // Values
@@ -28,7 +29,7 @@ fn on[Msg](String, Handler[Msg]) -> Attribute[Msg]
 
 fn patch[Msg, Model, View](Node[Msg], Node[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 
-fn property[Msg](String, String) -> Attribute[Msg]
+fn property[Msg](String, @variant.Variant) -> Attribute[Msg]
 
 fn style[Msg](String, String) -> Attribute[Msg]
 

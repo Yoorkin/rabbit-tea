@@ -77,7 +77,7 @@ pub fn on_change[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
     "change",
     HandleEvent(fn(event) {
       // TODO: eliminate to_option
-      let value : String = event
+      let html_element = event
         .target()
         .to_node()
         .to_option()
@@ -88,10 +88,13 @@ pub fn on_change[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
         .to_html_element()
         .to_option()
         .unwrap()
-        .to_html_input_element()
-        .to_option()
-        .unwrap()
-        .value()
+      let value = if html_element.to_html_input_element().to_option() is Some(x) {
+        x.value()
+      } else if html_element.to_html_select_element().to_option() is Some(x) {
+        x.value()
+      } else {
+        panic() // TODO: check for other HTMLElement types
+      }
       msg(value)
     }),
   )

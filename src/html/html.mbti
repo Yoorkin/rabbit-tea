@@ -3,6 +3,7 @@ package "Yoorkin/rabbit-tea/html"
 import(
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/internal/vdom"
+  "Yoorkin/rabbit-tea/variant"
 )
 
 // Values
@@ -98,11 +99,17 @@ fn on_mouse_over[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
 fn on_mouse_up[Msg]((Mouse) -> Msg) -> Attribute[Msg]
 
+fn option[M](style~ : Array[String] = .., id? : String, class? : String, disabled? : Bool, value? : String, selected~ : Bool = .., Array[T[M]]) -> T[M]
+
 fn p[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
 fn pre[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
+fn property[M](String, @variant.Variant) -> Attribute[M]
+
 fn section[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
+
+fn select[M](style~ : Array[String] = .., id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> M, Array[T[M]]) -> T[M]
 
 fn span[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 

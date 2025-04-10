@@ -50,7 +50,7 @@ pub extern "js" fn Element::remove_attribute(
 pub extern "js" fn Element::set_property(
   self : Element,
   prop : String,
-  value : String
+  value : @js.Value
 ) = "(self,prop,value) => self[prop] = value"
 
 ///|
@@ -98,6 +98,12 @@ pub extern "js" fn HTMLElement::to_html_input_element(
   #| (x) => x instanceof HTMLInputElement ? x : null
 
 ///|
+pub extern "js" fn HTMLElement::to_html_select_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLSelectElement] =
+  #| (x) => x instanceof HTMLSelectElement ? x : null
+
+///|
 pub extern "js" fn HTMLElement::set_style(
   self : HTMLElement,
   key : String,
@@ -114,3 +120,9 @@ extern type HTMLInputElement
 
 ///|
 pub extern "js" fn HTMLInputElement::value(self : HTMLInputElement) -> String = "(self) => self.value"
+
+///|
+extern type HTMLSelectElement
+
+///|
+pub extern "js" fn HTMLSelectElement::value(self : HTMLSelectElement) -> String = "(self) => self.value"
