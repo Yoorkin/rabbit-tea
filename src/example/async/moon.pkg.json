@@ -7,12 +7,7 @@
       },
       { 
         "path":"Yoorkin/rabbit-tea/html", 
-        "alias": "html", 
-        "value": [
-          "div",
-          "text",
-          "button"
-        ] 
+        "alias": "html"
       }
     ]
 }
