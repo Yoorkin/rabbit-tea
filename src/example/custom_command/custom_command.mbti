@@ -1,0 +1,13 @@
+package "Yoorkin/rabbit-tea/example/custom_command"
+
+// Values
+
+// Types and methods
+type Message
+
+type Model
+
+// Type aliases
+
+// Traits
+
