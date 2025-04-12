@@ -104,6 +104,12 @@ pub extern "js" fn HTMLElement::to_html_select_element(
   #| (x) => x instanceof HTMLSelectElement ? x : null
 
 ///|
+pub extern "js" fn HTMLElement::to_html_dialog_element(
+  self : HTMLElement
+) -> @js.Nullable[HTMLDialogElement] =
+  #| (x) => x instanceof HTMLDialogElement ? x : null
+
+///|
 pub extern "js" fn HTMLElement::set_style(
   self : HTMLElement,
   key : String,
@@ -126,3 +132,32 @@ extern type HTMLSelectElement
 
 ///|
 pub extern "js" fn HTMLSelectElement::value(self : HTMLSelectElement) -> String = "(self) => self.value"
+
+///|
+extern type HTMLDialogElement
+
+///|
+pub extern "js" fn HTMLDialogElement::open(self : HTMLDialogElement) -> Bool = "(self) => self.open"
+
+///|
+pub extern "js" fn HTMLDialogElement::return_value(
+  self : HTMLDialogElement
+) -> String = "(self) => self.returnValue"
+
+///|
+pub extern "js" fn HTMLDialogElement::close(
+  self : HTMLDialogElement,
+  return_value~ : @js.Optional[String] = @js.Optional::undefined()
+) = "(self,returnValue) => self.close(returnValue)"
+
+///|
+pub extern "js" fn HTMLDialogElement::request_close(
+  self : HTMLDialogElement,
+  return_value~ : @js.Optional[String] = @js.Optional::undefined()
+) = "(self, returnValue) => self.requestClose(returnValue)"
+
+///|
+pub extern "js" fn HTMLDialogElement::show(self : HTMLDialogElement) = "(self) => self.show()"
+
+///|
+pub extern "js" fn HTMLDialogElement::show_modal(self : HTMLDialogElement) = "(self) => self.showModal()"

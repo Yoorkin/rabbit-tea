@@ -29,6 +29,8 @@ fn colgroup[M](style~ : Array[String] = .., id? : String, span? : Int, class? : 
 
 fn dd[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]
 
+fn dialog[M](style~ : Array[String] = .., id? : String, class? : String, open? : Bool, close? : (String) -> M, cancel? : M, Array[T[M]]) -> T[M]
+
 fn div[M](style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[T[M]]) -> T[M]
 
 fn dl[M](style~ : Array[String] = .., id? : String, class? : String, Array[T[M]]) -> T[M]

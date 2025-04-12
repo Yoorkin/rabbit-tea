@@ -615,7 +615,7 @@ pub fn input[M](
     attrs.push(attribute("name", name))
   }
   if value is Some(value) {
-    attrs.push(attribute("value", value))
+    attrs.push(property("value", String(value)))
   }
   if checked is Some(checked) {
     attrs.push(property("checked", Boolean(checked)))
@@ -906,4 +906,111 @@ pub fn tfoot[M](
   childrens : Array[Html[M]]
 ) -> Html[M] {
   common_node("tfoot", [], style~, id?, class?, childrens)
+}
+
+///| Dialog element. 
+/// 
+/// Hint: You can use the `show` and `close` commands in the `@dialog` package
+/// to manipulate the dialog.
+///
+/// # Attributes
+/// 
+/// - `open`: indicates whether the dialog is open or closed by default.
+/// 
+/// # Messages
+/// 
+/// - `close`: triggered when the dialog is closed. 
+///   
+///   The string payload of the `close` message is the return value of the dialog.
+/// 
+/// - `cancel`: triggered when the user instructs the browser that they wish to 
+///   dismiss the current open dialog.
+/// 
+///   It can be triggered when the user presses `esc` or uses the `request_close` command.
+/// 
+///   If the `cancel` argument is provided, **the dialog will not close automatically** 
+///   after this message is triggered. You can use the `@dialog.close` command 
+///   to close it or `@cmd.none` to keep it open.
+/// 
+/// # Example
+/// 
+/// ```
+/// typealias Model = String
+/// 
+/// enum Msg {
+///   Open
+///   Closed(String)
+///   YesNo(Bool)
+/// }
+/// 
+/// fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
+///   match msg {
+///     Open => (@dialog.show("confirm"), model)
+///     YesNo(answer) => (@dialog.close("confirm", return_value=answer.to_string()), model) 
+///     Closed(value) => (none(), value)
+///   }
+/// }
+/// 
+/// fn view(model : Model) -> Html[Msg] {
+///   div([
+///     h1([text(model)]),
+///     button(click=Msg::Open, [text("open")]),
+///     dialog(id="confirm", close=Msg::Closed, [
+///       p([text("Are you sure?")]),
+///       button(click=YesNo(true), [text("Yes")]),
+///       button(click=YesNo(false), [text("No")]),
+///     ]),
+///   ])
+/// }
+/// ```
+/// 
+pub fn dialog[M](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String,
+  open? : Bool,
+  close? : (String) -> M,
+  cancel? : M,
+  childrens : Array[Html[M]]
+) -> Html[M] {
+  let attrs = []
+  if open is Some(open) {
+    attrs.push(property("open", Boolean(open)))
+  }
+  if close is Some(close) {
+    attrs.push(
+      @vdom.on(
+        "close",
+        HandleEvent(fn(event) {
+          let html_element = event
+            .target()
+            .to_node()
+            .to_option()
+            .unwrap()
+            .to_element()
+            .to_option()
+            .unwrap()
+            .to_html_element()
+            .to_option()
+            .unwrap()
+            .to_html_dialog_element()
+            .to_option()
+            .unwrap()
+          close(html_element.return_value())
+        }),
+      ),
+    )
+  }
+  if cancel is Some(cancel) {
+    attrs.push(
+      @vdom.on(
+        "cancel",
+        HandleEvent(fn(event) {
+          event.prevent_default()
+          cancel
+        }),
+      ),
+    )
+  }
+  common_node("dialog", attrs, style~, id?, class?, childrens)
 }

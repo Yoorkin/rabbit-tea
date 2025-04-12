@@ -1,0 +1,19 @@
+package "Yoorkin/rabbit-tea/dialog"
+
+import(
+  "Yoorkin/rabbit-tea/cmd"
+)
+
+// Values
+fn close[M](String, return_value? : String) -> @cmd.Cmd[M]
+
+fn request_close[M](String, return_value? : String) -> @cmd.Cmd[M]
+
+fn show[M](String, modal~ : Bool = ..) -> @cmd.Cmd[M]
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+
