@@ -17,48 +17,6 @@ pub fn to_virtual_dom[Msg](self : Html[Msg]) -> @vdom.Node[Msg] {
   node("root", [], [self])._
 }
 
-///| NOTE: This helper function is deprecated. Use `node` instead.
-fn new[Msg](
-  tag : String,
-  attrs : Map[String, String],
-  style? : Array[String],
-  class? : String,
-  id? : String,
-  optional_attrs~ : Map[String, String?] = {},
-  attributes~ : Array[Attribute[Msg]] = [],
-  optional_attributes~ : Array[Attribute[Msg]?] = [],
-  events~ : Map[String, Msg?] = {},
-  childrens : Array[Html[Msg]]
-) -> Html[Msg] {
-  let attrs = attrs.to_array().map(fn(p) { attribute(p.0, p.1) })
-  attrs.push_iter(attributes.iter())
-  optional_attributes.each(fn {
-    Some(attr) => attrs.push(attr)
-    None => ()
-  })
-  optional_attrs.each(fn {
-    k, Some(v) => attrs.push(attribute(k, v))
-    _, None => ()
-  })
-  match style {
-    Some(style) => attrs.push(attribute("style", style.join(";")))
-    None => ()
-  }
-  match class {
-    Some(class) => attrs.push(attribute("class", class))
-    None => ()
-  }
-  match id {
-    Some(id) => attrs.push(attribute("id", id))
-    None => ()
-  }
-  events.each(fn {
-    k, Some(v) => attrs.push(@vdom.on(k, Normal(v)))
-    _, None => ()
-  })
-  node(tag, attrs, childrens)
-}
-
 ///| 
 pub fn node[Msg](
   tag : String,
@@ -66,6 +24,28 @@ pub fn node[Msg](
   childrens : Array[Html[Msg]]
 ) -> Html[Msg] {
   @vdom.node(tag, attributes.map(fn(x) { x._ }), childrens.map(fn(x) { x._ }))
+}
+
+///|
+fn common_node[Msg](
+  style~ : Array[String] = [],
+  id? : String,
+  class? : String,
+  tag : String,
+  attributes : Array[Attribute[Msg]],
+  childrens : Array[Html[Msg]]
+) -> Html[Msg] {
+  let attrs = []
+  if style.length() > 0 {
+    attrs.push(attribute("style", style.join(";")))
+  }
+  if class is Some(class) {
+    attrs.push(attribute("class", class))
+  }
+  if id is Some(id) {
+    attrs.push(attribute("id", id))
+  }
+  node(tag, attributes + attrs, childrens)
 }
 
 ///| Represents an empty element
@@ -81,15 +61,11 @@ pub fn button[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "button",
-    {},
-    style~,
-    class?,
-    id?,
-    events={ "click": click.map(fn(m) { m }) },
-    childrens,
-  )
+  let attrs = []
+  if click is Some(click) {
+    attrs.push(on_click(fn(_) { click }))
+  }
+  common_node(style~, class?, id?, "button", attrs, childrens)
 }
 
 ///|
@@ -99,7 +75,7 @@ pub fn h1[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h1", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h1", [], childrens)
 }
 
 ///|
@@ -109,7 +85,7 @@ pub fn h2[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h2", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h2", [], childrens)
 }
 
 ///|
@@ -119,7 +95,7 @@ pub fn h3[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h3", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h3", [], childrens)
 }
 
 ///|
@@ -129,7 +105,7 @@ pub fn h4[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h4", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h4", [], childrens)
 }
 
 ///|
@@ -139,7 +115,7 @@ pub fn h5[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h5", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h5", [], childrens)
 }
 
 ///|
@@ -149,7 +125,7 @@ pub fn h6[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("h6", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "h6", [], childrens)
 }
 
 // ------ grouping content ------
@@ -162,15 +138,11 @@ pub fn div[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "div",
-    {},
-    style~,
-    class?,
-    id?,
-    events={ "click": click.map(fn(m) { m }) },
-    childrens,
-  )
+  let attrs = []
+  if click is Some(click) {
+    attrs.push(on_click(fn(_) { click }))
+  }
+  common_node(style~, class?, id?, "div", [], childrens)
 }
 
 ///|
@@ -180,7 +152,7 @@ pub fn p[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("p", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "p", [], childrens)
 }
 
 ///|
@@ -190,7 +162,7 @@ pub fn hr[M](
   class? : String,
   childrens~ : Array[Html[M]] = []
 ) -> Html[M] {
-  new("hr", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "hr", [], childrens)
 }
 
 ///|
@@ -200,7 +172,7 @@ pub fn pre[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("pre", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "pre", [], childrens)
 }
 
 ///|
@@ -210,7 +182,7 @@ pub fn blockquote[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("blockquote", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "blockquote", [], childrens)
 }
 
 ///|
@@ -220,7 +192,7 @@ pub fn section[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("section", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "section", [], childrens)
 }
 
 // ---- text ----
@@ -232,7 +204,7 @@ pub fn span[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("span", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "span", [], childrens)
 }
 
 ///| Create `a` element.
@@ -275,7 +247,7 @@ pub fn code[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("code", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "code", [], childrens)
 }
 
 ///|
@@ -285,7 +257,7 @@ pub fn em[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("em", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "em", [], childrens)
 }
 
 ///|
@@ -295,7 +267,7 @@ pub fn strong[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("strong", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "strong", [], childrens)
 }
 
 ///|
@@ -305,7 +277,7 @@ pub fn i[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("i", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "i", [], childrens)
 }
 
 ///|
@@ -315,7 +287,7 @@ pub fn b[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("b", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "b", [], childrens)
 }
 
 ///|
@@ -325,7 +297,7 @@ pub fn u[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("u", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "u", [], childrens)
 }
 
 ///|
@@ -335,7 +307,7 @@ pub fn sub[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("sub", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "sub", [], childrens)
 }
 
 ///|
@@ -345,7 +317,7 @@ pub fn sup[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("sup", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "sup", [], childrens)
 }
 
 ///|
@@ -363,13 +335,14 @@ pub fn ul[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("ul", {}, style~, class?, id?, childrens, events={
-    "click": click.map(fn(m) { m }),
-  })
+  let attrs = []
+  if click is Some(click) {
+    attrs.push(on_click(fn(_) { click }))
+  }
+  common_node(style~, class?, id?, "ul", attrs, childrens)
 }
 
-///|
-/// Notice that the `type` attribute for `ol` is not important for the browser now.
+///| Notice that the `type` attribute for `ol` is not important for the browser now.
 /// If you want to change the type of the list, you should use the `list-style-type` property in CSS.
 pub fn ol[M](
   style~ : Array[String] = [],
@@ -379,18 +352,16 @@ pub fn ol[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "ol",
-    {},
-    style~,
-    class?,
-    id?,
-    optional_attrs={
-      "reversed": reversed.map(Bool::to_string),
-      "start": start.map(fn(n) { n.to_string() }),
-    },
-    childrens,
-  )
+  let attrs = []
+  if reversed is Some(reversed) {
+    // TODO: test this attribute
+    attrs.push(attribute("reversed", reversed.to_string()))
+  }
+  if start is Some(start) {
+    // TODO: test this attribute
+    attrs.push(attribute("start", start.to_string()))
+  }
+  common_node(style~, class?, id?, "ol", attrs, childrens)
 }
 
 ///|
@@ -402,16 +373,14 @@ pub fn li[M](
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "li",
-    {},
-    style~,
-    class?,
-    id?,
-    optional_attrs={ "value": value.map(fn(n) { n.to_string() }) },
-    childrens,
-    events={ "click": click.map(fn(m) { m }) },
-  )
+  let attrs = []
+  if click is Some(click) {
+    attrs.push(on_click(fn(_) { click }))
+  }
+  if value is Some(value) {
+    attrs.push(attribute("value", value.to_string()))
+  }
+  common_node(style~, class?, id?, "li", attrs, childrens)
 }
 
 ///|
@@ -421,7 +390,7 @@ pub fn dl[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("dl", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "dl", [], childrens)
 }
 
 ///|
@@ -431,7 +400,7 @@ pub fn dt[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("dt", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "dt", [], childrens)
 }
 
 ///|
@@ -441,7 +410,7 @@ pub fn dd[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("dd", {}, style~, class?, id?, childrens)
+  common_node(style~, class?, id?, "dd", [], childrens)
 }
 
 // ---- embbded content ----
@@ -459,22 +428,26 @@ pub fn img[M](
   border? : Int,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "img",
-    {},
-    style~,
-    class?,
-    id?,
-    optional_attrs={
-      "src": src,
-      "alt": alt,
-      "title": title,
-      "width": width.map(fn(x) { x.to_string() }),
-      "height": height.map(fn(x) { x.to_string() }),
-      "border": border.map(fn(x) { x.to_string() }),
-    },
-    childrens,
-  )
+  let attrs = []
+  if src is Some(src) {
+    attrs.push(attribute("src", src))
+  }
+  if alt is Some(alt) {
+    attrs.push(attribute("alt", alt))
+  }
+  if title is Some(title) {
+    attrs.push(attribute("title", title))
+  }
+  if width is Some(width) {
+    attrs.push(attribute("width", width.to_string()))
+  }
+  if height is Some(height) {
+    attrs.push(attribute("height", height.to_string()))
+  }
+  if border is Some(border) {
+    attrs.push(attribute("border", border.to_string()))
+  }
+  common_node(style~, class?, id?, "img", attrs, childrens)
 }
 
 ///|
@@ -487,20 +460,20 @@ pub fn iframe[M](
   width? : Int,
   height? : Int
 ) -> Html[M] {
-  new(
-    "iframe",
-    {},
-    style~,
-    class?,
-    id?,
-    optional_attrs={
-      "src": src,
-      "title": title,
-      "width": width.map(fn(x) { x.to_string() }),
-      "height": height.map(fn(x) { x.to_string() }),
-    },
-    [],
-  )
+  let attrs = []
+  if src is Some(src) {
+    attrs.push(attribute("src", src))
+  }
+  if title is Some(title) {
+    attrs.push(attribute("title", title))
+  }
+  if width is Some(width) {
+    attrs.push(attribute("width", width.to_string()))
+  }
+  if height is Some(height) {
+    attrs.push(attribute("height", height.to_string()))
+  }
+  common_node(style~, class?, id?, "iframe", attrs, [])
 }
 
 // ---- inputs ----
@@ -511,7 +484,7 @@ pub fn br[M](
   id? : String,
   class? : String
 ) -> Html[M] {
-  new("br", {}, style~, class?, id?, [])
+  common_node(style~, class?, id?, "br", [], [])
 }
 
 ///|
@@ -553,17 +526,16 @@ pub fn form[M](
   class? : String,
   action? : String,
   name? : String,
-  children : Array[Html[M]]
+  childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "form",
-    {},
-    style~,
-    id?,
-    class?,
-    optional_attrs={ "action": action, "name": name },
-    children,
-  )
+  let attrs = []
+  if action is Some(action) {
+    attrs.push(attribute("action", action))
+  }
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  common_node(style~, class?, id?, "form", attrs, childrens)
 }
 
 ///|
@@ -574,15 +546,11 @@ pub fn label[M](
   for_? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "label",
-    {},
-    optional_attrs={ "for": for_ },
-    style~,
-    class?,
-    id?,
-    childrens,
-  )
+  let attrs = []
+  if for_ is Some(for_) {
+    attrs.push(attribute("for", for_))
+  }
+  common_node(style~, class?, id?, "form", attrs, childrens)
 }
 
 ///|
@@ -640,33 +608,64 @@ pub fn input[M](
     Some(On) => "on"
     _ => "off"
   }
-  new(
-    "input",
-    { "type": input_type, "autocomplete": auto_complete },
-    optional_attrs={
-      "name": name,
-      "value": value,
-      "checked": checked.map(Bool::to_string),
-      "readonly": read_only.map(Bool::to_string),
-      "multiple": multiple.map(Bool::to_string),
-      "accept": accept,
-      "max": max.map(fn(n) { n.to_string() }),
-      "min": min.map(fn(n) { n.to_string() }),
-      "step": step.map(fn(n) { n.to_string() }),
-      "maxlength": maxlength.map(fn(n) { n.to_string() }),
-      "minlength": minlength.map(fn(n) { n.to_string() }),
-      "pattern": pattern,
-      "size": size.map(fn(n) { n.to_string() }),
-      "width": width.map(fn(n) { n.to_string() }),
-      "height": height.map(fn(n) { n.to_string() }),
-      "placeholder": placeholder,
-    },
-    optional_attributes=[change.map(on_change), input.map(on_input)],
-    style~,
-    id?,
-    class?,
-    childrens,
-  )
+  let attrs = []
+  attrs.push(attribute("type", input_type))
+  attrs.push(attribute("autocomplete", auto_complete))
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  if value is Some(value) {
+    attrs.push(attribute("value", value))
+  }
+  if checked is Some(checked) {
+    attrs.push(property("checked", Boolean(checked)))
+  }
+  if read_only is Some(read_only) {
+    attrs.push(property("readonly", Boolean(read_only)))
+  }
+  if multiple is Some(multiple) {
+    attrs.push(property("multiple", Boolean(multiple)))
+  }
+  if accept is Some(accept) {
+    attrs.push(attribute("accept", accept))
+  }
+  if max is Some(max) {
+    attrs.push(attribute("max", max.to_string()))
+  }
+  if min is Some(min) {
+    attrs.push(attribute("min", min.to_string()))
+  }
+  if step is Some(step) {
+    attrs.push(attribute("step", step.to_string()))
+  }
+  if maxlength is Some(maxlength) {
+    attrs.push(attribute("maxlength", maxlength.to_string()))
+  }
+  if minlength is Some(minlength) {
+    attrs.push(attribute("minlength", minlength.to_string()))
+  }
+  if pattern is Some(pattern) {
+    attrs.push(attribute("pattern", pattern))
+  }
+  if size is Some(size) {
+    attrs.push(attribute("size", size.to_string()))
+  }
+  if width is Some(width) {
+    attrs.push(attribute("width", width.to_string()))
+  }
+  if height is Some(height) {
+    attrs.push(attribute("height", height.to_string()))
+  }
+  if placeholder is Some(placeholder) {
+    attrs.push(attribute("placeholder", placeholder))
+  }
+  if change is Some(to_msg) {
+    attrs.push(on_change(to_msg))
+  }
+  if input is Some(to_msg) {
+    attrs.push(on_input(to_msg))
+  }
+  common_node("input", attrs, childrens, style~, id?, class?)
 }
 
 ///|
@@ -754,7 +753,7 @@ pub fn table[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("table", {}, style~, id?, class?, childrens)
+  common_node("table", [], style~, id?, class?, childrens)
 }
 
 ///|
@@ -764,7 +763,7 @@ pub fn caption[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("caption", {}, style~, id?, class?, childrens)
+  common_node("caption", [], style~, id?, class?, childrens)
 }
 
 ///|
@@ -774,7 +773,7 @@ pub fn thead[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("thead", {}, style~, id?, class?, childrens)
+  common_node("thead", [], style~, id?, class?, childrens)
 }
 
 ///|
@@ -784,7 +783,7 @@ pub fn tbody[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tbody", {}, style~, id?, class?, childrens)
+  common_node("tbody", [], style~, id?, class?, childrens)
 }
 
 ///|
@@ -795,15 +794,11 @@ pub fn col[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "col",
-    {},
-    style~,
-    id?,
-    class?,
-    optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
-    childrens,
-  )
+  let attrs = []
+  if span is Some(span) {
+    attrs.push(attribute("span", span.to_string()))
+  }
+  common_node("col", attrs, style~, id?, class?, childrens)
 }
 
 ///|
@@ -814,15 +809,11 @@ pub fn colgroup[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "colgroup",
-    {},
-    style~,
-    id?,
-    class?,
-    optional_attrs={ "span": span.map(fn(n) { n.to_string() }) },
-    childrens,
-  )
+  let attrs = []
+  if span is Some(span) {
+    attrs.push(attribute("span", span.to_string()))
+  }
+  common_node("colgroup", attrs, style~, id?, class?, childrens)
 }
 
 ///|
@@ -832,7 +823,7 @@ pub fn tr[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tr", {}, style~, id?, class?, childrens)
+  common_node("tr", [], style~, id?, class?, childrens)
 }
 
 ///|
@@ -845,19 +836,17 @@ pub fn td[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "td",
-    {},
-    style~,
-    id?,
-    class?,
-    optional_attrs={
-      "colspan": colspan.map(fn(n) { n.to_string() }),
-      "rowspan": rowspan.map(fn(n) { n.to_string() }),
-      "headers": headers,
-    },
-    childrens,
-  )
+  let attrs = []
+  if colspan is Some(colspan) {
+    attrs.push(attribute("colspan", colspan.to_string()))
+  }
+  if rowspan is Some(rowspan) {
+    attrs.push(attribute("rowspan", rowspan.to_string()))
+  }
+  if headers is Some(headers) {
+    attrs.push(attribute("headers", headers))
+  }
+  common_node("td", attrs, style~, id?, class?, childrens)
 }
 
 ///|
@@ -880,28 +869,33 @@ pub fn th[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new(
-    "th",
-    {},
-    style~,
-    id?,
-    class?,
-    optional_attrs={
-      "abbr": abbr,
-      "colspan": colspan.map(fn(n) { n.to_string() }),
-      "rowspan": rowspan.map(fn(n) { n.to_string() }),
-      "headers": headers,
-      "scope": scope.map(fn(s) {
-        match s {
+  let attrs = []
+  if colspan is Some(colspan) {
+    attrs.push(attribute("colspan", colspan.to_string()))
+  }
+  if rowspan is Some(rowspan) {
+    attrs.push(attribute("rowspan", rowspan.to_string()))
+  }
+  if headers is Some(headers) {
+    attrs.push(attribute("headers", headers))
+  }
+  if abbr is Some(abbr) {
+    attrs.push(attribute("abbr", abbr))
+  }
+  if scope is Some(scope) {
+    attrs.push(
+      attribute(
+        "scope",
+        match scope {
           Row => "row"
           Col => "col"
           RowGroup => "rowgroup"
           ColGroup => "colgroup"
-        }
-      }),
-    },
-    childrens,
-  )
+        },
+      ),
+    )
+  }
+  common_node("th", attrs, style~, id?, class?, childrens)
 }
 
 ///|
@@ -911,5 +905,5 @@ pub fn tfoot[M](
   class? : String,
   childrens : Array[Html[M]]
 ) -> Html[M] {
-  new("tfoot", {}, style~, id?, class?, childrens)
+  common_node("tfoot", [], style~, id?, class?, childrens)
 }
