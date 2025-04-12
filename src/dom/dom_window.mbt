@@ -53,3 +53,9 @@ pub extern "js" fn window() -> Window = "() => window"
 
 ///|
 pub extern "js" fn Window::to_event_target(self : Window) -> EventTarget = "(x) => x"
+
+///|
+pub extern "js" fn Window::alert(self : Window, msg : String) = "(self,msg) => self.alert(msg)"
+
+///|
+pub extern "js" fn Window::confirm(self : Window, msg : String) -> Bool = "(self,msg) => self.confirm(msg)"

@@ -276,12 +276,23 @@ impl HTMLCanvasElement {
   to_html_element(Self) -> HTMLElement
 }
 
+type HTMLDialogElement
+impl HTMLDialogElement {
+  close(Self, return_value~ : @js.Optional[String] = ..) -> Unit
+  open(Self) -> Bool
+  request_close(Self, return_value~ : @js.Optional[String] = ..) -> Unit
+  return_value(Self) -> String
+  show(Self) -> Unit
+  show_modal(Self) -> Unit
+}
+
 type HTMLElement
 impl HTMLElement {
   remove_style(Self, String) -> Unit
   set_style(Self, String, String) -> Unit
   to_element(Self) -> Element
   to_html_canvas_element(Self) -> @js.Nullable[HTMLCanvasElement]
+  to_html_dialog_element(Self) -> @js.Nullable[HTMLDialogElement]
   to_html_input_element(Self) -> @js.Nullable[HTMLInputElement]
   to_html_select_element(Self) -> @js.Nullable[HTMLSelectElement]
 }
@@ -394,6 +405,8 @@ type WebGLRenderingContext
 
 type Window
 impl Window {
+  alert(Self, String) -> Unit
+  confirm(Self, String) -> Bool
   current_url(Self) -> String
   history_go_back(Self) -> Unit
   history_go_forward(Self) -> Unit
