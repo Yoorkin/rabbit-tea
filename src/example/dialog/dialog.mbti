@@ -1,0 +1,11 @@
+package "Yoorkin/rabbit-tea/example/dialog"
+
+// Values
+
+// Types and methods
+type Msg
+
+// Type aliases
+
+// Traits
+
