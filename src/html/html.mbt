@@ -142,7 +142,7 @@ pub fn div[M](
   if click is Some(click) {
     attrs.push(on_click(fn(_) { click }))
   }
-  common_node(style~, class?, id?, "div", [], childrens)
+  common_node(style~, class?, id?, "div", attrs, childrens)
 }
 
 ///|
