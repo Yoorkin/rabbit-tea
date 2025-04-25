@@ -1,0 +1,20 @@
+package "Yoorkin/rabbit-tea/clipboard"
+
+import(
+  "Yoorkin/rabbit-tea/cmd"
+)
+
+// Values
+fn copy[M](Item, copied? : M, failed? : (String) -> M) -> @cmd.Cmd[M]
+
+fn paste[M](pasted~ : (Item) -> M, failed? : (String) -> M) -> @cmd.Cmd[M]
+
+// Types and methods
+pub(all) enum Item {
+  Text(String)
+}
+
+// Type aliases
+
+// Traits
+
