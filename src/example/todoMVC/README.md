@@ -9,11 +9,7 @@ how to build a complex app with multiple pages. It doesn't mean the pattern is e
 Run the following command to start the example:
 
 ```bash
-cd src/example/todoMVC
-bash ./launch.sh
-``` 
-
-This command will build the project with js backend, and launch the server with node.
-
-
+npm i 
+npm run dev
+```
 
