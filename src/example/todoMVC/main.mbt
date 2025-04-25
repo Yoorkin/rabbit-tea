@@ -60,7 +60,7 @@ fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
     ["new"] =>
       @editor.load(None) |> update_with(Model::Editor, Message::GotEditorMsg)
     ["cards", id] =>
-      match @strconv.parse_int?(id) {
+      match @strconv.parse_int?(id.to_string()) {
         Ok(id) =>
           @editor.load(Some(id))
           |> update_with(Model::Editor, Message::GotEditorMsg)
