@@ -59,3 +59,7 @@ pub extern "js" fn Window::alert(self : Window, msg : String) = "(self,msg) => s
 
 ///|
 pub extern "js" fn Window::confirm(self : Window, msg : String) -> Bool = "(self,msg) => self.confirm(msg)"
+
+///|
+pub extern "js" fn Window::navigator(self : Window) -> Navigator =
+  #| (self) => self.navigator

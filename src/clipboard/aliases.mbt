@@ -1,0 +1,2 @@
+///|
+typealias @cmd.Cmd[M]
