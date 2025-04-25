@@ -86,7 +86,7 @@ pub fn task[M](message : M) -> Cmd[M] {
 /// 
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
-pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Cmd[M] {
+pub fn perform[A, M](msg : (A) -> M, f : () -> A!Async) -> Cmd[M] {
   Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f!())) }) })
 }
 
@@ -96,7 +96,7 @@ pub fn perform[A, M](msg : (A) -> M, f : async () -> A) -> Cmd[M] {
 /// or thrown error into a `Result`.
 pub fn attempt[A, E : Error, M](
   msg : (Result[A, E]) -> M,
-  f : async () -> A!E
+  f : () -> A!Async + E
 ) -> Cmd[M] {
   Cmd(fn(events) {
     @js.async_run(fn() {

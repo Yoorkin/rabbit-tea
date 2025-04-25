@@ -80,8 +80,8 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
           @http.post(
             "/api/cards",
             Json({
-              "title": String(card.title),
-              "content": String(card.content),
+              "title": Json::string(card.title),
+              "content": Json::string(card.content),
             }),
             expect=Json(Msg::ReqResult, Result::Ok),
           )
