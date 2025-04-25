@@ -81,6 +81,8 @@ fn scroll_to_bottom(Window) -> Unit
 
 fn scroll_to_top(Window) -> Unit
 
+fn to_clipboard(EventTarget) -> @js.Nullable[Clipboard]
+
 fn to_document(Node) -> @js.Nullable[Document]
 
 fn to_document_fragment(Node) -> @js.Nullable[DocumentFragment]
@@ -176,6 +178,12 @@ impl CanvasRenderingContext2D {
 }
 impl @js.Cast for CanvasRenderingContext2D
 
+pub extern type Clipboard
+impl Clipboard {
+  read_text(Self) -> @js.Promise
+  write_text(Self, String) -> @js.Promise
+}
+
 type ClipboardEvent
 impl ClipboardEvent {
   clipboard_data(Self) -> DataTransfer
@@ -258,6 +266,7 @@ impl EventTarget {
   add_event_listener(Self, String, (Event) -> Unit) -> Unit
   dispatch_event(Self, Event) -> Unit
   remove_event_listener(Self, String, (Event) -> Unit) -> Unit
+  to_clipboard(Self) -> @js.Nullable[Clipboard]
   to_node(Self) -> @js.Nullable[Node]
 }
 
@@ -354,6 +363,11 @@ impl MouseEvent {
   screen_y(Self) -> Int
 }
 
+pub extern type Navigator
+impl Navigator {
+  clipboard(Self) -> Clipboard
+}
+
 type Node
 impl Node {
   append_child(Self, Self) -> Unit
@@ -411,6 +425,7 @@ impl Window {
   history_go_back(Self) -> Unit
   history_go_forward(Self) -> Unit
   load_url(Self, String) -> Unit
+  navigator(Self) -> Navigator
   push_url(Self, String) -> Unit
   reload_url(Self) -> Unit
   replace_url(Self, String) -> Unit

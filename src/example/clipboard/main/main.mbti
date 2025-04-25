@@ -1,0 +1,13 @@
+package "Yoorkin/example-todoMVC/main"
+
+// Values
+
+// Types and methods
+type Model
+
+type Msg
+
+// Type aliases
+
+// Traits
+
