@@ -2,16 +2,22 @@
 /// # Hireharchy related to the DOM EventTarget
 /// 
 /// ```
-/// EventTarget <-- Node <--+-- Document
-///                         +-- DocumentFragment
-///                         +-- Element <-- HTMLElement <--+-- HTMLCanvasElement
-///                                                        +-- HTMLInputElement
+/// EventTarget <---+--Clipboard 
+///                 +--Node <--+-- Document
+///                            +-- DocumentFragment
+///                            +-- Element <-- HTMLElement <--+-- HTMLCanvasElement
+///                                                           +-- HTMLInputElement
+///                                                           +-- HTMLDialogElement
 /// ```
 extern type EventTarget
 
 ///|
 pub extern "js" fn to_node(self : EventTarget) -> @js.Nullable[Node] =
   #| (x) => x instanceof Node ? x : null
+
+///|
+pub extern "js" fn to_clipboard(self : EventTarget) -> @js.Nullable[Clipboard] =
+  #| (x) => x instanceof Clipboard ? x : null
 
 ///|
 pub extern "js" fn add_event_listener(
