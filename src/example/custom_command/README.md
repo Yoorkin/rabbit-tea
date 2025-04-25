@@ -1,4 +1,4 @@
-# Form Example
+# Custom Command Example
 
 Run the example with the following command:
 

@@ -12,8 +12,8 @@ If you are looking for HTTP request functionality, you can use the `rabbit-tea/h
 Run the example with the following command:
 
 ```bash
-cd src/example/async
-bash ./launch.sh
+npm i 
+npm run dev
 ```
 
-This command will build the project with js backend, and launch the server with node.
+

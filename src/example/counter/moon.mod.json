@@ -1,0 +1,11 @@
+{
+    "name": "Yoorkin/example-todoMVC",
+    "version": "0.0.1",
+    "deps": {
+        "Yoorkin/rabbit-tea": {
+            "path": "../../../."
+        }
+    },
+    "readme": "README.md",
+    "license": "Apache-2.0"
+}

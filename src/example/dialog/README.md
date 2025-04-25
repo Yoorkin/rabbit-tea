@@ -3,8 +3,6 @@
 Run the example with the following command:
 
 ```bash
-cd src/example/dialog
-bash ./launch.sh
+npm i 
+npm run dev
 ```
-
-This command will build the project with js backend, and launch the server with node.
