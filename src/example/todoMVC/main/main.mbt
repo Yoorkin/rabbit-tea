@@ -16,8 +16,8 @@ enum Model {
 ///|
 fn view(model : Model) -> @html.Html[Message] {
   match model {
-    Home(model) => @home.view(model).map(Message::GotHomeMsg)
-    Editor(model) => @editor.view(model).map(Message::GotEditorMsg)
+    Home(model) => @home.view(model).map(GotHomeMsg(_))
+    Editor(model) => @editor.view(model).map(GotEditorMsg(_))
     NotFound => @html.div([@html.text("Not Found")])
   }
 }
@@ -36,10 +36,9 @@ fn update_with[SubModel, SubMsg](
 fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
   match (msg, model) {
     (GotHomeMsg(msg), Home(model)) =>
-      @home.update(msg, model) |> update_with(Model::Home, Message::GotHomeMsg)
+      @home.update(msg, model) |> update_with(Home(_), GotHomeMsg(_))
     (GotEditorMsg(msg), Editor(model)) =>
-      @editor.update(msg, model)
-      |> update_with(Model::Editor, Message::GotEditorMsg)
+      @editor.update(msg, model) |> update_with(Editor(_), GotEditorMsg(_))
     (LinkClicked(request), _) =>
       match request {
         Internal(url) => (@nav.push_url(url.to_string()), model)
@@ -55,15 +54,12 @@ fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
   let paths = url.path.split("/").collect()
   println("routing to \{url.to_string()}, path \{paths}")
   match paths {
-    ["home" | "/"] | [] =>
-      @home.load() |> update_with(Model::Home, Message::GotHomeMsg)
-    ["new"] =>
-      @editor.load(None) |> update_with(Model::Editor, Message::GotEditorMsg)
+    ["home" | "/"] | [] => @home.load() |> update_with(Home(_), GotHomeMsg(_))
+    ["new"] => @editor.load(None) |> update_with(Editor(_), GotEditorMsg(_))
     ["cards", id] =>
       match @strconv.parse_int?(id.to_string()) {
         Ok(id) =>
-          @editor.load(Some(id))
-          |> update_with(Model::Editor, Message::GotEditorMsg)
+          @editor.load(Some(id)) |> update_with(Editor(_), GotEditorMsg(_))
         Err(err) => {
           println("error parsing id \{err}")
           (@tea.none(), NotFound)
@@ -79,7 +75,7 @@ fn main {
     initialize=route,
     update~,
     view~,
-    url_request=Message::LinkClicked,
-    url_changed=Message::UrlChanged,
+    url_request=LinkClicked(_),
+    url_changed=UrlChanged(_),
   )
 }

@@ -1,5 +1,5 @@
 ///|
-pub typealias @cmd.(Cmd[M], Command[M])
+pub typealias @cmd.(Cmd, Command)
 
 ///|
 pub fnalias @cmd.(none, batch, task, perform, attempt)

@@ -415,8 +415,8 @@ enum Patch[Msg] {
 ///|
 test {
   // TODO: this is used to suppress unused warnings. Remove this later.
-  ignore((Patch::Remove : (Int) -> Patch[Unit]))
-  ignore((Patch::InsertBefore : (Int, Node[Unit]) -> Patch[Unit]))
+  ignore((Patch::Remove(_) : (Int) -> Patch[Unit]))
+  ignore((Patch::InsertBefore(_, _) : (Int, Node[Unit]) -> Patch[Unit]))
 }
 
 ///|

@@ -5,10 +5,10 @@ fnalias @tea.none
 fnalias @html.(p, div, text, button)
 
 ///|
-typealias @tea.Cmd[M]
+typealias @tea.Cmd
 
 ///|
-typealias @html.Html[M]
+typealias @html.Html
 
 ///|
 struct Model {
@@ -31,14 +31,14 @@ fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
     Copy(text) => {
       let cmd = @clipboard.copy(
         Text(text),
-        copied=Msg::OnCopySucceed,
-        failed=Msg::OnError,
+        copied=OnCopySucceed,
+        failed=OnError(_),
       )
       (cmd, { ..model, copied: false })
     }
     Paste =>
       (
-        @clipboard.paste(pasted=Msg::GotPasteData, failed=Msg::OnError),
+        @clipboard.paste(pasted=GotPasteData(_), failed=OnError(_)),
         { ..model, copied: false },
       )
     GotPasteData(Text(tips)) => (none(), { ..model, tips, })

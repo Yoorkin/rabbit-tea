@@ -5,10 +5,10 @@ fnalias @tea.none
 fnalias @html.(h1, div, text, button)
 
 ///|
-typealias @tea.Cmd[M]
+typealias @tea.Cmd
 
 ///|
-typealias @html.Html[M]
+typealias @html.Html
 
 ///|
 typealias Model = Int
@@ -31,8 +31,8 @@ fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
 fn view(model : Model) -> Html[Msg] {
   div([
     h1([text(model.to_string())]),
-    button(click=Msg::Increment, [text("+")]),
-    button(click=Msg::Decrement, [text("-")]),
+    button(click=Increment, [text("+")]),
+    button(click=Decrement, [text("-")]),
   ])
 }
 

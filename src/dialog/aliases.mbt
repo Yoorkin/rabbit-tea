@@ -1,2 +1,2 @@
 ///|
-typealias @cmd.Cmd[M]
+typealias @cmd.Cmd

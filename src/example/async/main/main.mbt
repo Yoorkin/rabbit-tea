@@ -29,7 +29,7 @@ fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
         suspend!(fn(resolve) { set_timeout(fn() { resolve(()) }, 5000) })
         "5000"
       }
-      (@tea.perform(Message::TimeUp, f), model)
+      (@tea.perform(TimeUp(_), f), model)
     }
   }
 }
@@ -37,8 +37,8 @@ fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
 ///|
 fn view(model : Model) -> @html.Html[Message] {
   div([
-    button(click=Message::Clear, [text("Clear")]),
-    button(click=Message::SetTime, [text("show text after 5s")]),
+    button(click=Clear, [text("Clear")]),
+    button(click=SetTime, [text("show text after 5s")]),
     text(model.text),
   ])
 }

@@ -5,10 +5,10 @@ fnalias @tea.none
 fnalias @html.(h1, div, text, select, option)
 
 ///|
-typealias @tea.Cmd[M]
+typealias @tea.Cmd
 
 ///|
-typealias @html.Html[M]
+typealias @html.Html
 
 ///|
 typealias Model = String
@@ -29,7 +29,7 @@ fn update(msg : Msg, _ : Model) -> (Cmd[Msg], Model) {
 fn view(model : Model) -> Html[Msg] {
   div([
     h1([text(model)]),
-    select(change=SelectChange, disabled=false, [
+    select(change=SelectChange(_), disabled=false, [
       option(value="plan A", selected=false, [text("plan A")]),
       option(value="plan B", [text("plan B")]),
       option(value="plan C", [text("plan C")]),

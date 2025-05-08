@@ -29,7 +29,7 @@ pub fn load(index : Int?) -> (@tea.Cmd[Msg], Model) {
       (
         @http.get(
           "/api/cards/\{index}",
-          expect=Json(Msg::GotCardData, decode_card),
+          expect=Json(GotCardData(_), decode_card),
         ),
         Loading,
       )
@@ -61,10 +61,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
       let save = match card.id {
         Some(id) =>
           if card.title == "" && card.content == "" {
-            @http.delete(
-              "/api/cards/\{id}",
-              expect=Json(Msg::ReqResult, Result::Ok),
-            )
+            @http.delete("/api/cards/\{id}", expect=Json(ReqResult(_), Ok(_)))
           } else {
             @http.patch(
               "/api/cards/\{id}",
@@ -73,7 +70,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
                 "content": card.content.to_json(),
                 "id": id.to_json(),
               }),
-              expect=Json(Msg::ReqResult, Result::Ok),
+              expect=Json(ReqResult(_), Ok(_)),
             )
           }
         None =>
@@ -83,7 +80,7 @@ pub fn update(msg : Msg, model : Model) -> (@tea.Cmd[Msg], Model) {
               "title": Json::string(card.title),
               "content": Json::string(card.content),
             }),
-            expect=Json(Msg::ReqResult, Result::Ok),
+            expect=Json(ReqResult(_), Ok(_)),
           )
       }
       let exit = @nav.push_url("/home")
@@ -109,9 +106,9 @@ pub fn view(model : Model) -> @html.Html[Msg] {
         ],
         [
           @html.h1([title_text]),
-          view_text_input("title", title, input=Msg::TitleChanged),
-          view_text_input("content", content, input=Msg::ContentChanged),
-          @views.button("close", click=Msg::SaveCardAndExit(card)),
+          view_text_input("title", title, input=TitleChanged(_)),
+          view_text_input("content", content, input=ContentChanged(_)),
+          @views.button("close", click=SaveCardAndExit(card)),
         ],
       )
     }
