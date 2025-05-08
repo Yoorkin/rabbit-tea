@@ -1,4 +1,4 @@
-package "Yoorkin/rabbit-tea/example/todoMVC/home"
+package "Yoorkin/example-todoMVC/home"
 
 import(
   "Yoorkin/rabbit-tea/cmd"
@@ -6,6 +6,8 @@ import(
 )
 
 // Values
+fn id2() -> Int
+
 fn load() -> (@cmd.Cmd[Msg], Model)
 
 fn update(Msg, Model) -> (@cmd.Cmd[Msg], Model)

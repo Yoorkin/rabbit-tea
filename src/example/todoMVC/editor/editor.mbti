@@ -1,4 +1,4 @@
-package "Yoorkin/rabbit-tea/example/todoMVC/editor"
+package "Yoorkin/example-todoMVC/editor"
 
 import(
   "Yoorkin/rabbit-tea/cmd"
