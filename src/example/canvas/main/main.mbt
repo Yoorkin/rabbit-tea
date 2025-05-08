@@ -61,10 +61,10 @@ fn view(model : Model) -> @html.Html[Message] {
   div(style=["border: solid 1px gray; width: 500px; height: 500px"], [
     model.canvas.to_html(),
     div(style=["width:30px; height:30px", "background: \{model.color}"], []),
-    button(click=Message::Clear, [text("Clear")]),
-    button(click=Message::ChooseColor(RGB(255, 0, 0)), [text("Red")]),
-    button(click=Message::ChooseColor(RGB(0, 255, 0)), [text("Green")]),
-    button(click=Message::ChooseColor(RGB(0, 0, 255)), [text("Blue")]),
+    button(click=Clear, [text("Clear")]),
+    button(click=ChooseColor(RGB(255, 0, 0)), [text("Red")]),
+    button(click=ChooseColor(RGB(0, 255, 0)), [text("Green")]),
+    button(click=ChooseColor(RGB(0, 0, 255)), [text("Blue")]),
   ])
 }
 
@@ -77,8 +77,8 @@ fn main {
     canvas: @canvas.new(
       width=500,
       height=500,
-      mousemove=Message::DrawPoint,
-      mousedown=Message::MouseDown,
+      mousemove=DrawPoint(_),
+      mousedown=MouseDown(_),
       mouseup=fn(_) { Message::MouseUp },
     ),
   }

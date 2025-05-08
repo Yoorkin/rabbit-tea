@@ -5,10 +5,10 @@ fnalias @tea.none
 fnalias @html.(h1, div, text, button, dialog, input)
 
 ///|
-typealias @tea.Cmd[M]
+typealias @tea.Cmd
 
 ///|
-typealias @html.Html[M]
+typealias @html.Html
 
 ///|
 priv struct Model {
@@ -52,9 +52,9 @@ fn view(model : Model) -> Html[Msg] {
   div([
     h1([text(model.title)]),
     button(click=Msg::Edit, [text("edit")]),
-    dialog(id="menu", cancel=Msg::AboutToClose, close=Msg::DialogClosed, [
+    dialog(id="menu", cancel=Msg::AboutToClose, close=DialogClosed(_), [
       h1([text("edit the title")]),
-      input(input_type=Text, value=model.input, input=Msg::InputChanged),
+      input(input_type=Text, value=model.input, input=InputChanged(_)),
       button(click=Msg::Discard, [text("discard")]),
       button(click=Msg::Save, [text("save")]),
     ]),
