@@ -49,7 +49,7 @@ pub fn update[Msg, Model, View](
 
 ///| Refresh the view.
 /// This function will call the view function and patch the result to the DOM.
-pub fn refersh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
+pub fn refresh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
   let view = (self.view)(self.model)
   (self.after_update)(view)
 }

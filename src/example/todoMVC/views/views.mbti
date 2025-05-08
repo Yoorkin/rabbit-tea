@@ -1,4 +1,4 @@
-package "Yoorkin/rabbit-tea/example/todoMVC/views"
+package "Yoorkin/example-todoMVC/views"
 
 import(
   "Yoorkin/rabbit-tea/html"

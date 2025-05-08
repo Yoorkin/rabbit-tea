@@ -14,7 +14,7 @@ fn get_predefined_events[Msg, Model, View](Sandbox[Msg, Model, View]) -> @cmd.Ev
 
 fn launch[M, Model, View](Sandbox[M, Model, View], @cmd.Cmd[M]) -> Unit
 
-fn refersh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
+fn refresh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
 
 fn update[Msg, Model, View](Sandbox[Msg, Model, View], Msg) -> Unit
 
@@ -26,7 +26,7 @@ impl Sandbox {
   get_predefined_events[Msg, Model, View](Self[Msg, Model, View]) -> @cmd.Events[Msg]
   launch[M, Model, View](Self[M, Model, View], @cmd.Cmd[M]) -> Unit
   new[Model, Msg, View](Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
-  refersh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
+  refresh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
   update[Msg, Model, View](Self[Msg, Model, View], Msg) -> Unit
 }
 

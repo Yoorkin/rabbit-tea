@@ -54,7 +54,7 @@ fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
   let paths = url.path.split("/").collect()
   println("routing to \{url.to_string()}, path \{paths}")
   match paths {
-    ["home" | "/"] | [] => @home.load() |> update_with(Home(_), GotHomeMsg(_))
+    ["home" | "/" | ""] => @home.load() |> update_with(Home(_), GotHomeMsg(_))
     ["new"] => @editor.load(None) |> update_with(Editor(_), GotEditorMsg(_))
     ["cards", id] =>
       match @strconv.parse_int?(id.to_string()) {

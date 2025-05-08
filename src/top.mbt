@@ -35,7 +35,7 @@ pub fn startup[Model, Message](
   }
 
   sandbox = Some(@browser.Sandbox::new(model, update, view, after_update~))
-  sandbox.unwrap().refersh()
+  sandbox.unwrap().refresh()
 }
 
 ///| Start the application with initial URL. 
@@ -77,5 +77,5 @@ pub fn application[Model, Msg](
       url_changed?,
     ),
   )
-  sandbox.unwrap().launch(cmd)
+  sandbox.unwrap()..launch(cmd).refresh()
 }
