@@ -56,7 +56,7 @@ extern "js" fn js_request(
   #| }
 
 ///|
-fn request[Msg, Model](
+fn[Msg, Model] request(
   url : String,
   http_method : String,
   expect~ : Expecting[Msg, Model],
@@ -78,9 +78,7 @@ fn request[Msg, Model](
           body~,
           content_type~,
           succeed=fn(str) {
-            let result = try {
-              Ok(@json.parse!(str))
-            } catch {
+            let result = try Ok(@json.parse!(str)) catch {
               _ => Err("Json parse error")
             }
             events.trigger_update(f(result.bind(decoder)))
@@ -107,7 +105,7 @@ fn request[Msg, Model](
 }
 
 ///| Create a command to send a GET request.
-pub fn get[Msg, Model](
+pub fn[Msg, Model] get(
   url : String,
   expect~ : Expecting[Msg, Model]
 ) -> @cmd.Cmd[Msg] {
@@ -115,7 +113,7 @@ pub fn get[Msg, Model](
 }
 
 ///| Create a command to send a PUT request.
-pub fn delete[Msg, Model](
+pub fn[Msg, Model] delete(
   url : String,
   expect~ : Expecting[Msg, Model]
 ) -> @cmd.Cmd[Msg] {
@@ -123,7 +121,7 @@ pub fn delete[Msg, Model](
 }
 
 ///| Create a command to send a POST request.
-pub fn post[Msg, Model](
+pub fn[Msg, Model] post(
   url : String,
   body : Body,
   expect~ : Expecting[Msg, Model]
@@ -132,7 +130,7 @@ pub fn post[Msg, Model](
 }
 
 ///| Create a command to send a PATCH request.
-pub fn patch[Msg, Model](
+pub fn[Msg, Model] patch(
   url : String,
   body : Body,
   expect~ : Expecting[Msg, Model]

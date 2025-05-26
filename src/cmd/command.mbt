@@ -6,7 +6,7 @@ struct Events[M] {
 }
 
 ///| Used by the runtime.
-pub fn Events::new[M](
+pub fn[M] Events::new(
   on_url_changed : (@url.Url) -> Unit,
   on_url_request : (@url.UrlRequest) -> Unit,
   on_update : (M) -> Unit
@@ -15,12 +15,12 @@ pub fn Events::new[M](
 }
 
 ///| Trigger the update function with `url_changed` message config by the user.
-pub fn Events::trigger_url_changed[M](self : Events[M], url : @url.Url) -> Unit {
+pub fn[M] Events::trigger_url_changed(self : Events[M], url : @url.Url) -> Unit {
   (self.on_url_changed)(url)
 }
 
 ///| Trigger the update function with `url_request` message config by the user.
-pub fn Events::trigger_url_request[M](
+pub fn[M] Events::trigger_url_request(
   self : Events[M],
   url : @url.UrlRequest
 ) -> Unit {
@@ -28,7 +28,7 @@ pub fn Events::trigger_url_request[M](
 }
 
 ///| Trigger the update function with message `msg`.
-pub fn Events::trigger_update[M](self : Events[M], msg : M) -> Unit {
+pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
   (self.on_update)(msg)
 }
 
@@ -55,7 +55,7 @@ pub(all) type Cmd[M] (Events[M]) -> Unit
 pub typealias Command[M] = Cmd[M]
 
 ///| Map the messages in the command to another type.
-pub fn map[A, B](self : Cmd[A], f : (A) -> B) -> Cmd[B] {
+pub fn[A, B] map(self : Cmd[A], f : (A) -> B) -> Cmd[B] {
   Cmd(fn(events) {
     let predef = {
       on_url_changed: events.on_url_changed,
@@ -68,17 +68,17 @@ pub fn map[A, B](self : Cmd[A], f : (A) -> B) -> Cmd[B] {
 }
 
 ///| Create a command that does nothing.
-pub fn none[M]() -> Cmd[M] {
+pub fn[M] none() -> Cmd[M] {
   Cmd(fn { _ => () })
 }
 
 ///| Create a command that runs multiple commands.
-pub fn batch[M](xs : Array[Cmd[M]]) -> Cmd[M] {
+pub fn[M] batch(xs : Array[Cmd[M]]) -> Cmd[M] {
   Cmd(fn(events) { xs.each(fn { Cmd(f) => f(events) }) })
 }
 
 ///| Create a command that trigger another update for the given message.
-pub fn task[M](message : M) -> Cmd[M] {
+pub fn[M] task(message : M) -> Cmd[M] {
   Cmd(fn(events) { events.trigger_update(message) })
 }
 
@@ -86,7 +86,7 @@ pub fn task[M](message : M) -> Cmd[M] {
 /// 
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
-pub fn perform[A, M](msg : (A) -> M, f : () -> A!Async) -> Cmd[M] {
+pub fn[A, M] perform(msg : (A) -> M, f : () -> A!Async) -> Cmd[M] {
   Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f!())) }) })
 }
 
@@ -94,15 +94,13 @@ pub fn perform[A, M](msg : (A) -> M, f : () -> A!Async) -> Cmd[M] {
 /// 
 /// This is similar to `perform`, but it converts the returned value 
 /// or thrown error into a `Result`.
-pub fn attempt[A, E : Error, M](
+pub fn[A, E : Error, M] attempt(
   msg : (Result[A, E]) -> M,
   f : () -> A!Async + E
 ) -> Cmd[M] {
   Cmd(fn(events) {
     @js.async_run(fn() {
-      let msg = try {
-        f!()
-      } catch {
+      let msg = try f!() catch {
         e => msg(Err(e))
       } else {
         r => msg(Ok(r))

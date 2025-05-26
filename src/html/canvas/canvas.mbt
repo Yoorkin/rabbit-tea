@@ -5,12 +5,12 @@ struct Model[Msg] {
 }
 
 ///|
-pub fn context2d[Msg](self : Model[Msg]) -> Context2D {
+pub fn[Msg] context2d(self : Model[Msg]) -> Context2D {
   self.element.get_context("2d").to0().unwrap()
 }
 
 ///|
-pub fn new[Msg](
+pub fn[Msg] new(
   width~ : Double,
   height~ : Double,
   click? : (@html.Mouse) -> Msg,
@@ -59,6 +59,6 @@ pub fn new[Msg](
 }
 
 ///|
-pub fn to_html[Msg](self : Model[Msg]) -> @html.T[Msg] {
+pub fn[Msg] to_html(self : Model[Msg]) -> @html.T[Msg] {
   self.wrapper
 }
