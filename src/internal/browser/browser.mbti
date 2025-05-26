@@ -6,17 +6,17 @@ import(
 )
 
 // Values
-fn get_on_url_changed[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.Url) -> Msg)?
+fn[Msg, Model, View] get_on_url_changed(Sandbox[Msg, Model, View]) -> ((@url.Url) -> Msg)?
 
-fn get_on_url_request[Msg, Model, View](Sandbox[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
+fn[Msg, Model, View] get_on_url_request(Sandbox[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
 
-fn get_predefined_events[Msg, Model, View](Sandbox[Msg, Model, View]) -> @cmd.Events[Msg]
+fn[Msg, Model, View] get_predefined_events(Sandbox[Msg, Model, View]) -> @cmd.Events[Msg]
 
-fn launch[M, Model, View](Sandbox[M, Model, View], @cmd.Cmd[M]) -> Unit
+fn[M, Model, View] launch(Sandbox[M, Model, View], @cmd.Cmd[M]) -> Unit
 
-fn refresh[Msg, Model, View](Sandbox[Msg, Model, View]) -> Unit
+fn[Msg, Model, View] refresh(Sandbox[Msg, Model, View]) -> Unit
 
-fn update[Msg, Model, View](Sandbox[Msg, Model, View], Msg) -> Unit
+fn[Msg, Model, View] update(Sandbox[Msg, Model, View], Msg) -> Unit
 
 // Types and methods
 type Sandbox[Msg, Model, View]

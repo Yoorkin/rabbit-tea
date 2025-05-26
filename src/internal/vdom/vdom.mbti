@@ -8,33 +8,33 @@ import(
 )
 
 // Values
-fn attribute[Msg](String, String) -> Attribute[Msg]
+fn[Msg] attribute(String, String) -> Attribute[Msg]
 
-fn diff[Msg](Node[Msg], Node[Msg]) -> Patch[Msg]
+fn[Msg] diff(Node[Msg], Node[Msg]) -> Patch[Msg]
 
-fn diff_without_key[Msg](Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]]
+fn[Msg] diff_without_key(Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]]
 
-fn do_diff[Msg](Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
+fn[Msg] do_diff(Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
 
-fn external[Msg](@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
+fn[Msg] external(@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
 
-fn link[Msg](Array[Attribute[Msg]], Array[Node[Msg]], escape~ : Bool = ..) -> Node[Msg]
+fn[Msg] link(Array[Attribute[Msg]], Array[Node[Msg]], escape~ : Bool = ..) -> Node[Msg]
 
-fn map[A, B](Node[A], (A) -> B) -> Node[B]
+fn[A, B] map(Node[A], (A) -> B) -> Node[B]
 
-fn node[Msg](String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
+fn[Msg] node(String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
-fn nothing[Msg]() -> Node[Msg]
+fn[Msg] nothing() -> Node[Msg]
 
-fn on[Msg](String, Handler[Msg]) -> Attribute[Msg]
+fn[Msg] on(String, Handler[Msg]) -> Attribute[Msg]
 
-fn patch[Msg, Model, View](Node[Msg], Node[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
+fn[Msg, Model, View] patch(Node[Msg], Node[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 
-fn property[Msg](String, @variant.Variant) -> Attribute[Msg]
+fn[Msg] property(String, @variant.Variant) -> Attribute[Msg]
 
-fn style[Msg](String, String) -> Attribute[Msg]
+fn[Msg] style(String, String) -> Attribute[Msg]
 
-fn text[Msg](String) -> Node[Msg]
+fn[Msg] text(String) -> Node[Msg]
 
 fn variant_to_js_value(@variant.Variant) -> @js.Value
 

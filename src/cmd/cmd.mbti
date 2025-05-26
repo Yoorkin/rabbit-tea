@@ -5,17 +5,17 @@ import(
 )
 
 // Values
-fn attempt[A, E : Error, M]((Result[A, E]) -> M, () -> A!E) -> Cmd[M]
+fn[A, E : Error, M] attempt((Result[A, E]) -> M, () -> A!E) -> Cmd[M]
 
-fn batch[M](Array[Cmd[M]]) -> Cmd[M]
+fn[M] batch(Array[Cmd[M]]) -> Cmd[M]
 
-fn map[A, B](Cmd[A], (A) -> B) -> Cmd[B]
+fn[A, B] map(Cmd[A], (A) -> B) -> Cmd[B]
 
-fn none[M]() -> Cmd[M]
+fn[M] none() -> Cmd[M]
 
-fn perform[A, M]((A) -> M, () -> A) -> Cmd[M]
+fn[A, M] perform((A) -> M, () -> A) -> Cmd[M]
 
-fn task[M](M) -> Cmd[M]
+fn[M] task(M) -> Cmd[M]
 
 // Types and methods
 pub(all) type Cmd[M] (Events[M]) -> Unit
