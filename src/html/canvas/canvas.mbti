@@ -10,7 +10,7 @@ fn begin_path(Context2D) -> Unit
 
 fn clear_rect(Context2D, Double, Double, Double, Double) -> Unit
 
-fn context2d[Msg](Model[Msg]) -> Context2D
+fn[Msg] context2d(Model[Msg]) -> Context2D
 
 fn fill_rect(Context2D, Double, Double, Double, Double) -> Unit
 
@@ -20,7 +20,7 @@ fn line_to(Context2D, Double, Double) -> Unit
 
 fn move_to(Context2D, Double, Double) -> Unit
 
-fn new[Msg](width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
+fn[Msg] new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
 
 fn set_fill_style(Context2D, Color) -> Unit
 
@@ -30,7 +30,7 @@ fn set_stroke_style(Context2D, Color) -> Unit
 
 fn stroke(Context2D) -> Unit
 
-fn to_html[Msg](Model[Msg]) -> @html.T[Msg]
+fn[Msg] to_html(Model[Msg]) -> @html.T[Msg]
 
 fn to_string(Color) -> String
 

@@ -5,9 +5,9 @@ import(
 )
 
 // Values
-fn copy[M](Item, copied? : M, failed? : (String) -> M) -> @cmd.Cmd[M]
+fn[M] copy(Item, copied? : M, failed? : (String) -> M) -> @cmd.Cmd[M]
 
-fn paste[M](pasted~ : (Item) -> M, failed? : (String) -> M) -> @cmd.Cmd[M]
+fn[M] paste(pasted~ : (Item) -> M, failed? : (String) -> M) -> @cmd.Cmd[M]
 
 // Types and methods
 pub(all) enum Item {

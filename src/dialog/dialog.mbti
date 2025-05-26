@@ -5,11 +5,11 @@ import(
 )
 
 // Values
-fn close[M](String, return_value? : String) -> @cmd.Cmd[M]
+fn[M] close(String, return_value? : String) -> @cmd.Cmd[M]
 
-fn request_close[M](String, return_value? : String) -> @cmd.Cmd[M]
+fn[M] request_close(String, return_value? : String) -> @cmd.Cmd[M]
 
-fn show[M](String, modal~ : Bool = ..) -> @cmd.Cmd[M]
+fn[M] show(String, modal~ : Bool = ..) -> @cmd.Cmd[M]
 
 // Types and methods
 

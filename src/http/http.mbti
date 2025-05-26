@@ -5,13 +5,13 @@ import(
 )
 
 // Values
-fn delete[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
+fn[Msg, Model] delete(String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn get[Msg, Model](String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
+fn[Msg, Model] get(String, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn patch[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
+fn[Msg, Model] patch(String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
-fn post[Msg, Model](String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
+fn[Msg, Model] post(String, Body, expect~ : Expecting[Msg, Model]) -> @cmd.Cmd[Msg]
 
 // Types and methods
 pub(all) enum Body {

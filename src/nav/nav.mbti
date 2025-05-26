@@ -5,27 +5,27 @@ import(
 )
 
 // Values
-fn back[M]() -> @cmd.Cmd[M]
+fn[M] back() -> @cmd.Cmd[M]
 
-fn forward[M]() -> @cmd.Cmd[M]
+fn[M] forward() -> @cmd.Cmd[M]
 
-fn load[M](String) -> @cmd.Cmd[M]
+fn[M] load(String) -> @cmd.Cmd[M]
 
-fn push_url[M](String) -> @cmd.Cmd[M]
+fn[M] push_url(String) -> @cmd.Cmd[M]
 
-fn reload[M]() -> @cmd.Cmd[M]
+fn[M] reload() -> @cmd.Cmd[M]
 
-fn replace_url[M](String) -> @cmd.Cmd[M]
+fn[M] replace_url(String) -> @cmd.Cmd[M]
 
-fn scroll_by_pos[M](Int, Int) -> @cmd.Cmd[M]
+fn[M] scroll_by_pos(Int, Int) -> @cmd.Cmd[M]
 
-fn scroll_to[M](String) -> @cmd.Cmd[M]
+fn[M] scroll_to(String) -> @cmd.Cmd[M]
 
-fn scroll_to_bottom[M]() -> @cmd.Cmd[M]
+fn[M] scroll_to_bottom() -> @cmd.Cmd[M]
 
-fn scroll_to_pos[M](Int, Int) -> @cmd.Cmd[M]
+fn[M] scroll_to_pos(Int, Int) -> @cmd.Cmd[M]
 
-fn scroll_to_top[M]() -> @cmd.Cmd[M]
+fn[M] scroll_to_top() -> @cmd.Cmd[M]
 
 // Types and methods
 
