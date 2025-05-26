@@ -23,7 +23,7 @@ pub fn Mouse::client_pos(self : Mouse) -> Pos {
 }
 
 ///|
-fn on_mouse[Msg](event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
+fn[Msg] on_mouse(event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     event,
     HandleEvent(fn(event) {
@@ -41,12 +41,12 @@ fn on_mouse[Msg](event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
 }
 
 ///|
-pub fn on_click[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_click(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("click", msg)
 }
 
 ///|
-pub fn on_input[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_input(msg : (String) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     "input",
     HandleEvent(fn(event) {
@@ -72,7 +72,7 @@ pub fn on_input[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
 }
 
 ///|
-pub fn on_change[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_change(msg : (String) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     "change",
     HandleEvent(fn(event) {
@@ -101,41 +101,41 @@ pub fn on_change[Msg](msg : (String) -> Msg) -> Attribute[Msg] {
 }
 
 ///|
-pub fn on_double_click[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_double_click(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("dblclick", msg)
 }
 
 ///|
-pub fn on_mouse_down[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_down(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mousedown", msg)
 }
 
 ///|
-pub fn on_mouse_up[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_up(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseup", msg)
 }
 
 ///|
-pub fn on_mouse_move[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_move(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mousemove", msg)
 }
 
 ///|
-pub fn on_mouse_enter[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_enter(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseenter", msg)
 }
 
 ///|
-pub fn on_mouse_over[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_over(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseover", msg)
 }
 
 ///|
-pub fn on_mouse_leave[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_leave(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseleave", msg)
 }
 
 ///|
-pub fn on_mouse_out[Msg](msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn[Msg] on_mouse_out(msg : (Mouse) -> Msg) -> Attribute[Msg] {
   on_mouse("mouseout", msg)
 }

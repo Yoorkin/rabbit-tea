@@ -1,7 +1,7 @@
 ///| Create a command to show a dialog.
 /// 
 /// The `modal` argument determines whether the dialog is modal or not.
-pub fn show[M](id : String, modal~ : Bool = true) -> Cmd[M] {
+pub fn[M] show(id : String, modal~ : Bool = true) -> Cmd[M] {
   fn(_) {
     let dialog = @dom.document()
       .get_element_by_id(id)
@@ -24,7 +24,7 @@ pub fn show[M](id : String, modal~ : Bool = true) -> Cmd[M] {
 ///| Create a command to close a dialog.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
-pub fn close[M](id : String, return_value? : String) -> Cmd[M] {
+pub fn[M] close(id : String, return_value? : String) -> Cmd[M] {
   fn(_) {
     let dialog = @dom.document()
       .get_element_by_id(id)
@@ -46,7 +46,7 @@ pub fn close[M](id : String, return_value? : String) -> Cmd[M] {
 /// `cancel` message.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
-pub fn request_close[M](id : String, return_value? : String) -> Cmd[M] {
+pub fn[M] request_close(id : String, return_value? : String) -> Cmd[M] {
   fn(_) {
     let dialog = @dom.document()
       .get_element_by_id(id)

@@ -1,5 +1,5 @@
 ///| Launch commands. It may trigger the update function.
-pub fn launch[M, Model, View](
+pub fn[M, Model, View] launch(
   self : Sandbox[M, Model, View],
   cmd : @cmd.Cmd[M]
 ) -> Unit {

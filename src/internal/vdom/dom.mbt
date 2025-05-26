@@ -20,7 +20,7 @@ enum Node[Msg] {
 ///| Convert msg type of Node.
 /// 
 /// This is a expensive operation and should be used rarely.
-pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
+pub fn[A, B] map(self : Node[A], f : (A) -> B) -> Node[B] {
   match self {
     Node(tag, attrs~, childrens~, listeners~) => {
       let attrs = attrs.map(fn(x) { x.map(f) })
@@ -39,7 +39,7 @@ pub fn map[A, B](self : Node[A], f : (A) -> B) -> Node[B] {
 }
 
 ///| Create a DOM node 
-pub fn node[Msg](
+pub fn[Msg] node(
   tag : String,
   attrs : Array[Attribute[Msg]],
   childrens : Array[Node[Msg]]
@@ -55,7 +55,7 @@ const NORMAL_LINK_TAG = "a"
 
 ///| Create a link node.
 /// The `escape` parameter is used to create a link that will not trigger the `url_request` message.
-pub fn link[Msg](
+pub fn[Msg] link(
   attrs : Array[Attribute[Msg]],
   childrens : Array[Node[Msg]],
   escape~ : Bool = false
@@ -65,7 +65,7 @@ pub fn link[Msg](
 }
 
 ///|
-pub fn external[Msg](
+pub fn[Msg] external(
   node : @dom.Node,
   attrs : Ref[Array[Attribute[Msg]]?],
   width~ : Int,
@@ -75,12 +75,12 @@ pub fn external[Msg](
 }
 
 ///| Create a plain text
-pub fn text[Msg](value : String) -> Node[Msg] {
+pub fn[Msg] text(value : String) -> Node[Msg] {
   Text(value)
 }
 
 ///| Create a dummy node
-pub fn nothing[Msg]() -> Node[Msg] {
+pub fn[Msg] nothing() -> Node[Msg] {
   Nothing
 }
 
@@ -111,7 +111,7 @@ pub(all) enum Handler[Msg] {
 }
 
 ///|
-fn is_same_type[Msg](x : Node[Msg], y : Node[Msg]) -> Bool {
+fn[Msg] is_same_type(x : Node[Msg], y : Node[Msg]) -> Bool {
   match (x, y) {
     (Node(_), Node(_)) => true
     (Text(_), Text(_)) => true
@@ -137,7 +137,7 @@ impl[Msg] Eq for Attribute[Msg] with op_equal(_a, _b) {
 }
 
 ///|
-pub fn Handler::map[A, B](self : Handler[A], f : (A) -> B) -> Handler[B] {
+pub fn[A, B] Handler::map(self : Handler[A], f : (A) -> B) -> Handler[B] {
   match self {
     Normal(msg) => Normal(f(msg))
     HandleEvent(g) => HandleEvent(fn(event) { g(event) |> f })
@@ -147,7 +147,7 @@ pub fn Handler::map[A, B](self : Handler[A], f : (A) -> B) -> Handler[B] {
 }
 
 ///|
-pub fn Attribute::map[A, B](self : Attribute[A], f : (A) -> B) -> Attribute[B] {
+pub fn[A, B] Attribute::map(self : Attribute[A], f : (A) -> B) -> Attribute[B] {
   let Attribute((key, value)) = self
   let value = match value {
     AttrEvent(handler) => AttrEvent(handler.map(f))
@@ -159,27 +159,27 @@ pub fn Attribute::map[A, B](self : Attribute[A], f : (A) -> B) -> Attribute[B] {
 }
 
 ///| Create an custom event handler
-pub fn on[Msg](event : String, handler : Handler[Msg]) -> Attribute[Msg] {
+pub fn[Msg] on(event : String, handler : Handler[Msg]) -> Attribute[Msg] {
   (event, AttrEvent(handler))
 }
 
 ///| Create an attribute
-pub fn attribute[Msg](key : String, value : String) -> Attribute[Msg] {
+pub fn[Msg] attribute(key : String, value : String) -> Attribute[Msg] {
   (key, AttrString(value))
 }
 
 ///| Create an property
-pub fn property[Msg](key : String, value : @variant.Variant) -> Attribute[Msg] {
+pub fn[Msg] property(key : String, value : @variant.Variant) -> Attribute[Msg] {
   (key, AttrProperty(value))
 }
 
 ///| Create an style attribute
-pub fn style[Msg](key : String, value : String) -> Attribute[Msg] {
+pub fn[Msg] style(key : String, value : String) -> Attribute[Msg] {
   (key, AttrStyle(value))
 }
 
 ///| Convert virtual DOM to real DOM
-fn to_node[Msg, Model, View](
+fn[Msg, Model, View] to_node(
   self : Node[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
 ) -> @dom.Node {
@@ -304,7 +304,7 @@ pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
 }
 
 ///|
-pub fn patch[Msg, Model, View](
+pub fn[Msg, Model, View] patch(
   self : Node[Msg],
   old : Node[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View],
@@ -432,7 +432,7 @@ priv enum Update[Msg] {
 
 ///|
 /// Now the root node must be a Node
-pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
+pub fn[Msg] diff(root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
   guard root_old is Node(_, attrs=attrs_old, listeners~, ..)
   guard root_new is Node(_, attrs=attrs_new, ..)
   Update(
@@ -446,7 +446,7 @@ pub fn diff[Msg](root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
 }
 
 ///|
-pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
+pub fn[Msg] do_diff(old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
   let childrens_old = match old {
     Node(_, childrens~, ..) => childrens
     _ => abort("old is not a node or fragment")
@@ -466,7 +466,7 @@ pub fn do_diff[Msg](old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
 // And If a AttributeString's name is same as a AttrEvent's name, the diff algorithm will not work.
 // Now we think the events is different although they never changed.
 ///|
-fn attrs_diff[Msg](
+fn[Msg] attrs_diff(
   old : Array[Attribute[Msg]],
   new : Array[Attribute[Msg]],
   // We think the event is different although they never changed.
@@ -537,7 +537,7 @@ fn attrs_diff[Msg](
 }
 
 ///|
-pub fn diff_without_key[Msg](
+pub fn[Msg] diff_without_key(
   old : Array[Node[Msg]],
   new : Array[Node[Msg]]
 ) -> Array[Patch[Msg]] {

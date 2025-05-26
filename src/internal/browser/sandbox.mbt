@@ -11,7 +11,7 @@ struct Sandbox[Msg, Model, View] {
 
 ///|
 // used by vdom
-pub fn get_predefined_events[Msg, Model, View](
+pub fn[Msg, Model, View] get_predefined_events(
   self : Sandbox[Msg, Model, View]
 ) -> @cmd.Events[Msg] {
   self.predefined.unwrap()
@@ -19,21 +19,21 @@ pub fn get_predefined_events[Msg, Model, View](
 
 ///|
 // used by vdom
-pub fn get_on_url_changed[Msg, Model, View](
+pub fn[Msg, Model, View] get_on_url_changed(
   self : Sandbox[Msg, Model, View]
 ) -> ((@url.Url) -> Msg)? {
   self.on_url_changed
 }
 
 ///|
-pub fn get_on_url_request[Msg, Model, View](
+pub fn[Msg, Model, View] get_on_url_request(
   self : Sandbox[Msg, Model, View]
 ) -> ((@url.UrlRequest) -> Msg)? {
   self.on_url_request
 }
 
 ///| Update the model and launch commands.
-pub fn update[Msg, Model, View](
+pub fn[Msg, Model, View] update(
   self : Sandbox[Msg, Model, View],
   message : Msg
 ) -> Unit {
@@ -49,13 +49,13 @@ pub fn update[Msg, Model, View](
 
 ///| Refresh the view.
 /// This function will call the view function and patch the result to the DOM.
-pub fn refresh[Msg, Model, View](self : Sandbox[Msg, Model, View]) -> Unit {
+pub fn[Msg, Model, View] refresh(self : Sandbox[Msg, Model, View]) -> Unit {
   let view = (self.view)(self.model)
   (self.after_update)(view)
 }
 
 ///|
-pub fn Sandbox::new[Model, Msg, View](
+pub fn[Model, Msg, View] Sandbox::new(
   model : Model,
   update : (Msg, Model) -> (@cmd.Cmd[Msg], Model),
   view : (Model) -> View,

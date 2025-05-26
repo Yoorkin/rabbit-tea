@@ -9,7 +9,7 @@ pub(all) enum Item {
 /// 
 /// - `copied` is triggered if the copy operation is successful.
 /// - `failed` is triggered with the error message if the copy operation fails.
-pub fn copy[M](item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
+pub fn[M] copy(item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
   fn(dispatcher) {
     @js.async_run(fn() {
       try {
@@ -35,7 +35,7 @@ pub fn copy[M](item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
 /// # Message
 /// - `pasted` is triggered with the pasted item if the paste operation is successful.
 /// - `failed` is triggered with the error message if the paste operation fails.
-pub fn paste[M](pasted~ : (Item) -> M, failed? : (String) -> M) -> Cmd[M] {
+pub fn[M] paste(pasted~ : (Item) -> M, failed? : (String) -> M) -> Cmd[M] {
   fn(dispatcher) {
     @js.async_run(fn() {
       try {

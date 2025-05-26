@@ -7,18 +7,18 @@ pub typealias Html[Msg] = T[Msg]
 ///| Convert msg type of Html.
 /// 
 /// This is a expensive operation and should be used rarely.
-pub fn map[A, B](self : Html[A], f : (A) -> B) -> Html[B] {
+pub fn[A, B] map(self : Html[A], f : (A) -> B) -> Html[B] {
   self._.map(f)
 }
 
 ///|
-pub fn to_virtual_dom[Msg](self : Html[Msg]) -> @vdom.Node[Msg] {
+pub fn[Msg] to_virtual_dom(self : Html[Msg]) -> @vdom.Node[Msg] {
   // Wrap the node with a root node. This node represents the root of the real DOM managed by TEA.
   node("root", [], [self])._
 }
 
 ///| 
-pub fn node[Msg](
+pub fn[Msg] node(
   tag : String,
   attributes : Array[Attribute[Msg]],
   childrens : Array[Html[Msg]]
@@ -27,7 +27,7 @@ pub fn node[Msg](
 }
 
 ///|
-fn common_node[Msg](
+fn[Msg] common_node(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -49,12 +49,12 @@ fn common_node[Msg](
 }
 
 ///| Represents an empty element
-pub fn nothing[M]() -> Html[M] {
+pub fn[M] nothing() -> Html[M] {
   @vdom.nothing()
 }
 
 ///|
-pub fn button[M](
+pub fn[M] button(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -69,7 +69,7 @@ pub fn button[M](
 }
 
 ///|
-pub fn h1[M](
+pub fn[M] h1(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -79,7 +79,7 @@ pub fn h1[M](
 }
 
 ///|
-pub fn h2[M](
+pub fn[M] h2(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -89,7 +89,7 @@ pub fn h2[M](
 }
 
 ///|
-pub fn h3[M](
+pub fn[M] h3(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -99,7 +99,7 @@ pub fn h3[M](
 }
 
 ///|
-pub fn h4[M](
+pub fn[M] h4(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -109,7 +109,7 @@ pub fn h4[M](
 }
 
 ///|
-pub fn h5[M](
+pub fn[M] h5(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -119,7 +119,7 @@ pub fn h5[M](
 }
 
 ///|
-pub fn h6[M](
+pub fn[M] h6(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -131,7 +131,7 @@ pub fn h6[M](
 // ------ grouping content ------
 
 ///|
-pub fn div[M](
+pub fn[M] div(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -146,7 +146,7 @@ pub fn div[M](
 }
 
 ///|
-pub fn p[M](
+pub fn[M] p(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -156,7 +156,7 @@ pub fn p[M](
 }
 
 ///|
-pub fn hr[M](
+pub fn[M] hr(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -166,7 +166,7 @@ pub fn hr[M](
 }
 
 ///|
-pub fn pre[M](
+pub fn[M] pre(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -176,7 +176,7 @@ pub fn pre[M](
 }
 
 ///|
-pub fn blockquote[M](
+pub fn[M] blockquote(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -186,7 +186,7 @@ pub fn blockquote[M](
 }
 
 ///|
-pub fn section[M](
+pub fn[M] section(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -198,7 +198,7 @@ pub fn section[M](
 // ---- text ----
 
 ///|
-pub fn span[M](
+pub fn[M] span(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -215,7 +215,7 @@ pub fn span[M](
 /// When `escape` is set to `true`, clicking the escaped link will cause the browser 
 /// to immediately navigate to the `href` target, bypassing any interception logic. 
 /// As a result, the `UrlRequest` message will not be triggered.
-pub fn a[M](
+pub fn[M] a(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -241,7 +241,7 @@ pub fn a[M](
 }
 
 ///|
-pub fn code[M](
+pub fn[M] code(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -251,7 +251,7 @@ pub fn code[M](
 }
 
 ///|
-pub fn em[M](
+pub fn[M] em(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -261,7 +261,7 @@ pub fn em[M](
 }
 
 ///|
-pub fn strong[M](
+pub fn[M] strong(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -271,7 +271,7 @@ pub fn strong[M](
 }
 
 ///|
-pub fn i[M](
+pub fn[M] i(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -281,7 +281,7 @@ pub fn i[M](
 }
 
 ///|
-pub fn b[M](
+pub fn[M] b(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -291,7 +291,7 @@ pub fn b[M](
 }
 
 ///|
-pub fn u[M](
+pub fn[M] u(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -301,7 +301,7 @@ pub fn u[M](
 }
 
 ///|
-pub fn sub[M](
+pub fn[M] sub(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -311,7 +311,7 @@ pub fn sub[M](
 }
 
 ///|
-pub fn sup[M](
+pub fn[M] sup(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -321,14 +321,14 @@ pub fn sup[M](
 }
 
 ///|
-pub fn text[Msg](str : String) -> Html[Msg] {
+pub fn[Msg] text(str : String) -> Html[Msg] {
   @vdom.text(str)
 }
 
 // ---- lists ----
 
 ///|
-pub fn ul[M](
+pub fn[M] ul(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -344,7 +344,7 @@ pub fn ul[M](
 
 ///| Notice that the `type` attribute for `ol` is not important for the browser now.
 /// If you want to change the type of the list, you should use the `list-style-type` property in CSS.
-pub fn ol[M](
+pub fn[M] ol(
   style~ : Array[String] = [],
   reversed? : Bool,
   start? : Int,
@@ -365,7 +365,7 @@ pub fn ol[M](
 }
 
 ///|
-pub fn li[M](
+pub fn[M] li(
   style~ : Array[String] = [],
   value? : Int,
   id? : String,
@@ -384,7 +384,7 @@ pub fn li[M](
 }
 
 ///|
-pub fn dl[M](
+pub fn[M] dl(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -394,7 +394,7 @@ pub fn dl[M](
 }
 
 ///|
-pub fn dt[M](
+pub fn[M] dt(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -404,7 +404,7 @@ pub fn dt[M](
 }
 
 ///|
-pub fn dd[M](
+pub fn[M] dd(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -416,7 +416,7 @@ pub fn dd[M](
 // ---- embbded content ----
 
 ///|
-pub fn img[M](
+pub fn[M] img(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -451,7 +451,7 @@ pub fn img[M](
 }
 
 ///|
-pub fn iframe[M](
+pub fn[M] iframe(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -479,7 +479,7 @@ pub fn iframe[M](
 // ---- inputs ----
 
 ///|
-pub fn br[M](
+pub fn[M] br(
   style~ : Array[String] = [],
   id? : String,
   class? : String
@@ -520,7 +520,7 @@ pub(all) enum AutoComplete {
 }
 
 ///|
-pub fn form[M](
+pub fn[M] form(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -539,7 +539,7 @@ pub fn form[M](
 }
 
 ///|
-pub fn label[M](
+pub fn[M] label(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -554,7 +554,7 @@ pub fn label[M](
 }
 
 ///|
-pub fn input[M](
+pub fn[M] input(
   input_type~ : InputType = Text,
   name? : String,
   value? : String,
@@ -669,7 +669,7 @@ pub fn input[M](
 }
 
 ///|
-pub fn select[M](
+pub fn[M] select(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -702,7 +702,7 @@ pub fn select[M](
 }
 
 ///|
-pub fn option[M](
+pub fn[M] option(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -734,7 +734,7 @@ pub fn option[M](
 }
 
 ///|
-pub fn external[Msg](
+pub fn[Msg] external(
   node : @dom.Node,
   attrs : Ref[Array[Attribute[Msg]]?],
   width~ : Int,
@@ -747,7 +747,7 @@ pub fn external[Msg](
 // table
 
 ///|
-pub fn table[M](
+pub fn[M] table(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -757,7 +757,7 @@ pub fn table[M](
 }
 
 ///|
-pub fn caption[M](
+pub fn[M] caption(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -767,7 +767,7 @@ pub fn caption[M](
 }
 
 ///|
-pub fn thead[M](
+pub fn[M] thead(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -777,7 +777,7 @@ pub fn thead[M](
 }
 
 ///|
-pub fn tbody[M](
+pub fn[M] tbody(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -787,7 +787,7 @@ pub fn tbody[M](
 }
 
 ///|
-pub fn col[M](
+pub fn[M] col(
   style~ : Array[String] = [],
   id? : String,
   span? : Int,
@@ -802,7 +802,7 @@ pub fn col[M](
 }
 
 ///|
-pub fn colgroup[M](
+pub fn[M] colgroup(
   style~ : Array[String] = [],
   id? : String,
   span? : Int,
@@ -817,7 +817,7 @@ pub fn colgroup[M](
 }
 
 ///|
-pub fn tr[M](
+pub fn[M] tr(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -827,7 +827,7 @@ pub fn tr[M](
 }
 
 ///|
-pub fn td[M](
+pub fn[M] td(
   style~ : Array[String] = [],
   id? : String,
   colspan? : Int,
@@ -858,7 +858,7 @@ pub(all) enum Scope {
 }
 
 ///|
-pub fn th[M](
+pub fn[M] th(
   style~ : Array[String] = [],
   id? : String,
   abbr? : String,
@@ -899,7 +899,7 @@ pub fn th[M](
 }
 
 ///|
-pub fn tfoot[M](
+pub fn[M] tfoot(
   style~ : Array[String] = [],
   id? : String,
   class? : String,
@@ -964,7 +964,7 @@ pub fn tfoot[M](
 /// }
 /// ```
 /// 
-pub fn dialog[M](
+pub fn[M] dialog(
   style~ : Array[String] = [],
   id? : String,
   class? : String,

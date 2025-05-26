@@ -81,9 +81,7 @@ pub fn parse(url : String) -> Url!Error {
   }
   let (host, port) = match mid.split(":").collect() {
     [host, port] => {
-      let port = try {
-        @strconv.parse_int!(port.to_string())
-      } catch {
+      let port = try @strconv.parse_int!(port.to_string()) catch {
         _ => Option::None
       } else {
         number => Some(number)
