@@ -15,7 +15,7 @@ pub fnalias @cmd.(none, batch, task, perform, attempt)
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn startup[Model, Message](
+pub fn[Model, Message] startup(
   model~ : Model,
   update~ : (Message, Model) -> (Cmd[Message], Model),
   view~ : (Model) -> @html.Html[Message],
@@ -44,7 +44,7 @@ pub fn startup[Model, Message](
 /// - `url_request` is a message that will be passed when an `<a>` tag is clicked.
 /// - `initialize` will be called when the application is started. 
 /// 
-pub fn application[Model, Msg](
+pub fn[Model, Msg] application(
   initialize~ : (@url.Url) -> (Cmd[Msg], Model),
   update~ : (Msg, Model) -> (Cmd[Msg], Model),
   view~ : (Model) -> @html.Html[Msg],
@@ -56,10 +56,10 @@ pub fn application[Model, Msg](
   .get_element_by_id(mount)
   .get_exn()
   .set_inner_html("<div></div>")
-  let mut sandbox = None
+  let mut sandbox_ref = None
   let mut curr_dom = @vdom.node("div", [], [])
   fn after_update(html : @html.Html[Msg]) {
-    guard sandbox is Some(sandbox)
+    guard sandbox_ref is Some(sandbox)
     let new_dom = html.to_virtual_dom()
     new_dom.patch(curr_dom, sandbox, mount~)
     curr_dom = new_dom
@@ -67,15 +67,14 @@ pub fn application[Model, Msg](
 
   guard @url.parse?(@dom.window().current_url()) is Ok(url)
   let (cmd, model) = initialize(url)
-  sandbox = Some(
-    @browser.Sandbox::new(
-      model,
-      update,
-      view,
-      after_update~,
-      url_request?,
-      url_changed?,
-    ),
+  let sandbox = @browser.Sandbox::new(
+    model,
+    update,
+    view,
+    after_update~,
+    url_request?,
+    url_changed?,
   )
-  sandbox.unwrap()..launch(cmd).refresh()
+  sandbox_ref = Some(sandbox)
+  sandbox..launch(cmd)..refresh()
 }
