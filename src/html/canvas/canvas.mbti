@@ -43,31 +43,25 @@ pub(all) enum Color {
   Black
   White
 }
-impl Color {
-  to_string(Self) -> String
-}
+fn Color::to_string(Self) -> String
 impl Show for Color
 
 type Context2D
-impl Context2D {
-  begin_path(Self) -> Unit
-  clear_rect(Self, Double, Double, Double, Double) -> Unit
-  fill_rect(Self, Double, Double, Double, Double) -> Unit
-  fill_text(Self, String, Double, Double) -> Unit
-  line_to(Self, Double, Double) -> Unit
-  move_to(Self, Double, Double) -> Unit
-  set_fill_style(Self, Color) -> Unit
-  set_line_width(Self, Double) -> Unit
-  set_stroke_style(Self, Color) -> Unit
-  stroke(Self) -> Unit
-  to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
-}
+fn Context2D::begin_path(Self) -> Unit
+fn Context2D::clear_rect(Self, Double, Double, Double, Double) -> Unit
+fn Context2D::fill_rect(Self, Double, Double, Double, Double) -> Unit
+fn Context2D::fill_text(Self, String, Double, Double) -> Unit
+fn Context2D::line_to(Self, Double, Double) -> Unit
+fn Context2D::move_to(Self, Double, Double) -> Unit
+fn Context2D::set_fill_style(Self, Color) -> Unit
+fn Context2D::set_line_width(Self, Double) -> Unit
+fn Context2D::set_stroke_style(Self, Color) -> Unit
+fn Context2D::stroke(Self) -> Unit
+fn Context2D::to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
 
 type Model[Msg]
-impl Model {
-  context2d[Msg](Self[Msg]) -> Context2D
-  to_html[Msg](Self[Msg]) -> @html.T[Msg]
-}
+fn[Msg] Model::context2d(Self[Msg]) -> Context2D
+fn[Msg] Model::to_html(Self[Msg]) -> @html.T[Msg]
 
 // Type aliases
 

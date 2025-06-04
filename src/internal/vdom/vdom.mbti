@@ -40,24 +40,18 @@ fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Types and methods
 type Attribute[Msg]
-impl Attribute {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-}
+fn[A, B] Attribute::map(Self[A], (A) -> B) -> Self[B]
 
 pub(all) enum Handler[Msg] {
   Normal(Msg)
   HandleEvent((@dom.Event) -> Msg)
   Custom(Msg, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
-impl Handler {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-}
+fn[A, B] Handler::map(Self[A], (A) -> B) -> Self[B]
 
 type Node[Msg]
-impl Node {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-  patch[Msg, Model, View](Self[Msg], Self[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
-}
+fn[A, B] Node::map(Self[A], (A) -> B) -> Self[B]
+fn[Msg, Model, View] Node::patch(Self[Msg], Self[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 
 type Patch[Msg]
 

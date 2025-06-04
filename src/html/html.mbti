@@ -181,11 +181,9 @@ pub(all) enum InputType {
 }
 
 type Mouse
-impl Mouse {
-  client_pos(Self) -> Pos
-  offset_pos(Self) -> Pos
-  screen_pos(Self) -> Pos
-}
+fn Mouse::client_pos(Self) -> Pos
+fn Mouse::offset_pos(Self) -> Pos
+fn Mouse::screen_pos(Self) -> Pos
 
 pub(all) struct Pos {
   x : Int
@@ -200,10 +198,8 @@ pub(all) enum Scope {
 }
 
 type T[Msg]
-impl T {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-  to_virtual_dom[Msg](Self[Msg]) -> @vdom.Node[Msg]
-}
+fn[A, B] T::map(Self[A], (A) -> B) -> Self[B]
+fn[Msg] T::to_virtual_dom(Self[Msg]) -> @vdom.Node[Msg]
 
 pub(all) enum Target {
   Self

@@ -23,9 +23,7 @@ pub(all) struct Url {
   query : String?
   fragment : String?
 }
-impl Url {
-  to_string(Self) -> String
-}
+fn Url::to_string(Self) -> String
 impl Compare for Url
 impl Eq for Url
 impl Show for Url

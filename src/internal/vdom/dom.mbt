@@ -179,7 +179,7 @@ pub fn[Msg] style(key : String, value : String) -> Attribute[Msg] {
 }
 
 ///| Convert virtual DOM to real DOM
-fn[Msg, Model, View] to_node(
+fn[Msg, Model, View] Node::to_node(
   self : Node[Msg],
   sandbox : @adapter.Sandbox[Msg, Model, View]
 ) -> @dom.Node {
@@ -268,7 +268,7 @@ fn[Msg, Model, View] to_node(
         }
       }
       for child in childrens {
-        element.to_node().append_child(to_node(child, sandbox))
+        element.to_node().append_child(child.to_node(sandbox))
       }
       element.to_node()
     }
