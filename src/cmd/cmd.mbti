@@ -19,17 +19,13 @@ fn[M] task(M) -> Cmd[M]
 
 // Types and methods
 pub(all) type Cmd[M] (Events[M]) -> Unit
-impl Cmd {
-  map[A, B](Self[A], (A) -> B) -> Self[B]
-}
+fn[A, B] Cmd::map(Self[A], (A) -> B) -> Self[B]
 
 type Events[M]
-impl Events {
-  new[M]((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (M) -> Unit) -> Self[M]
-  trigger_update[M](Self[M], M) -> Unit
-  trigger_url_changed[M](Self[M], @url.Url) -> Unit
-  trigger_url_request[M](Self[M], @url.UrlRequest) -> Unit
-}
+fn[M] Events::new((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (M) -> Unit) -> Self[M]
+fn[M] Events::trigger_update(Self[M], M) -> Unit
+fn[M] Events::trigger_url_changed(Self[M], @url.Url) -> Unit
+fn[M] Events::trigger_url_request(Self[M], @url.UrlRequest) -> Unit
 
 // Type aliases
 pub typealias Command[M] = Cmd[M]

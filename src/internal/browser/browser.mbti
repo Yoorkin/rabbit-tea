@@ -20,15 +20,13 @@ fn[Msg, Model, View] update(Sandbox[Msg, Model, View], Msg) -> Unit
 
 // Types and methods
 type Sandbox[Msg, Model, View]
-impl Sandbox {
-  get_on_url_changed[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
-  get_on_url_request[Msg, Model, View](Self[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
-  get_predefined_events[Msg, Model, View](Self[Msg, Model, View]) -> @cmd.Events[Msg]
-  launch[M, Model, View](Self[M, Model, View], @cmd.Cmd[M]) -> Unit
-  new[Model, Msg, View](Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
-  refresh[Msg, Model, View](Self[Msg, Model, View]) -> Unit
-  update[Msg, Model, View](Self[Msg, Model, View], Msg) -> Unit
-}
+fn[Msg, Model, View] Sandbox::get_on_url_changed(Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
+fn[Msg, Model, View] Sandbox::get_on_url_request(Self[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
+fn[Msg, Model, View] Sandbox::get_predefined_events(Self[Msg, Model, View]) -> @cmd.Events[Msg]
+fn[M, Model, View] Sandbox::launch(Self[M, Model, View], @cmd.Cmd[M]) -> Unit
+fn[Model, Msg, View] Sandbox::new(Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
+fn[Msg, Model, View] Sandbox::refresh(Self[Msg, Model, View]) -> Unit
+fn[Msg, Model, View] Sandbox::update(Self[Msg, Model, View], Msg) -> Unit
 
 // Type aliases
 
