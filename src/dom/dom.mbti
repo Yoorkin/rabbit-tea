@@ -308,12 +308,16 @@ fn KeyboardEvent::repeat(Self) -> Bool
 fn KeyboardEvent::shift_key(Self) -> Bool
 
 type MouseEvent
+fn MouseEvent::alt_key(Self) -> Bool
 fn MouseEvent::client_x(Self) -> Int
 fn MouseEvent::client_y(Self) -> Int
+fn MouseEvent::ctrl_key(Self) -> Bool
+fn MouseEvent::meta_key(Self) -> Bool
 fn MouseEvent::offset_x(Self) -> Int
 fn MouseEvent::offset_y(Self) -> Int
 fn MouseEvent::screen_x(Self) -> Int
 fn MouseEvent::screen_y(Self) -> Int
+fn MouseEvent::shift_key(Self) -> Bool
 
 pub extern type Navigator
 fn Navigator::clipboard(Self) -> Clipboard

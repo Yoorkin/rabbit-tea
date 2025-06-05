@@ -82,6 +82,18 @@ pub extern "js" fn MouseEvent::offset_x(self : MouseEvent) -> Int = "(e) => e.of
 pub extern "js" fn MouseEvent::offset_y(self : MouseEvent) -> Int = "(e) => e.offsetY"
 
 ///|
+pub extern "js" fn MouseEvent::ctrl_key(self : MouseEvent) -> Bool = "(e) => e.ctrlKey"
+
+///|
+pub extern "js" fn MouseEvent::shift_key(self : MouseEvent) -> Bool = "(e) => e.shiftKey"
+
+///|
+pub extern "js" fn MouseEvent::alt_key(self : MouseEvent) -> Bool = "(e) => e.altKey"
+
+///|
+pub extern "js" fn MouseEvent::meta_key(self : MouseEvent) -> Bool = "(e) => e.metaKey"
+
+///|
 extern type InputEvent
 
 ///|

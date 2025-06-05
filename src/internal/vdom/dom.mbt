@@ -231,6 +231,8 @@ fn[Msg, Model, View] Node::to_node(
       //
       // If the `url_request` message was not provided, let the browser 
       // handle the click event.
+      // 
+      // If the user hold the meta key or ctrl key, let the browser handle the click event.
       let element = match (sandbox.get_on_url_request(), tag) {
         (Some(url_request), NORMAL_LINK_TAG) => {
           let element = @dom.document().create_element(tag)
@@ -239,18 +241,27 @@ fn[Msg, Model, View] Node::to_node(
           .to_node()
           .to_event_target()
           .add_event_listener("click", fn(event) {
-            event.prevent_default()
-            let href = element.get_property("href")
-            guard @url.parse?(@dom.window().current_url()) is Ok(curr)
-            guard @url.parse?(href) is Ok(next)
-            let request = if curr.protocol == next.protocol &&
-              curr.host == next.host &&
-              curr.port == next.port {
-              @url.Internal(next)
-            } else {
-              External(href)
+            let mouse_event = event
+              .to_ui_event()
+              .to_option()
+              .unwrap()
+              .to_mouse_event()
+              .to_option()
+              .unwrap()
+            if not(mouse_event.meta_key() || mouse_event.ctrl_key()) {
+              event.prevent_default()
+              let href = element.get_property("href")
+              guard @url.parse?(@dom.window().current_url()) is Ok(curr)
+              guard @url.parse?(href) is Ok(next)
+              let request = if curr.protocol == next.protocol &&
+                curr.host == next.host &&
+                curr.port == next.port {
+                @url.Internal(next)
+              } else {
+                External(href)
+              }
+              sandbox.update(url_request(request))
             }
-            sandbox.update(url_request(request))
           })
           element
         }

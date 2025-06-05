@@ -209,12 +209,19 @@ pub fn[M] span(
 
 ///| Create `a` element.
 /// 
-/// The `escape` parameter is an optional boolean that determines whether the link 
-/// should be escaped. By default, it is set to `false`. 
+/// # Parameters
 /// 
-/// When `escape` is set to `true`, clicking the escaped link will cause the browser 
-/// to immediately navigate to the `href` target, bypassing any interception logic. 
-/// As a result, the `UrlRequest` message will not be triggered.
+/// - `escape`: an optional boolean that determines whether the link 
+///  should be escaped. By default, it is set to `false`. 
+/// 
+///   When `escape` is set to `true`, clicking the escaped link will cause the browser 
+///   to immediately navigate to the `href` target, bypassing any interception logic. 
+///   As a result, the `UrlRequest` message will not be triggered.
+/// 
+/// - `target`: an optional `Target` that specifies where to open the link.
+/// 
+/// If the user holds the `ctrl` key (or the command key on macOS) while clicking the link,
+/// the click event will be handled by the browser, and the `UrlRequest` will not be triggered either.
 pub fn[M] a(
   style~ : Array[String] = [],
   id? : String,
