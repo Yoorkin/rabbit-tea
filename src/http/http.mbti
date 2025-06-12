@@ -26,7 +26,6 @@ pub(all) enum Expecting[Msg, Model] {
 }
 
 // Type aliases
-pub typealias Decoder[Model] = (Json) -> Result[Model, String]
 
 // Traits
 

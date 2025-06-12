@@ -3,7 +3,7 @@
 
 This package provides the helper functions to build Html.
 
-Here are two design choices:
+Here are some design choices:
 
 - Guide Users with Type Definitions
 
@@ -16,6 +16,11 @@ Here are two design choices:
   You can embed expressions in views without needing escape characters like `property={expression}` or `:property=expression`. For cases where the property name matches the variable name, you can use the convenient name-punning syntax, such as `property?` or `property~`.
 
   In this early stage, we need to focus on improving the functionality of Rabbit-TEA. Language extensions like JSX may be considered after the 1.0 release.
+
+- Keep it simple
+
+  No compile-time code translation or runtime reflection magic.
+
   
 # Using the Html EDSL
 
@@ -25,11 +30,13 @@ We are trying to define wrapper functions for each HTML element. They all follow
 pub fn div[M](
   style~ : Array[String] = [],
   id? : String,
-  class? : String,
+  klass? : String,
   click? : M,
   childrens : Array[Html[M]]
 ) -> Html[M] 
 ```
+
+**Note:** The `class` property in HTML is renamed to `klass` because `class` is a reserved word in MoonBit.
 
 ## The `text` element
 

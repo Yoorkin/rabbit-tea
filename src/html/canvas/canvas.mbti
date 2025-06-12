@@ -30,7 +30,7 @@ fn set_stroke_style(Context2D, Color) -> Unit
 
 fn stroke(Context2D) -> Unit
 
-fn[Msg] to_html(Model[Msg]) -> @html.T[Msg]
+fn[Msg] to_html(Model[Msg]) -> @html.Html[Msg]
 
 fn to_string(Color) -> String
 
@@ -61,7 +61,7 @@ fn Context2D::to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
 
 type Model[Msg]
 fn[Msg] Model::context2d(Self[Msg]) -> Context2D
-fn[Msg] Model::to_html(Self[Msg]) -> @html.T[Msg]
+fn[Msg] Model::to_html(Self[Msg]) -> @html.Html[Msg]
 
 // Type aliases
 

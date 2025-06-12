@@ -7,9 +7,9 @@ import(
 )
 
 // Values
-fn[Model, Msg] application(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.T[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
+fn[Model, Msg] application(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount~ : String = ..) -> Unit
 
-fn[A, E : Error, M] attempt((Result[A, E]) -> M, () -> A!E) -> @cmd.Cmd[M]
+fn[A, E : Error, M] attempt((Result[A, E]) -> M, () -> A raise E) -> @cmd.Cmd[M]
 
 fn[M] batch(Array[@cmd.Cmd[M]]) -> @cmd.Cmd[M]
 
@@ -17,7 +17,7 @@ fn[M] none() -> @cmd.Cmd[M]
 
 fn[A, M] perform((A) -> M, () -> A) -> @cmd.Cmd[M]
 
-fn[Model, Message] startup(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.T[Message], mount~ : String = ..) -> Unit
+fn[Model, Message] startup(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.Html[Message], mount~ : String = ..) -> Unit
 
 fn[M] task(M) -> @cmd.Cmd[M]
 

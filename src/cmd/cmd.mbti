@@ -5,7 +5,7 @@ import(
 )
 
 // Values
-fn[A, E : Error, M] attempt((Result[A, E]) -> M, () -> A!E) -> Cmd[M]
+fn[A, E : Error, M] attempt((Result[A, E]) -> M, () -> A raise E) -> Cmd[M]
 
 fn[M] batch(Array[Cmd[M]]) -> Cmd[M]
 
