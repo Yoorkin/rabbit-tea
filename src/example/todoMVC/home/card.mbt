@@ -13,7 +13,7 @@ fn id(self : CardModel) -> Int {
 }
 
 ///|
-fn view_card[Msg](model : CardModel) -> @html.Html[Msg] {
+fn[Msg] view_card(model : CardModel) -> @html.Html[Msg] {
   let (content, id) = match model {
     TitleCard(title~, content~, id~) =>
       ([@html.h1([@html.text(title)]), @html.p([@html.text(content)])], id)

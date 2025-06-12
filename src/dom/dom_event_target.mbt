@@ -9,7 +9,8 @@
 ///                                                           +-- HTMLInputElement
 ///                                                           +-- HTMLDialogElement
 /// ```
-extern type EventTarget
+#external
+type EventTarget
 
 ///|
 pub extern "js" fn to_node(self : EventTarget) -> @js.Nullable[Node] =
@@ -40,4 +41,4 @@ pub extern "js" fn dispatch_event(self : EventTarget, event : Event) -> Unit =
   #| (target, event) => target.dispatchEvent(event)
 
 ///|
-pub typealias Listener = (Event) -> Unit
+pub typealias (Event) -> Unit as Listener

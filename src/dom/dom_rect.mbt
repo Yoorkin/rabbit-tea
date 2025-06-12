@@ -1,5 +1,6 @@
 ///|
-extern type DOMRect
+#external
+type DOMRect
 
 ///|
 pub extern "js" fn DOMRect::get_x(self : DOMRect) -> Double = "(self) => self.x"

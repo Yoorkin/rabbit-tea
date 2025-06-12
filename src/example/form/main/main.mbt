@@ -11,7 +11,7 @@ typealias @tea.Cmd
 typealias @html.Html
 
 ///|
-typealias Model = String
+typealias String as Model
 
 ///|
 enum Msg {
