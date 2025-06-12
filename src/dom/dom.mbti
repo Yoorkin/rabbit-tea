@@ -172,7 +172,8 @@ fn CanvasRenderingContext2D::transform(Self, Double, Double, Double, Double, Dou
 fn CanvasRenderingContext2D::translate(Self, Double, Double) -> Unit
 impl @js.Cast for CanvasRenderingContext2D
 
-pub extern type Clipboard
+#external
+pub type Clipboard
 fn Clipboard::read_text(Self) -> @js.Promise
 fn Clipboard::write_text(Self, String) -> @js.Promise
 
@@ -319,7 +320,8 @@ fn MouseEvent::screen_x(Self) -> Int
 fn MouseEvent::screen_y(Self) -> Int
 fn MouseEvent::shift_key(Self) -> Bool
 
-pub extern type Navigator
+#external
+pub type Navigator
 fn Navigator::clipboard(Self) -> Clipboard
 
 type Node

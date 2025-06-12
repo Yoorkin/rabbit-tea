@@ -24,7 +24,7 @@ A declarative and functional web UI framework inspired by The Elm Architecture.
 ## Basic Example
 
 ```moonbit
-typealias Model = Int
+typealias Int as Model
 let model = 0
 
 enum Msg {
@@ -32,7 +32,7 @@ enum Msg {
   Decrement
 }
 
-fn update(msg : Msg, model : Model) -> (Command[Msg], Model) {
+fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
   match msg {
     Increment => (none(), model + 1)
     Decrement => (none(), model - 1)
@@ -42,8 +42,8 @@ fn update(msg : Msg, model : Model) -> (Command[Msg], Model) {
 fn view(model : Model) -> Html[Msg] {
   div([
     h1([text(model.to_string())]),
-    button(click=Msg::Increment, [text("+")]),
-    button(click=Msg::Decrement, [text("-")]),
+    button(click=Increment, [text("+")]),
+    button(click=Decrement, [text("-")]),
   ])
 }
 
