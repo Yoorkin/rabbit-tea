@@ -83,7 +83,7 @@ pub fn[Model, Msg, View] Sandbox::new(
   @dom.window()
   .to_event_target()
   .add_event_listener("popstate", fn(_event) {
-    guard @url.parse?(@dom.window().current_url()) is Ok(url)
+    guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
     on_url_changed(url)
   })
   sandbox.predefined = Some(

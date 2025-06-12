@@ -77,7 +77,7 @@ pub fn parse(url : String) -> Url!Error {
     [mid] => (mid, "")
     [mid, .. paths] =>
       (mid, paths.iter().map(@string.View::to_string).join("/"))
-    _ => fail!("Invalid host")
+    _ => fail("Invalid host")
   }
   let (host, port) = match mid.split(":").collect() {
     [host, port] => {
@@ -89,7 +89,7 @@ pub fn parse(url : String) -> Url!Error {
       (host.to_string(), port)
     }
     [host] => (host.to_string(), None)
-    _ => fail!("Invalid host")
+    _ => fail("Invalid host")
   }
   let (query, fragment2) = match query_and_fragment.split("#").collect() {
     [query, fragment] => (Some(query.to_string()), Some(fragment))
@@ -100,7 +100,7 @@ pub fn parse(url : String) -> Url!Error {
         (Some(query.to_string()), None)
       }
     [] => (None, None)
-    _ => fail!("Invalid query")
+    _ => fail("Invalid query")
   }
   let fragment = match (fragment1, fragment2) {
     (Some(f1), Some(f2)) => Some("\{f1}#\{f2}")

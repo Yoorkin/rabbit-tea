@@ -1,9 +1,6 @@
-///| 
-pub typealias Decoder[Model] = (Json) -> Result[Model, String]
-
 ///|
 pub(all) enum Expecting[Msg, Model] {
-  Json((Result[Model, String]) -> Msg, Decoder[Model])
+  Json((Result[Model, String]) -> Msg, (Json) -> Result[Model,String])
   Text((Result[String, String]) -> Msg)
 }
 
@@ -78,7 +75,7 @@ fn[Msg, Model] request(
           body~,
           content_type~,
           succeed=fn(str) {
-            let result = try Ok(@json.parse!(str)) catch {
+            let result = try Ok(@json.parse(str)) catch {
               _ => Err("Json parse error")
             }
             events.trigger_update(f(result.bind(decoder)))

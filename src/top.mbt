@@ -65,7 +65,7 @@ pub fn[Model, Msg] application(
     curr_dom = new_dom
   }
 
-  guard @url.parse?(@dom.window().current_url()) is Ok(url)
+  guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
   let (cmd, model) = initialize(url)
   let sandbox = @browser.Sandbox::new(
     model,

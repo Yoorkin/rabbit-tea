@@ -251,8 +251,8 @@ fn[Msg, Model, View] Node::to_node(
             if not(mouse_event.meta_key() || mouse_event.ctrl_key()) {
               event.prevent_default()
               let href = element.get_property("href")
-              guard @url.parse?(@dom.window().current_url()) is Ok(curr)
-              guard @url.parse?(href) is Ok(next)
+              guard (try? @url.parse(@dom.window().current_url())) is Ok(curr)
+              guard (try? @url.parse(href)) is Ok(next)
               let request = if curr.protocol == next.protocol &&
                 curr.host == next.host &&
                 curr.port == next.port {
