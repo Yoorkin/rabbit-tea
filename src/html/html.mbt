@@ -1,8 +1,8 @@
 ///|
-type T[Msg] @vdom.Node[Msg]
+type Html[Msg] @vdom.Node[Msg]
 
 ///|
-pub typealias Html[Msg] = T[Msg]
+pub typealias Html as T
 
 ///| Convert msg type of Html.
 /// 

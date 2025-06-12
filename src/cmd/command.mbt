@@ -52,7 +52,7 @@ pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
 pub(all) type Cmd[M] (Events[M]) -> Unit
 
 ///|
-pub typealias Command[M] = Cmd[M]
+pub typealias Cmd as Command
 
 ///| Map the messages in the command to another type.
 pub fn[A, B] map(self : Cmd[A], f : (A) -> B) -> Cmd[B] {
@@ -87,7 +87,7 @@ pub fn[M] task(message : M) -> Cmd[M] {
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
 pub fn[A, M] perform(msg : (A) -> M, f : async () -> A) -> Cmd[M] {
-  Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f!())) }) })
+  Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f())) }) })
 }
 
 ///| Create a command that runs an async function and handles errors.
@@ -96,7 +96,7 @@ pub fn[A, M] perform(msg : (A) -> M, f : async () -> A) -> Cmd[M] {
 /// or thrown error into a `Result`.
 pub fn[A, E : Error, M] attempt(
   msg : (Result[A, E]) -> M,
-  f : async () -> A!E
+  f : async () -> A raise E
 ) -> Cmd[M] {
   Cmd(fn(events) {
     @js.async_run(fn() {

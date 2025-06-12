@@ -14,7 +14,7 @@ pub fn[M] copy(item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
     @js.async_run(fn() {
       try {
         guard item is Text(text)  //TODO: support other formats
-        @dom.window().navigator().clipboard().write_text(text).wait!() |> ignore
+        @dom.window().navigator().clipboard().write_text(text).wait() |> ignore
         match copied {
           Some(msg) => dispatcher.trigger_update(msg)
           None => ()
@@ -44,7 +44,7 @@ pub fn[M] paste(pasted~ : (Item) -> M, failed? : (String) -> M) -> Cmd[M] {
           .navigator()
           .clipboard()
           .read_text()
-          .wait!()
+          .wait()
           |> @js.Value::cast()
         dispatcher.trigger_update(pasted(Text(str)))
       } catch {
