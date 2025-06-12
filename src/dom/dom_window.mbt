@@ -1,5 +1,6 @@
 ///|
-extern type Window
+#external
+type Window
 
 ///|
 pub extern "js" fn scroll_to(self : Window, x : Int, y : Int) =

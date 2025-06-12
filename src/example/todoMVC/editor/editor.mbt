@@ -116,7 +116,7 @@ pub fn view(model : Model) -> @html.Html[Msg] {
 }
 
 ///|
-fn view_text_input[M](
+fn[M] view_text_input(
   label : String,
   value : String,
   input~ : (String) -> M

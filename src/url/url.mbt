@@ -55,23 +55,23 @@ pub fn to_string(self : Url) -> String {
 }
 
 ///|
-pub fn parse(url : String) -> Url!Error {
+pub fn parse(url : String) -> Url raise Error {
   let (protocol, remain) = match url.split("://").collect() {
     ["http", remain] => (Http, remain)
     ["https", remain] => (Https, remain)
     [x, remain] => (Other(x.to_string()), remain)
     [remain] => (Other(""), remain)
-    _ => fail!("Invalid protocol")
+    _ => fail("Invalid protocol")
   }
   let (mid, query_and_fragment) = match remain.split("?").collect() {
     [mid, remain] => (mid, remain)
     [mid] => (mid, "")
-    _ => fail!("Invalid host")
+    _ => fail("Invalid host")
   }
   let (mid_part, fragment1) = match mid.split("#").collect() {
     [mid, fragment] => (mid, Some(fragment))
     [mid] => (mid, None)
-    _ => fail!("Invalid fragment")
+    _ => fail("Invalid fragment")
   }
   let (mid, path) = match mid_part.split("/").collect() {
     [mid] => (mid, "")
@@ -81,7 +81,7 @@ pub fn parse(url : String) -> Url!Error {
   }
   let (host, port) = match mid.split(":").collect() {
     [host, port] => {
-      let port = try @strconv.parse_int!(port.to_string()) catch {
+      let port = try @strconv.parse_int(port.to_string()) catch {
         _ => Option::None
       } else {
         number => Some(number)

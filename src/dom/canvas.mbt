@@ -1,5 +1,6 @@
 ///|
-extern type HTMLCanvasElement
+#external
+type HTMLCanvasElement
 
 ///|
 pub extern "js" fn HTMLCanvasElement::to_html_element(
@@ -20,17 +21,17 @@ pub extern "js" fn HTMLCanvasElement::get_height(
 pub extern "js" fn HTMLCanvasElement::get_context(
   self : HTMLCanvasElement,
   context_id : String
-) ->
-     @js.Union5[
-       CanvasRenderingContext2D,
-       ImageBitmapRenderingContext,
-       WebGLRenderingContext,
-       WebGL2RenderingContext,
-       GPUCanvasContext,
-     ] = "(x, id) => x.getContext(id)"
+) -> @js.Union5[
+  CanvasRenderingContext2D,
+  ImageBitmapRenderingContext,
+  WebGLRenderingContext,
+  WebGL2RenderingContext,
+  GPUCanvasContext,
+] = "(x, id) => x.getContext(id)"
 
 ///|
-extern type CanvasRenderingContext2D
+#external
+type CanvasRenderingContext2D
 
 ///|
 extern "js" fn checked_to_canvas_rendering_context_2d(
@@ -49,16 +50,20 @@ pub impl @js.Cast for CanvasRenderingContext2D with from(value) {
 }
 
 ///|
-extern type ImageBitmapRenderingContext
+#external
+type ImageBitmapRenderingContext
 
 ///|
-extern type WebGLRenderingContext
+#external
+type WebGLRenderingContext
 
 ///|
-extern type WebGL2RenderingContext
+#external
+type WebGL2RenderingContext
 
 ///|
-extern type GPUCanvasContext
+#external
+type GPUCanvasContext
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::save(
@@ -437,10 +442,12 @@ pub extern "js" fn CanvasRenderingContext2D::set_line_width(
 ) = "(self,value) => self.lineWidth = value"
 
 ///|
-extern type CanvasLineCap
+#external
+type CanvasLineCap
 
 ///|
-extern type CanvasLineJoin
+#external
+type CanvasLineJoin
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_line_cap(
@@ -561,7 +568,8 @@ pub extern "js" fn CanvasRenderingContext2D::ellipse(
 ) = "(self,x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise) => self.ellipse(x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise)"
 
 ///|
-extern type CanvasGradient
+#external
+type CanvasGradient
 
 ///|
 pub extern "js" fn CanvasGradient::add_color_stop(
@@ -571,7 +579,8 @@ pub extern "js" fn CanvasGradient::add_color_stop(
 ) = "(self,offset,color) => self.addColorStop(offset,color)"
 
 ///|
-extern type CanvasPattern
+#external
+type CanvasPattern
 
 ///|
 pub extern "js" fn CanvasPattern::set_transform(
@@ -580,15 +589,17 @@ pub extern "js" fn CanvasPattern::set_transform(
 ) = "(self,transform) => self.setTransform(transform)"
 
 ///|
-extern type DOMMatrix2DInit
+#external
+type DOMMatrix2DInit
 
 // TODO: add TextMetrics
 
 ///|
-extern type ImageDataSettings
+#external
+type ImageDataSettings
 
 ///| Possible values are "srgb" and "display-p3".
-pub typealias PredefinedColorSpace = String
+pub typealias String as PredefinedColorSpace
 
 ///|
 pub extern "js" fn ImageDataSettings::new(
@@ -596,7 +607,8 @@ pub extern "js" fn ImageDataSettings::new(
 ) -> ImageDataSettings = "(colorSpace) => ({colorSpace: colorSpace})"
 
 ///|
-extern type ImageData
+#external
+type ImageData
 
 ///|
 pub extern "js" fn ImageData::new(
@@ -630,7 +642,8 @@ pub extern "js" fn ImageData::get_color_space(
 ) -> PredefinedColorSpace = "(self) => self.colorSpace"
 
 ///|
-extern type Path2D
+#external
+type Path2D
 
 ///|
 pub extern "js" fn Path2D::new(
@@ -645,4 +658,5 @@ pub extern "js" fn Path2D::add_path(
 ) = "(self,path,transform) => self.addPath(path,transform)"
 
 ///|
-extern type Uint8ClampedArray
+#external
+type Uint8ClampedArray

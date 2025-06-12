@@ -1,5 +1,6 @@
 ///|
-extern type DataTransfer
+#external
+type DataTransfer
 
 ///|
 pub extern "js" fn DataTransfer::drop_effect(self : DataTransfer) -> String = "(t) => t.dropEffect"
@@ -21,7 +22,8 @@ pub extern "js" fn DataTransfer::set_drog_image(
 ) = "(t, image, x, y) => t.setDragImage(image, x, y)"
 
 ///|
-extern type DataTransferItemList
+#external
+type DataTransferItemList
 
 ///|
 pub extern "js" fn DataTransferItemList::length(

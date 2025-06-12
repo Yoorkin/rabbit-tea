@@ -1,2 +1,3 @@
 ///|
-extern type DocumentFragment
+#external
+type DocumentFragment

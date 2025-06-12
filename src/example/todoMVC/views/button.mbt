@@ -1,5 +1,5 @@
 ///|
-pub fn button[M](text : String, href? : String, click? : M) -> @html.Html[M] {
+pub fn[M] button(text : String, href? : String, click? : M) -> @html.Html[M] {
   let button_style = [
     "background: pink", "border-radius: 10px", "width:80px", "padding:20px", "margin:10px",
   ]

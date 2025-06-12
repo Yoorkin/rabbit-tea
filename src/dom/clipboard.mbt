@@ -1,5 +1,6 @@
 ///|
-pub extern type Clipboard
+#external
+pub type Clipboard
 
 // TODO: support ClipboardItem
 //

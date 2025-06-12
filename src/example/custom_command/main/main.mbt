@@ -17,7 +17,7 @@ struct Model {
 extern "js" fn set_timeout(f : () -> Unit, ms : Int) = "(f,ms) => setTimeout(f, ms)"
 
 ///| Custom command to delay the message `msg` for `ms` milliseconds.
-fn delay[M](msg : M, ms : Int) -> @cmd.Cmd[M] {
+fn[M] delay(msg : M, ms : Int) -> @cmd.Cmd[M] {
   @cmd.Cmd(fn(events) { set_timeout(fn() { events.trigger_update(msg) }, ms) })
 }
 

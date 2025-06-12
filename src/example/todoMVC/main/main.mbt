@@ -23,7 +23,7 @@ fn view(model : Model) -> @html.Html[Message] {
 }
 
 ///|
-fn update_with[SubModel, SubMsg](
+fn[SubModel, SubMsg] update_with(
   pair : (@tea.Cmd[SubMsg], SubModel),
   to_model : (SubModel) -> Model,
   to_msg : (SubMsg) -> Message
@@ -57,7 +57,7 @@ fn route(url : @url.Url) -> (@tea.Cmd[Message], Model) {
     ["home" | "/" | ""] => @home.load() |> update_with(Home(_), GotHomeMsg(_))
     ["new"] => @editor.load(None) |> update_with(Editor(_), GotEditorMsg(_))
     ["cards", id] =>
-      match @strconv.parse_int?(id.to_string()) {
+      match (try? @strconv.parse_int(id.to_string())) {
         Ok(id) =>
           @editor.load(Some(id)) |> update_with(Editor(_), GotEditorMsg(_))
         Err(err) => {

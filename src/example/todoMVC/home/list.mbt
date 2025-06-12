@@ -1,8 +1,8 @@
 ///|
-typealias ListModel = Array[CardModel]
+typealias Array[CardModel] as ListModel
 
 ///|
-fn view_list[A](model : ListModel) -> @html.Html[A] {
+fn[A] view_list(model : ListModel) -> @html.Html[A] {
   @html.div(
     style=[
       "display: flex", "flex-direction: column", "width: 500px", "height: 100%",

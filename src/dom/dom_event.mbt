@@ -9,7 +9,8 @@
 ///                        +-- FocusEvent
 ///                        +-- KeyboardEvent
 /// ```
-extern type Event
+#external
+type Event
 
 ///|
 pub extern "js" fn Event::target(self : Event) -> EventTarget = "(self) => self.target"
@@ -31,7 +32,8 @@ pub extern "js" fn Event::prevent_default(self : Event) = "(self) => self.preven
 pub extern "js" fn Event::stop_propagation(self : Event) = "(self) => self.stopPropagation()"
 
 ///|
-extern type UIEvent
+#external
+type UIEvent
 
 ///|
 pub extern "js" fn UIEvent::to_event(self : UIEvent) -> Event = "(x) => x"
@@ -61,7 +63,8 @@ pub extern "js" fn UIEvent::to_keyboard_event(
   #| (e) => e instanceof KeyboardEvent ? e : null
 
 ///|
-extern type MouseEvent
+#external
+type MouseEvent
 
 ///|
 pub extern "js" fn MouseEvent::screen_x(self : MouseEvent) -> Int = "(e) => e.screenX"
@@ -94,7 +97,8 @@ pub extern "js" fn MouseEvent::alt_key(self : MouseEvent) -> Bool = "(e) => e.al
 pub extern "js" fn MouseEvent::meta_key(self : MouseEvent) -> Bool = "(e) => e.metaKey"
 
 ///|
-extern type InputEvent
+#external
+type InputEvent
 
 ///|
 pub extern "js" fn InputEvent::data(self : InputEvent) -> String = "(e) => e.data"
@@ -106,13 +110,15 @@ pub extern "js" fn InputEvent::is_composing(self : InputEvent) -> Bool = "(e) =>
 pub extern "js" fn InputEvent::input_type(self : InputEvent) -> String = "(e) => e.inputType"
 
 ///|
-extern type FocusEvent
+#external
+type FocusEvent
 
 ///|
 pub extern "js" fn FocusEvent::related_target(self : FocusEvent) -> EventTarget = "(e) => e.relatedTarget"
 
 ///|
-extern type KeyboardEvent
+#external
+type KeyboardEvent
 
 ///|
 pub extern "js" fn KeyboardEvent::key(self : KeyboardEvent) -> String = "(e) => e.key"
@@ -154,7 +160,8 @@ pub const DOM_KEY_LOCATION_RIGHT : Int = 0x02
 pub const DOM_KEY_LOCATION_NUMPAD : Int = 0x03
 
 ///|
-extern type ClipboardEvent
+#external
+type ClipboardEvent
 
 ///|
 pub extern "js" fn ClipboardEvent::clipboard_data(

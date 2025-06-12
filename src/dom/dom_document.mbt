@@ -1,5 +1,6 @@
 ///|
-extern type Document
+#external
+type Document
 
 ///|
 pub extern "js" fn document() -> Document = "() => document"
