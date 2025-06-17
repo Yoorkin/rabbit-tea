@@ -36,8 +36,6 @@ pub fn div[M](
 ) -> Html[M] 
 ```
 
-**Note:** The `class` property in HTML is renamed to `klass` because `class` is a reserved word in MoonBit.
-
 ## The `text` element
 
 To represent text in HTML, use the `text` function.
