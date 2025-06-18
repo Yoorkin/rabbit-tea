@@ -5,32 +5,32 @@ type Context2D @dom.CanvasRenderingContext2D
 /// 
 /// This function is unsafe and should be used rarely.
 pub fn to_unsafe_js(self : Context2D) -> @dom.CanvasRenderingContext2D {
-  self._
+  self.inner()
 }
 
 ///|
 pub fn begin_path(self : Context2D) -> Unit {
-  self._.begin_path()
+  self.inner().begin_path()
 }
 
 ///|
 pub fn move_to(self : Context2D, x : Double, y : Double) -> Unit {
-  self._.move_to(x, y)
+  self.inner().move_to(x, y)
 }
 
 ///|
 pub fn line_to(self : Context2D, x : Double, y : Double) -> Unit {
-  self._.line_to(x, y)
+  self.inner().line_to(x, y)
 }
 
 ///|
 pub fn set_line_width(self : Context2D, width : Double) -> Unit {
-  self._.set_line_width(width)
+  self.inner().set_line_width(width)
 }
 
 ///|
 pub fn stroke(self : Context2D) -> Unit {
-  self._.stroke()
+  self.inner().stroke()
 }
 
 ///|
@@ -53,12 +53,12 @@ pub fn to_string(self : Color) -> String {
 
 ///|
 pub fn set_stroke_style(self : Context2D, color : Color) -> Unit {
-  self._.set_stroke_style(@js.Union3::from0(color.to_string()))
+  self.inner().set_stroke_style(@js.Union3::from0(color.to_string()))
 }
 
 ///|
 pub fn set_fill_style(self : Context2D, color : Color) -> Unit {
-  self._.set_fill_style(@js.Union3::from0(color.to_string()))
+  self.inner().set_fill_style(@js.Union3::from0(color.to_string()))
 }
 
 ///|
@@ -69,7 +69,7 @@ pub fn fill_rect(
   width : Double,
   height : Double
 ) -> Unit {
-  self._.fill_rect(x, y, width, height)
+  self.inner().fill_rect(x, y, width, height)
 }
 
 ///|
@@ -80,7 +80,7 @@ pub fn clear_rect(
   width : Double,
   height : Double
 ) -> Unit {
-  self._.clear_rect(x, y, width, height)
+  self.inner().clear_rect(x, y, width, height)
 }
 
 ///|
@@ -90,5 +90,5 @@ pub fn fill_text(
   x : Double,
   y : Double
 ) -> Unit {
-  self._.fill_text(text, x, y)
+  self.inner().fill_text(text, x, y)
 }

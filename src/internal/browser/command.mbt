@@ -3,6 +3,6 @@ pub fn[M, Model, View] launch(
   self : Sandbox[M, Model, View],
   cmd : @cmd.Cmd[M]
 ) -> Unit {
-  let f = cmd._
+  let f = cmd.inner()
   f(self.predefined.unwrap())
 }

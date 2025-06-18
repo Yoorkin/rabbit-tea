@@ -8,13 +8,13 @@ pub typealias Html as T
 /// 
 /// This is a expensive operation and should be used rarely.
 pub fn[A, B] map(self : Html[A], f : (A) -> B) -> Html[B] {
-  self._.map(f)
+  self.inner().map(f)
 }
 
 ///|
 pub fn[Msg] to_virtual_dom(self : Html[Msg]) -> @vdom.Node[Msg] {
   // Wrap the node with a root node. This node represents the root of the real DOM managed by TEA.
-  node("root", [], [self])._
+  node("root", [], [self]).inner()
 }
 
 ///| 
@@ -23,7 +23,11 @@ pub fn[Msg] node(
   attributes : Array[Attribute[Msg]],
   childrens : Array[Html[Msg]]
 ) -> Html[Msg] {
-  @vdom.node(tag, attributes.map(fn(x) { x._ }), childrens.map(fn(x) { x._ }))
+  @vdom.node(
+    tag,
+    attributes.map(fn(x) { x.inner() }),
+    childrens.map(fn(x) { x.inner() }),
+  )
 }
 
 ///|
@@ -129,6 +133,9 @@ pub fn[M] h6(
 }
 
 // ------ grouping content ------
+
+///|
+type ScrollMsg (Scroll) -> Unit
 
 ///|
 pub fn[M] div(
@@ -244,7 +251,7 @@ pub fn[M] a(
   if id is Some(id) {
     attrs.push(@vdom.attribute("id", id))
   }
-  @vdom.link(attrs, childrens.map(fn(x) { x._ }), escape~)
+  @vdom.link(attrs, childrens.map(fn(x) { x.inner() }), escape~)
 }
 
 ///|
@@ -747,7 +754,9 @@ pub fn[Msg] external(
   width~ : Int,
   height~ : Int
 ) -> Html[Msg] {
-  let attrs = attrs.map(fn(opt) { opt.map(fn(arr) { arr.map(fn(a) { a._ }) }) })
+  let attrs = attrs.map(fn(opt) {
+    opt.map(fn(arr) { arr.map(fn(a) { a.inner() }) })
+  })
   @vdom.external(node, attrs, width~, height~)
 }
 

@@ -3,6 +3,7 @@
 type Node
 
 // ---------- node API --------------
+
 ///|
 pub extern "js" fn node_type(self : Node) -> Int = "(x) => x.nodeType"
 
@@ -41,6 +42,7 @@ pub extern "js" fn insert_before(self : Node, value : Node, before : Node) = "(p
 
 // ---------- some specific node API --------------
 // Note: the childNodes property is a NodeList, not an array, so we can't use the Array type.
+
 ///|  
 pub extern "js" fn nth_child(self : Node, index : Int) -> Node =
   #| (x,i) => { 
