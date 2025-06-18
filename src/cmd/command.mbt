@@ -69,12 +69,12 @@ pub fn[A, B] map(self : Cmd[A], f : (A) -> B) -> Cmd[B] {
 
 ///| Create a command that does nothing.
 pub fn[M] none() -> Cmd[M] {
-  Cmd(fn { _ => () })
+  Cmd(ignore)
 }
 
 ///| Create a command that runs multiple commands.
 pub fn[M] batch(xs : Array[Cmd[M]]) -> Cmd[M] {
-  Cmd(fn(events) { xs.each(fn { Cmd(f) => f(events) }) })
+  Cmd(fn(events) { xs.each(cmd => cmd.inner()(events)) })
 }
 
 ///| Create a command that trigger another update for the given message.

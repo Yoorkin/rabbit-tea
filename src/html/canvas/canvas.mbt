@@ -33,7 +33,7 @@ pub fn[Msg] new(
       mouseup.map(@html.on_mouse_up),
       mouseenter.map(@html.on_mouse_enter),
       mouseleave.map(@html.on_mouse_leave),
-    ].each(fn {
+    ].each(x => match x {
       None => ()
       Some(attr) => attrs.push(attr)
     })

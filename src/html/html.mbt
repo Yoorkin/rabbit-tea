@@ -135,9 +135,6 @@ pub fn[M] h6(
 // ------ grouping content ------
 
 ///|
-type ScrollMsg (Scroll) -> Unit
-
-///|
 pub fn[M] div(
   style~ : Array[String] = [],
   id? : String,
