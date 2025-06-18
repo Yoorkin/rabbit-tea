@@ -26,7 +26,7 @@ fn update(msg : Message, model : Model) -> (@tea.Cmd[Message], Model) {
     Clear => (@tea.none(), { text: "" })
     SetTime => {
       let f = async fn() {
-        suspend(fn(resolve) { set_timeout(fn() { resolve(()) }, 5000) })
+        suspend(resolve => set_timeout(() => resolve(()), 5000))
         "5000"
       }
       (@tea.perform(TimeUp(_), f), model)
