@@ -23,11 +23,7 @@ pub fn[Msg] node(
   attributes : Array[Attribute[Msg]],
   childrens : Array[Html[Msg]]
 ) -> Html[Msg] {
-  @vdom.node(
-    tag,
-    attributes.map(fn(x) { x.inner() }),
-    childrens.map(fn(x) { x.inner() }),
-  )
+  @vdom.node(tag, attributes.map(_.inner()), childrens.map(_.inner()))
 }
 
 ///|
@@ -67,7 +63,7 @@ pub fn[M] button(
 ) -> Html[M] {
   let attrs = []
   if click is Some(click) {
-    attrs.push(on_click(fn(_) { click }))
+    attrs.push(on_click(_ => click))
   }
   common_node(style~, class?, id?, "button", attrs, childrens)
 }
@@ -144,7 +140,7 @@ pub fn[M] div(
 ) -> Html[M] {
   let attrs = []
   if click is Some(click) {
-    attrs.push(on_click(fn(_) { click }))
+    attrs.push(on_click(_ => click))
   }
   common_node(style~, class?, id?, "div", attrs, childrens)
 }
@@ -248,7 +244,7 @@ pub fn[M] a(
   if id is Some(id) {
     attrs.push(@vdom.attribute("id", id))
   }
-  @vdom.link(attrs, childrens.map(fn(x) { x.inner() }), escape~)
+  @vdom.link(attrs, childrens.map(_.inner()), escape~)
 }
 
 ///|
@@ -348,7 +344,7 @@ pub fn[M] ul(
 ) -> Html[M] {
   let attrs = []
   if click is Some(click) {
-    attrs.push(on_click(fn(_) { click }))
+    attrs.push(on_click(_ => click))
   }
   common_node(style~, class?, id?, "ul", attrs, childrens)
 }
@@ -386,7 +382,7 @@ pub fn[M] li(
 ) -> Html[M] {
   let attrs = []
   if click is Some(click) {
-    attrs.push(on_click(fn(_) { click }))
+    attrs.push(on_click(_ => click))
   }
   if value is Some(value) {
     attrs.push(attribute("value", value.to_string()))
@@ -751,9 +747,7 @@ pub fn[Msg] external(
   width~ : Int,
   height~ : Int
 ) -> Html[Msg] {
-  let attrs = attrs.map(fn(opt) {
-    opt.map(fn(arr) { arr.map(fn(a) { a.inner() }) })
-  })
+  let attrs = attrs.map(_.map(_.map(_.inner())))
   @vdom.external(node, attrs, width~, height~)
 }
 
@@ -994,7 +988,7 @@ pub fn[M] dialog(
     attrs.push(
       @vdom.on(
         "close",
-        HandleEvent(fn(event) {
+        HandleEvent(event => {
           let html_element = event
             .target()
             .to_node()
@@ -1018,7 +1012,7 @@ pub fn[M] dialog(
     attrs.push(
       @vdom.on(
         "cancel",
-        HandleEvent(fn(event) {
+        HandleEvent(event => {
           event.prevent_default()
           cancel
         }),

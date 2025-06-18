@@ -23,14 +23,12 @@ enum Node[Msg] {
 pub fn[A, B] map(self : Node[A], f : (A) -> B) -> Node[B] {
   match self {
     Node(tag, attrs~, childrens~, listeners~) => {
-      let attrs = attrs.map(fn(x) { x.map(f) })
-      let childrens = childrens.map(fn(x) { x.map(f) })
+      let attrs = attrs.map(_.map(f))
+      let childrens = childrens.map(_.map(f))
       Node(tag, attrs~, childrens~, listeners~)
     }
     ExternalNode(node, attrs, width~, height~) => {
-      let attrs = attrs.map(fn(opt) {
-        opt.map(fn(attrs) { attrs.map(fn(x) { x.map(f) }) })
-      })
+      let attrs = attrs.map(_.map(_.map(_.map(f))))
       ExternalNode(node, attrs, width~, height~)
     }
     Text(value) => Text(value)
@@ -140,7 +138,7 @@ impl[Msg] Eq for Attribute[Msg] with op_equal(_a, _b) {
 pub fn[A, B] Handler::map(self : Handler[A], f : (A) -> B) -> Handler[B] {
   match self {
     Normal(msg) => Normal(f(msg))
-    HandleEvent(g) => HandleEvent(fn(event) { g(event) |> f })
+    HandleEvent(g) => HandleEvent(event => event |> g |> f)
     Custom(msg, stop_propagation~, prevent_default~) =>
       Custom(f(msg), stop_propagation~, prevent_default~)
   }
@@ -198,8 +196,8 @@ fn[Msg, Model, View] Node::to_node(
     attrs.each(x => match x {
       Attribute((event, AttrEvent(handler))) => {
         let listener = match handler {
-          Normal(msg) => fn(_event) { sandbox.update(msg) }
-          HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
+          Normal(msg) => _ => sandbox.update(msg)
+          HandleEvent(f) => event => sandbox.update(f(event))
           Custom(msg, stop_propagation~, prevent_default~) =>
             fn(event : @dom.Event) { // TODO: remove this annotation will cause type error, why?
               if stop_propagation {
@@ -240,7 +238,7 @@ fn[Msg, Model, View] Node::to_node(
           element
           .to_node()
           .to_event_target()
-          .add_event_listener("click", fn(event) {
+          .add_event_listener("click", event => {
             let mouse_event = event
               .to_ui_event()
               .to_option()
@@ -364,8 +362,8 @@ pub fn[Msg, Model, View] patch(
                   .remove_event_listener(key, listener)
                 EventAdd(key, handler) => {
                   let listener = match handler {
-                    Normal(msg) => fn(_event) { sandbox.update(msg) }
-                    HandleEvent(f) => fn(event) { sandbox.update(f(event)) }
+                    Normal(msg) => _ => sandbox.update(msg)
+                    HandleEvent(f) => event => sandbox.update(f(event))
                     Custom(msg, stop_propagation~, prevent_default~) =>
                       fn(event : @dom.Event) {
                         if stop_propagation {
@@ -485,8 +483,8 @@ fn[Msg] attrs_diff(
   // The listeners is used to remove the event listener when the attribute is removed.
   listeners : Array[(String, @dom.Listener)]
 ) -> Array[AttrsUpdate[Msg]] {
-  let old_map = Map::from_iter(old.iter().map(fn(attr) { attr.inner() }))
-  let new_map = Map::from_iter(new.iter().map(fn(attr) { attr.inner() }))
+  let old_map = Map::from_iter(old.iter().map(_.inner()))
+  let new_map = Map::from_iter(new.iter().map(_.inner()))
   let result = []
   for x in listeners {
     result.push(EventRemove(x.0, x.1))
@@ -561,7 +559,7 @@ pub fn[Msg] diff_without_key(
   ) -> Unit {
     match (xs, ys) {
       ([], []) => ()
-      ([], tl) => patches.push(Append(tl.map(fn(x) { x })))
+      ([], tl) => patches.push(Append(tl.map(x => x)))
       (l, []) => patches.push(Drop(index, l.length()))
       ([x, .. tl1], [y, .. tl2]) => {
         if is_same_type(x, y) {

@@ -73,23 +73,21 @@ pub fn[Model, Msg, View] Sandbox::new(
     predefined: None,
   }
   let on_url_changed = match url_changed {
-    Some(f) => fn(url) { sandbox.update(f(url)) }
+    Some(f) => url => sandbox.update(f(url))
     None => ignore
   }
   let on_url_request = match url_request {
-    Some(f) => fn(url) { sandbox.update(f(url)) }
+    Some(f) => url => sandbox.update(f(url))
     None => ignore
   }
   @dom.window()
   .to_event_target()
-  .add_event_listener("popstate", fn(_event) {
+  .add_event_listener("popstate", _ => {
     guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
     on_url_changed(url)
   })
   sandbox.predefined = Some(
-    @cmd.Events::new(on_url_changed, on_url_request, fn(msg) {
-      sandbox.update(msg)
-    }),
+    @cmd.Events::new(on_url_changed, on_url_request, sandbox.update(_)),
   )
   sandbox
 }

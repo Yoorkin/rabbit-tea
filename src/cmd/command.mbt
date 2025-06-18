@@ -42,8 +42,8 @@ pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
 /// 
 /// ```
 /// fn delay[M](msg : M, ms : Int) -> Cmd[M] {
-///   Cmd(fn(events){
-///     set_timeout(fn(){ events.trigger_update(msg) }, ms)
+///   Cmd(events => {
+///     set_timeout(() => { events.trigger_update(msg) }, ms)
 ///   })
 /// } 
 /// 
@@ -87,7 +87,7 @@ pub fn[M] task(message : M) -> Cmd[M] {
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
 pub fn[A, M] perform(msg : (A) -> M, f : async () -> A) -> Cmd[M] {
-  Cmd(events => @js.async_run(fn() { events.trigger_update(msg(f())) }))
+  Cmd(events => @js.async_run(() => events.trigger_update(msg(f()))))
 }
 
 ///| Create a command that runs an async function and handles errors.
@@ -98,7 +98,7 @@ pub fn[A, E : Error, M] attempt(
   msg : (Result[A, E]) -> M,
   f : async () -> A raise E
 ) -> Cmd[M] {
-  Cmd(events => @js.async_run(fn() {
+  Cmd(events => @js.async_run(() => {
     let msg = try f() catch {
       e => msg(Err(e))
     } else {
