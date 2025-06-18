@@ -195,7 +195,7 @@ fn[Msg, Model, View] Node::to_node(
     element : @dom.Element,
     generated_listeners : Array[(String, @dom.Listener)]
   ) {
-    attrs.each(fn {
+    attrs.each(x => match x {
       Attribute((event, AttrEvent(handler))) => {
         let listener = match handler {
           Normal(msg) => fn(_event) { sandbox.update(msg) }
