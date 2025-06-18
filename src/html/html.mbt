@@ -941,7 +941,7 @@ pub fn[M] tfoot(
 /// 
 /// # Example
 /// 
-/// ```
+/// ```moonbit skip
 /// typealias Model = String
 /// 
 /// enum Msg {

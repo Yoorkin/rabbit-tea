@@ -1,7 +1,7 @@
 ///|
 /// # Hireharchy related to the DOM EventTarget
 /// 
-/// ```
+/// ```plaintext
 /// EventTarget <---+--Clipboard 
 ///                 +--Node <--+-- Document
 ///                            +-- DocumentFragment

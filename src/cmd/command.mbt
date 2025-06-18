@@ -40,7 +40,7 @@ pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
 /// 
 /// # Example 
 /// 
-/// ```
+/// ```moonbit skip
 /// fn delay[M](msg : M, ms : Int) -> Cmd[M] {
 ///   Cmd(events => {
 ///     set_timeout(() => { events.trigger_update(msg) }, ms)
