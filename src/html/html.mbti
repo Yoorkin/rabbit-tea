@@ -31,7 +31,7 @@ fn[M] dd(style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 
 fn[M] dialog(style~ : Array[String] = .., id? : String, class? : String, open? : Bool, close? : (String) -> M, cancel? : M, Array[Html[M]]) -> Html[M]
 
-fn[M] div(style~ : Array[String] = .., id? : String, class? : String, click? : M, scroll? : ScrollMsg, Array[Html[M]]) -> Html[M]
+fn[M] div(style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
 
 fn[M] dl(style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
@@ -203,8 +203,6 @@ type Scroll
 fn Scroll::height(Self) -> Int
 fn Scroll::offset_pos(Self) -> Pos
 fn Scroll::width(Self) -> Int
-
-type ScrollMsg
 
 pub(all) enum Target {
   Self
