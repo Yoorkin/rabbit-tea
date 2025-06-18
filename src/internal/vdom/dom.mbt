@@ -476,6 +476,7 @@ pub fn[Msg] do_diff(old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
 // To be improved!!! Now this implementation will affect the performance of the diff algorithm.
 // And If a AttributeString's name is same as a AttrEvent's name, the diff algorithm will not work.
 // Now we think the events is different although they never changed.
+
 ///|
 fn[Msg] attrs_diff(
   old : Array[Attribute[Msg]],
@@ -484,8 +485,8 @@ fn[Msg] attrs_diff(
   // The listeners is used to remove the event listener when the attribute is removed.
   listeners : Array[(String, @dom.Listener)]
 ) -> Array[AttrsUpdate[Msg]] {
-  let old_map = Map::from_iter(old.iter().map(fn(attr) { attr._ }))
-  let new_map = Map::from_iter(new.iter().map(fn(attr) { attr._ }))
+  let old_map = Map::from_iter(old.iter().map(fn(attr) { attr.inner() }))
+  let new_map = Map::from_iter(new.iter().map(fn(attr) { attr.inner() }))
   let result = []
   for x in listeners {
     result.push(EventRemove(x.0, x.1))

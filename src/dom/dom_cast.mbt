@@ -1,4 +1,5 @@
 // ------------- cast node to other types -----------------
+
 ///|
 pub extern "js" fn to_document(self : Node) -> @js.Nullable[Document] =
   #| (x) => x.nodeType===9 ? x : null
@@ -21,6 +22,7 @@ pub extern "js" fn to_text(self : Node) -> @js.Nullable[Text] =
 pub extern "js" fn to_event_target(self : Node) -> EventTarget = "(x) => x"
 
 // -------------- convert types back to node -----------------
+
 ///|
 pub extern "js" fn Document::to_node(self : Document) -> Node = "(x) => x"
 

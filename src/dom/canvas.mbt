@@ -133,6 +133,7 @@ pub extern "js" fn CanvasRenderingContext2D::reset_transform(
 ) = "(x) => x.resetTransform()"
 
 // TODO: add interface CanvasCompositing
+
 ///|
 pub extern "js" fn CanvasRenderingContext2D::image_smoothing_enabled(
   self : CanvasRenderingContext2D

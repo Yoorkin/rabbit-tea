@@ -20,15 +20,11 @@ fn[Msg] external(@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ :
 
 fn[Msg] link(Array[Attribute[Msg]], Array[Node[Msg]], escape~ : Bool = ..) -> Node[Msg]
 
-fn[A, B] map(Node[A], (A) -> B) -> Node[B]
-
 fn[Msg] node(String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
 
 fn[Msg] nothing() -> Node[Msg]
 
 fn[Msg] on(String, Handler[Msg]) -> Attribute[Msg]
-
-fn[Msg, Model, View] patch(Node[Msg], Node[Msg], @browser.Sandbox[Msg, Model, View], mount~ : String) -> Unit
 
 fn[Msg] property(String, @variant.Variant) -> Attribute[Msg]
 

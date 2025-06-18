@@ -13,87 +13,7 @@ const DOM_KEY_LOCATION_RIGHT : Int = 0x02
 
 const DOM_KEY_LOCATION_STANDARD : Int = 0x00
 
-fn add_event_listener(EventTarget, String, (Event) -> Unit) -> Unit
-
-fn append_child(Node, Node) -> Unit
-
-fn count_child(Node) -> Int
-
-fn create_document_fragment(Document) -> DocumentFragment
-
-fn create_element(Document, String) -> Element
-
-fn create_text_node(Document, String) -> Element
-
-fn current_url(Window) -> String
-
-fn dispatch_event(EventTarget, Event) -> Unit
-
 fn document() -> Document
-
-fn first_child(Node) -> Node
-
-fn get_element_by_id(Document, String) -> @js.Nullable[Element]
-
-fn history_go_back(Window) -> Unit
-
-fn history_go_forward(Window) -> Unit
-
-fn insert_before(Node, Node, Node) -> Unit
-
-fn last_child(Node) -> Node
-
-fn load_url(Window, String) -> Unit
-
-fn next_sibling(Node) -> Node
-
-fn node_name(Node) -> String
-
-fn node_type(Node) -> Int
-
-fn node_value(Node) -> String
-
-fn nth_child(Node, Int) -> Node
-
-fn parent_node(Node) -> Node
-
-fn previous_sibling(Node) -> Node
-
-fn push_url(Window, String) -> Unit
-
-fn reload_url(Window) -> Unit
-
-fn remove_child(Node, Node) -> Unit
-
-fn remove_event_listener(EventTarget, String, (Event) -> Unit) -> Unit
-
-fn replace_child(Node, Node, Node) -> Unit
-
-fn replace_url(Window, String) -> Unit
-
-fn request_animination_frame(Window, () -> Unit) -> Unit
-
-fn scroll_by(Window, Int, Int) -> Unit
-
-fn scroll_to(Window, Int, Int) -> Unit
-
-fn scroll_to_bottom(Window) -> Unit
-
-fn scroll_to_top(Window) -> Unit
-
-fn to_clipboard(EventTarget) -> @js.Nullable[Clipboard]
-
-fn to_document(Node) -> @js.Nullable[Document]
-
-fn to_document_fragment(Node) -> @js.Nullable[DocumentFragment]
-
-fn to_element(Node) -> @js.Nullable[Element]
-
-fn to_event_target(Node) -> EventTarget
-
-fn to_node(EventTarget) -> @js.Nullable[Node]
-
-fn to_text(Node) -> @js.Nullable[Text]
 
 fn window() -> Window
 
@@ -221,6 +141,10 @@ fn Element::children(Self) -> Array[Self]
 fn Element::get_attribute(Self, String) -> String
 fn Element::get_bounding_client_rect(Self) -> DOMRect
 fn Element::get_property(Self, String) -> String
+fn Element::get_scroll_height(Self) -> Double
+fn Element::get_scroll_left(Self) -> Double
+fn Element::get_scroll_top(Self) -> Double
+fn Element::get_scroll_width(Self) -> Double
 fn Element::remove_attribute(Self, String) -> Unit
 fn Element::remove_children(Self, Self) -> Unit
 fn Element::remove_property(Self, String) -> Unit
@@ -228,6 +152,8 @@ fn Element::scroll_into_view(Self) -> Unit
 fn Element::set_attribute(Self, String, String) -> Unit
 fn Element::set_inner_html(Self, String) -> Unit
 fn Element::set_property(Self, String, @js.Value) -> Unit
+fn Element::set_scroll_left(Self, Double) -> Unit
+fn Element::set_scroll_top(Self, Double) -> Unit
 fn Element::to_html_element(Self) -> @js.Nullable[HTMLElement]
 fn Element::to_node(Self) -> Node
 
@@ -384,9 +310,9 @@ fn Window::scroll_to_top(Self) -> Unit
 fn Window::to_event_target(Self) -> EventTarget
 
 // Type aliases
-pub typealias Listener = (Event) -> Unit
+pub typealias (Event) -> Unit as Listener
 
-pub typealias PredefinedColorSpace = String
+pub typealias String as PredefinedColorSpace
 
 // Traits
 

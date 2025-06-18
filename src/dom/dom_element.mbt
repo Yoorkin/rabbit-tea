@@ -66,9 +66,26 @@ pub extern "js" fn Element::get_property(
   prop : String
 ) -> String = "(self,prop) => self[prop]"
 
-///|
-pub extern "js" fn Element::scroll_into_view(self : Element) -> Unit =
-  #| (self) => self.scrollIntoView()
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+pub extern "js" fn Element::scroll_into_view(self : Element) = "(self) => self.scrollIntoView()"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop
+pub extern "js" fn Element::get_scroll_top(self : Self) -> Double = "(self) => self.scrollTop"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop
+pub extern "js" fn Element::set_scroll_top(self : Self, value : Double) = "(s,v) => s.scrollTop = v"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+pub extern "js" fn Element::get_scroll_left(self : Self) -> Double = "(self) => self.scrollLeft"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+pub extern "js" fn Element::set_scroll_left(self : Self, value : Double) = "(s,v) => s.scrollLeft = v"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollWidth
+pub extern "js" fn Element::get_scroll_width(self : Self) -> Double = "(self) => self.scrollWidth"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight
+pub extern "js" fn Element::get_scroll_height(self : Self) -> Double = "(self) => self.scrollHeight"
 
 ///|
 pub extern "js" fn Element::set_inner_html(

@@ -31,7 +31,7 @@ fn[M] dd(style~ : Array[String] = .., id? : String, class? : String, Array[Html[
 
 fn[M] dialog(style~ : Array[String] = .., id? : String, class? : String, open? : Bool, close? : (String) -> M, cancel? : M, Array[Html[M]]) -> Html[M]
 
-fn[M] div(style~ : Array[String] = .., id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+fn[M] div(style~ : Array[String] = .., id? : String, class? : String, click? : M, scroll? : ScrollMsg, Array[Html[M]]) -> Html[M]
 
 fn[M] dl(style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
@@ -71,8 +71,6 @@ fn[M] label(style~ : Array[String] = .., id? : String, class? : String, for_? : 
 
 fn[M] li(style~ : Array[String] = .., value? : Int, id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
 
-fn[A, B] map(Html[A], (A) -> B) -> Html[B]
-
 fn[Msg] node(String, Array[Attribute[Msg]], Array[Html[Msg]]) -> Html[Msg]
 
 fn[M] nothing() -> Html[M]
@@ -100,6 +98,8 @@ fn[Msg] on_mouse_out((Mouse) -> Msg) -> Attribute[Msg]
 fn[Msg] on_mouse_over((Mouse) -> Msg) -> Attribute[Msg]
 
 fn[Msg] on_mouse_up((Mouse) -> Msg) -> Attribute[Msg]
+
+fn[M] on_scroll((Scroll) -> M) -> Attribute[M]
 
 fn[M] option(style~ : Array[String] = .., id? : String, class? : String, disabled? : Bool, value? : String, selected~ : Bool = .., Array[Html[M]]) -> Html[M]
 
@@ -138,8 +138,6 @@ fn[M] tfoot(style~ : Array[String] = .., id? : String, class? : String, Array[Ht
 fn[M] th(style~ : Array[String] = .., id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, Array[Html[M]]) -> Html[M]
 
 fn[M] thead(style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
-
-fn[Msg] to_virtual_dom(Html[Msg]) -> @vdom.Node[Msg]
 
 fn[M] tr(style~ : Array[String] = .., id? : String, class? : String, Array[Html[M]]) -> Html[M]
 
@@ -201,13 +199,20 @@ pub(all) enum Scope {
   ColGroup
 }
 
+type Scroll
+fn Scroll::height(Self) -> Int
+fn Scroll::offset_pos(Self) -> Pos
+fn Scroll::width(Self) -> Int
+
+type ScrollMsg
+
 pub(all) enum Target {
   Self
   Blank
 }
 
 // Type aliases
-pub typealias T[Msg] = Html[Msg]
+pub typealias Html as T
 
 // Traits
 
