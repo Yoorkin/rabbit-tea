@@ -56,11 +56,11 @@ pub typealias Cmd as Command
 
 ///| Map the messages in the command to another type.
 pub fn[A, B] map(self : Cmd[A], f : (A) -> B) -> Cmd[B] {
-  Cmd(fn(events) {
+  Cmd(events => {
     let predef = {
       on_url_changed: events.on_url_changed,
       on_url_request: events.on_url_request,
-      on_update: fn(msg) { (events.on_update)(f(msg)) },
+      on_update: msg => (events.on_update)(f(msg)),
     }
     let Cmd(f) = self
     f(predef)
@@ -74,12 +74,12 @@ pub fn[M] none() -> Cmd[M] {
 
 ///| Create a command that runs multiple commands.
 pub fn[M] batch(xs : Array[Cmd[M]]) -> Cmd[M] {
-  Cmd(fn(events) { xs.each(cmd => cmd.inner()(events)) })
+  Cmd(events => xs.each(cmd => cmd.inner()(events)))
 }
 
 ///| Create a command that trigger another update for the given message.
 pub fn[M] task(message : M) -> Cmd[M] {
-  Cmd(fn(events) { events.trigger_update(message) })
+  Cmd(events => events.trigger_update(message))
 }
 
 ///| Create a command that runs an async function.
@@ -87,7 +87,7 @@ pub fn[M] task(message : M) -> Cmd[M] {
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
 pub fn[A, M] perform(msg : (A) -> M, f : async () -> A) -> Cmd[M] {
-  Cmd(fn(events) { @js.async_run(fn() { events.trigger_update(msg(f())) }) })
+  Cmd(events => @js.async_run(fn() { events.trigger_update(msg(f())) }))
 }
 
 ///| Create a command that runs an async function and handles errors.
@@ -98,14 +98,12 @@ pub fn[A, E : Error, M] attempt(
   msg : (Result[A, E]) -> M,
   f : async () -> A raise E
 ) -> Cmd[M] {
-  Cmd(fn(events) {
-    @js.async_run(fn() {
-      let msg = try f() catch {
-        e => msg(Err(e))
-      } else {
-        r => msg(Ok(r))
-      }
-      events.trigger_update(msg)
-    })
-  })
+  Cmd(events => @js.async_run(fn() {
+    let msg = try f() catch {
+      e => msg(Err(e))
+    } else {
+      r => msg(Ok(r))
+    }
+    events.trigger_update(msg)
+  }))
 }

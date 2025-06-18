@@ -79,7 +79,7 @@ fn main {
       height=500,
       mousemove=DrawPoint(_),
       mousedown=MouseDown(_),
-      mouseup=fn(_) { Message::MouseUp },
+      mouseup=_ => Message::MouseUp,
     ),
   }
   @tea.startup(model~, update~, view~)
