@@ -2,7 +2,7 @@
 /// 
 /// # Hierarchy of DOM Events
 /// 
-/// ```
+/// ```plaintext
 /// Event <-+-- ClipboardEvent
 ///         +-- UIEvent <--+-- MouseEvent
 ///                        +-- InputEvent
