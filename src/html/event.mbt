@@ -47,17 +47,15 @@ pub fn Scroll::height(self : Self) -> Int {
 fn[Msg] on_mouse(event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     event,
-    HandleEvent(fn(event) {
-      msg(
-        event
-        .to_ui_event()
-        .to_option()
-        .unwrap()
-        .to_mouse_event()
-        .to_option()
-        .unwrap(),
-      )
-    }),
+    HandleEvent(event => msg(
+      event
+      .to_ui_event()
+      .to_option()
+      .unwrap()
+      .to_mouse_event()
+      .to_option()
+      .unwrap(),
+    )),
   )
 }
 
@@ -70,7 +68,7 @@ pub fn[Msg] on_click(msg : (Mouse) -> Msg) -> Attribute[Msg] {
 pub fn[Msg] on_input(msg : (String) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     "input",
-    HandleEvent(fn(event) {
+    HandleEvent(event => {
       // TODO: eliminate to_option
       let value : String = event
         .target()
@@ -96,7 +94,7 @@ pub fn[Msg] on_input(msg : (String) -> Msg) -> Attribute[Msg] {
 pub fn[Msg] on_change(msg : (String) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     "change",
-    HandleEvent(fn(event) {
+    HandleEvent(event => {
       // TODO: eliminate to_option
       let html_element = event
         .target()
@@ -165,18 +163,16 @@ pub fn[Msg] on_mouse_out(msg : (Mouse) -> Msg) -> Attribute[Msg] {
 pub fn[M] on_scroll(msg : (Scroll) -> M) -> Attribute[M] {
   @vdom.on(
     "scroll",
-    HandleEvent(fn(event) {
-      msg(
-        // TODO: eliminate to_option
-        event
-        .target()
-        .to_node()
-        .to_option()
-        .unwrap()
-        .to_element()
-        .to_option()
-        .unwrap(),
-      )
-    }),
+    HandleEvent(event => msg(
+      // TODO: eliminate to_option
+      event
+      .target()
+      .to_node()
+      .to_option()
+      .unwrap()
+      .to_element()
+      .to_option()
+      .unwrap(),
+    )),
   )
 }

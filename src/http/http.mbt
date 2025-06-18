@@ -74,15 +74,15 @@ fn[Msg, Model] request(
           has_body~,
           body~,
           content_type~,
-          succeed=fn(str) {
+          succeed=str => {
             let result = Ok(@json.parse(str)) catch {
               _ => Err("Json parse error")
             }
             events.trigger_update(f(result.bind(decoder)))
           },
-          failed=fn(msg) {
-            events.trigger_update(f(Err("Http request failed:\{msg}")))
-          },
+          failed=msg => events.trigger_update(
+            f(Err("Http request failed:\{msg}")),
+          ),
         )
       Text(f) =>
         js_request(
@@ -91,10 +91,10 @@ fn[Msg, Model] request(
           has_body~,
           body~,
           content_type~,
-          succeed=fn(str) { events.trigger_update(f(Ok(str))) },
-          failed=fn(msg) {
-            events.trigger_update(f(Err("Http request failed:\{msg}")))
-          },
+          succeed=str => events.trigger_update(f(Ok(str))),
+          failed=msg => events.trigger_update(
+            f(Err("Http request failed:\{msg}")),
+          ),
         )
     }
   }

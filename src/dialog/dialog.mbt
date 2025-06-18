@@ -2,7 +2,7 @@
 /// 
 /// The `modal` argument determines whether the dialog is modal or not.
 pub fn[M] show(id : String, modal~ : Bool = true) -> Cmd[M] {
-  fn(_) {
+  _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .to_option()
@@ -25,7 +25,7 @@ pub fn[M] show(id : String, modal~ : Bool = true) -> Cmd[M] {
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
 pub fn[M] close(id : String, return_value? : String) -> Cmd[M] {
-  fn(_) {
+  _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .to_option()
@@ -47,7 +47,7 @@ pub fn[M] close(id : String, return_value? : String) -> Cmd[M] {
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
 pub fn[M] request_close(id : String, return_value? : String) -> Cmd[M] {
-  fn(_) {
+  _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .to_option()
