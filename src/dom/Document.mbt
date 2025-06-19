@@ -6,14 +6,20 @@ type Document
 pub extern "js" fn document() -> Document = "() => document"
 
 ///|
-pub extern "js" fn create_element(self : Document, tag : String) -> Element = "(doc,tag) => doc.createElement(tag)"
+pub extern "js" fn Document::create_element(
+  self : Self,
+  tag : String
+) -> Element = "(doc,tag) => doc.createElement(tag)"
 
 ///|
-pub extern "js" fn create_text_node(self : Document, str : String) -> Element = "(doc,str) => doc.createTextNode(str)"
+pub extern "js" fn Document::create_text_node(
+  self : Self,
+  str : String
+) -> Element = "(doc,str) => doc.createTextNode(str)"
 
 ///|
-pub extern "js" fn create_document_fragment(
-  self : Document
+pub extern "js" fn Document::create_document_fragment(
+  self : Self
 ) -> DocumentFragment = "(doc) => doc.createDocumentFragment()"
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
@@ -48,13 +54,16 @@ pub extern "js" fn Document::get_elements_by_tag_name_ns(
 ) -> HTMLCollection = "(doc,namespace,name) => doc.getElementsByTagNameNS(namespace, name)"
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
-pub extern "js" fn query_selector(
-  self : Document,
+pub extern "js" fn Document::query_selector(
+  self : Self,
   selectors : String
 ) -> @js.Nullable[Element] = "(self,selectors) => self.querySelector(selectors)"
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
-pub extern "js" fn query_selector_all(
-  self : Document,
+pub extern "js" fn Document::query_selector_all(
+  self : Self,
   selectors : String
 ) -> NodeList = "(self,selectors) => self.querySelectorAll(selectors)"
+
+///|
+pub extern "js" fn Document::to_node(self : Self) -> Node = "(x) => x"

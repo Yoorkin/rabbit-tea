@@ -1,3 +1,0 @@
-///|
-#external
-type DocumentFragment

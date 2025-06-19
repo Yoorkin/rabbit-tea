@@ -3,19 +3,17 @@
 type DataTransfer
 
 ///|
-pub extern "js" fn DataTransfer::drop_effect(self : DataTransfer) -> String = "(t) => t.dropEffect"
+pub extern "js" fn DataTransfer::drop_effect(self : Self) -> String = "(t) => t.dropEffect"
 
 ///|
-pub extern "js" fn DataTransfer::effect_allowed(self : DataTransfer) -> String = "(t) => t.effectAllowed"
+pub extern "js" fn DataTransfer::effect_allowed(self : Self) -> String = "(t) => t.effectAllowed"
 
 ///| 
-pub extern "js" fn DataTransfer::items(
-  self : DataTransfer
-) -> DataTransferItemList = "(t) => t.items"
+pub extern "js" fn DataTransfer::items(self : Self) -> DataTransferItemList = "(t) => t.items"
 
 ///|
 pub extern "js" fn DataTransfer::set_drog_image(
-  self : DataTransfer,
+  self : Self,
   image : Element,
   x : Int,
   y : Int
@@ -26,28 +24,20 @@ pub extern "js" fn DataTransfer::set_drog_image(
 type DataTransferItemList
 
 ///|
-pub extern "js" fn DataTransferItemList::length(
-  self : DataTransferItemList
-) -> Int = "(l) => l.length"
+pub extern "js" fn DataTransferItemList::length(self : Self) -> Int = "(l) => l.length"
 
 ///|
-pub extern "js" fn DataTransferItemList::op_get(
-  self : DataTransferItemList,
-  index : Int
-) = "(l, i) => l[i]"
+pub extern "js" fn DataTransferItemList::op_get(self : Self, index : Int) = "(l, i) => l[i]"
 
 ///|
 pub extern "js" fn DataTransferItemList::add(
-  self : DataTransferItemList,
+  self : Self,
   data : String,
   type_ : String
 ) = "(l, d, t) => l.add(d, t)"
 
 ///|
-pub extern "js" fn DataTransferItemList::remove(
-  self : DataTransferItemList,
-  index : Int
-) = "(l, i) => l.remove(i)"
+pub extern "js" fn DataTransferItemList::remove(self : Self, index : Int) = "(l, i) => l.remove(i)"
 
 ///|
-pub extern "js" fn DataTransferItemList::clear(self : DataTransferItemList) = "(l) => l.clear()"
+pub extern "js" fn DataTransferItemList::clear(self : Self) = "(l) => l.clear()"
