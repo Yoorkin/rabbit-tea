@@ -48,13 +48,7 @@ fn[Msg] on_mouse(event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
   @vdom.on(
     event,
     HandleEvent(event => msg(
-      event
-      .to_ui_event()
-      .to_option()
-      .unwrap()
-      .to_mouse_event()
-      .to_option()
-      .unwrap(),
+      event.to_ui_event().unwrap().to_mouse_event().unwrap(),
     )),
   )
 }
@@ -73,16 +67,12 @@ pub fn[Msg] on_input(msg : (String) -> Msg) -> Attribute[Msg] {
       let value : String = event
         .target()
         .to_node()
-        .to_option()
         .unwrap()
         .to_element()
-        .to_option()
         .unwrap()
         .to_html_element()
-        .to_option()
         .unwrap()
         .to_html_input_element()
-        .to_option()
         .unwrap()
         .value()
       msg(value)
@@ -99,13 +89,10 @@ pub fn[Msg] on_change(msg : (String) -> Msg) -> Attribute[Msg] {
       let html_element = event
         .target()
         .to_node()
-        .to_option()
         .unwrap()
         .to_element()
-        .to_option()
         .unwrap()
         .to_html_element()
-        .to_option()
         .unwrap()
       let value = if html_element.to_html_input_element().to_option() is Some(x) {
         x.value()
@@ -165,14 +152,7 @@ pub fn[M] on_scroll(msg : (Scroll) -> M) -> Attribute[M] {
     "scroll",
     HandleEvent(event => msg(
       // TODO: eliminate to_option
-      event
-      .target()
-      .to_node()
-      .to_option()
-      .unwrap()
-      .to_element()
-      .to_option()
-      .unwrap(),
+      event.target().to_node().unwrap().to_element().unwrap(),
     )),
   )
 }

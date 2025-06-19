@@ -5,13 +5,10 @@ pub fn[M] show(id : String, modal~ : Bool = true) -> Cmd[M] {
   _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
-      .to_option()
       .unwrap()
       .to_html_element()
-      .to_option()
       .unwrap()
       .to_html_dialog_element()
-      .to_option()
       .unwrap()
     if modal {
       dialog.show_modal()
@@ -28,13 +25,10 @@ pub fn[M] close(id : String, return_value? : String) -> Cmd[M] {
   _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
-      .to_option()
       .unwrap()
       .to_html_element()
-      .to_option()
       .unwrap()
       .to_html_dialog_element()
-      .to_option()
       .unwrap()
     dialog.close(return_value=@js.Optional::from_option(return_value))
   }
@@ -50,13 +44,10 @@ pub fn[M] request_close(id : String, return_value? : String) -> Cmd[M] {
   _ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
-      .to_option()
       .unwrap()
       .to_html_element()
-      .to_option()
       .unwrap()
       .to_html_dialog_element()
-      .to_option()
       .unwrap()
     dialog.request_close(return_value=@js.Optional::from_option(return_value))
   }

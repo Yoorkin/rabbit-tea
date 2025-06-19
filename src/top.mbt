@@ -23,7 +23,7 @@ pub fn[Model, Message] startup(
 ) -> Unit {
   @dom.document()
   .get_element_by_id(mount)
-  .get_exn()
+  .unwrap()
   .set_inner_html("<div></div>")
   let mut sandbox = None
   let mut curr_dom = @vdom.node("div", [], [])
@@ -54,7 +54,7 @@ pub fn[Model, Msg] application(
 ) -> Unit {
   @dom.document()
   .get_element_by_id(mount)
-  .get_exn()
+  .unwrap()
   .set_inner_html("<div></div>")
   let mut sandbox_ref = None
   let mut curr_dom = @vdom.node("div", [], [])

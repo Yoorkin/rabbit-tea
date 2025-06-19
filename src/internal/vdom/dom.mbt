@@ -214,7 +214,7 @@ fn[Msg, Model, View] Node::to_node(
       }
       Attribute((key, AttrString(value))) => element.set_attribute(key, value)
       Attribute((key, AttrStyle(value))) =>
-        element.to_html_element().get_exn().set_style(key, value)
+        element.to_html_element().unwrap().set_style(key, value)
       Attribute((key, AttrProperty(value))) =>
         element.set_property(key, variant_to_js_value(value))
     })
@@ -241,10 +241,8 @@ fn[Msg, Model, View] Node::to_node(
           .add_event_listener("click", event => {
             let mouse_event = event
               .to_ui_event()
-              .to_option()
               .unwrap()
               .to_mouse_event()
-              .to_option()
               .unwrap()
             if not(mouse_event.meta_key() || mouse_event.ctrl_key()) {
               event.prevent_default()
@@ -284,18 +282,15 @@ fn[Msg, Model, View] Node::to_node(
     ExternalNode(node, attrs, width~, height~) => {
       match attrs.val {
         Some(xs) => {
-          attach_attrs(xs, node.to_element().to_option().unwrap(), [])
+          attach_attrs(xs, node.to_element().unwrap(), [])
           attrs.val = None
         }
         None => ()
       }
       let element = @dom.document().create_element("div")
-      element.to_html_element().get_exn().set_style("width", width.to_string())
-      element
-      .to_html_element()
-      .get_exn()
-      .set_style("height", height.to_string())
-      element..append_children(node.to_element().to_option().unwrap()).to_node()
+      element.to_html_element().unwrap().set_style("width", width.to_string())
+      element.to_html_element().unwrap().set_style("height", height.to_string())
+      element..append_children(node.to_element().unwrap()).to_node()
     }
     Text(value) => @dom.document().create_text_node(value).to_node()
     Nothing => @dom.document().create_text_node("").to_node()
@@ -343,15 +338,15 @@ pub fn[Msg, Model, View] patch(
         match update {
           UpdateNode(index, attrs_patches, childs_patches, new_listeners) => {
             let node = current.nth_child(index)
-            let element = node.to_element().get_exn()
+            let element = node.to_element().unwrap()
             for patch in attrs_patches {
               match patch {
                 AttrRemove(key) => element.remove_attribute(key)
                 AttrAdd(key, value) => element.set_attribute(key, value)
                 StyleAdd(key, value) =>
-                  element.to_html_element().get_exn().set_style(key, value)
+                  element.to_html_element().unwrap().set_style(key, value)
                 StyleRemove(key) =>
-                  element.to_html_element().get_exn().remove_style(key)
+                  element.to_html_element().unwrap().remove_style(key)
                 PropertyAdd(key, value) =>
                   element.set_property(key, variant_to_js_value(value))
                 PropertyRemove(key) => element.remove_property(key)
@@ -395,7 +390,7 @@ pub fn[Msg, Model, View] patch(
     }
   }
 
-  let root = @dom.document().get_element_by_id(mount).get_exn().to_node()
+  let root = @dom.document().get_element_by_id(mount).unwrap().to_node()
   aux(patches, root)
 }
 
