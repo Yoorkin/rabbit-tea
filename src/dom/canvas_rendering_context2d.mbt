@@ -252,7 +252,7 @@ pub extern "js" fn CanvasRenderingContext2D::fill_text(
   x : Double,
   y : Double,
   max_width~ : @js.Optional[Double] = @js.Optional::undefined()
-) = "(self,text,x,y,maxWidth) => self.fill_text(text,x,y,maxWidth)"
+) = "(self,text,x,y,maxWidth) => self.fillText(text,x,y,maxWidth)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::stroke_text(
@@ -261,7 +261,7 @@ pub extern "js" fn CanvasRenderingContext2D::stroke_text(
   x : Double,
   y : Double,
   max_width~ : @js.Optional[Double] = @js.Optional::undefined()
-) = "(self,text,x,y,maxWidth) => self.stroke_text(text,x,y,maxWidth)"
+) = "(self,text,x,y,maxWidth) => self.strokeText(text,x,y,maxWidth)"
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub typealias @js.Union7[
