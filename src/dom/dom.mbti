@@ -355,7 +355,7 @@ type WebGLRenderingContext
 
 type Window
 fn Window::alert(Self, String) -> Unit
-fn Window::cancel_animination_frame(Self, Double) -> Unit
+fn Window::cancel_animation_frame(Self, Double) -> Unit
 fn Window::confirm(Self, String) -> Bool
 fn Window::current_url(Self) -> String
 fn Window::history_go_back(Self) -> Unit
@@ -365,7 +365,7 @@ fn Window::navigator(Self) -> Navigator
 fn Window::push_url(Self, String) -> Unit
 fn Window::reload_url(Self) -> Unit
 fn Window::replace_url(Self, String) -> Unit
-fn Window::request_animination_frame(Self, (Double) -> Unit) -> Double
+fn Window::request_animation_frame(Self, (Double) -> Unit) -> Double
 fn Window::scroll_by(Self, Int, Int) -> Unit
 fn Window::scroll_to(Self, Int, Int) -> Unit
 fn Window::scroll_to_bottom(Self) -> Unit

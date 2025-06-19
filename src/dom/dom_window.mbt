@@ -47,13 +47,13 @@ pub extern "js" fn replace_url(self : Window, url : String) =
   #| (self,url) => { self.history.replaceState(null, '', url); }
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame
-pub extern "js" fn request_animination_frame(
+pub extern "js" fn request_animation_frame(
   self : Window,
   f : (DOMHighResTimeStamp) -> Unit
 ) -> Double = "(self,f) => self.requestAnimationFrame(f)"
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/Window/cancelAnimationFrame
-pub extern "js" fn cancel_animination_frame(self : Window, request_id : Double) = "(self,id) => self.cancelAnimationFrame(id)"
+pub extern "js" fn cancel_animation_frame(self : Window, request_id : Double) = "(self,id) => self.cancelAnimationFrame(id)"
 
 ///|
 pub extern "js" fn window() -> Window = "() => window"
