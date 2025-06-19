@@ -992,16 +992,12 @@ pub fn[M] dialog(
           let html_element = event
             .target()
             .to_node()
-            .to_option()
             .unwrap()
             .to_element()
-            .to_option()
             .unwrap()
             .to_html_element()
-            .to_option()
             .unwrap()
             .to_html_dialog_element()
-            .to_option()
             .unwrap()
           close(html_element.return_value())
         }),

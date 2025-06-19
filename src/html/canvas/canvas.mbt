@@ -41,10 +41,8 @@ pub fn[Msg] new(
   }
   let element = canvas
     .to_html_element()
-    .to_option()
     .unwrap()
     .to_html_canvas_element()
-    .to_option()
     .unwrap()
   let node = canvas.to_node()
   {
