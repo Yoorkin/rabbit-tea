@@ -43,9 +43,9 @@ fn CanvasRenderingContext2D::create_image_data(Self, Double, Double, settings~ :
 fn CanvasRenderingContext2D::create_image_data_with_data(Self, ImageData) -> ImageData
 fn CanvasRenderingContext2D::create_linear_gradient(Self, Double, Double, Double, Double) -> CanvasGradient
 fn CanvasRenderingContext2D::create_radial_gradient(Self, Double, Double, Double, Double, Double, Double) -> CanvasGradient
-fn CanvasRenderingContext2D::draw_image(Self, Double, Double) -> Unit
-fn CanvasRenderingContext2D::draw_image_with_size(Self, Double, Double, Double, Double) -> Unit
-fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(Self, Double, Double, Double, Double, Double, Double, Double, Double) -> Unit
+fn CanvasRenderingContext2D::draw_image(Self, @js.Union7[HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame], Double, Double) -> Unit
+fn CanvasRenderingContext2D::draw_image_with_size(Self, @js.Union7[HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame], Double, Double, Double, Double) -> Unit
+fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(Self, @js.Union7[HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame], Double, Double, Double, Double, Double, Double, Double, Double) -> Unit
 fn CanvasRenderingContext2D::ellipse(Self, Double, Double, Double, Double, Double, Double, Double, anticlockwise~ : Bool = ..) -> Unit
 fn CanvasRenderingContext2D::fill(Self, fill_rule~ : String = ..) -> Unit
 fn CanvasRenderingContext2D::fill_path(Self, Path2D, fill_rule~ : String = ..) -> Unit
@@ -130,6 +130,12 @@ fn Document::create_document_fragment(Self) -> DocumentFragment
 fn Document::create_element(Self, String) -> Element
 fn Document::create_text_node(Self, String) -> Element
 fn Document::get_element_by_id(Self, String) -> @js.Nullable[Element]
+fn Document::get_elements_by_class_name(Self, String) -> HTMLCollection
+fn Document::get_elements_by_name(Self, String) -> NodeList
+fn Document::get_elements_by_tag_name(Self, String) -> HTMLCollection
+fn Document::get_elements_by_tag_name_ns(Self, String, String) -> HTMLCollection
+fn Document::query_selector(Self, String) -> @js.Nullable[Element]
+fn Document::query_selector_all(Self, String) -> NodeList
 fn Document::to_node(Self) -> Node
 
 type DocumentFragment
@@ -182,6 +188,11 @@ fn HTMLCanvasElement::get_height(Self) -> Int
 fn HTMLCanvasElement::get_width(Self) -> Int
 fn HTMLCanvasElement::to_html_element(Self) -> HTMLElement
 
+type HTMLCollection
+fn HTMLCollection::get_length(Self) -> Double
+fn HTMLCollection::item(Self, Double) -> @js.Nullable[Element]
+fn HTMLCollection::named_item(Self, String) -> @js.Nullable[Element]
+
 type HTMLDialogElement
 fn HTMLDialogElement::close(Self, return_value~ : @js.Optional[String] = ..) -> Unit
 fn HTMLDialogElement::open(Self) -> Bool
@@ -196,14 +207,55 @@ fn HTMLElement::set_style(Self, String, String) -> Unit
 fn HTMLElement::to_element(Self) -> Element
 fn HTMLElement::to_html_canvas_element(Self) -> @js.Nullable[HTMLCanvasElement]
 fn HTMLElement::to_html_dialog_element(Self) -> @js.Nullable[HTMLDialogElement]
+fn HTMLElement::to_html_image_element(Self) -> @js.Nullable[HTMLImageElement]
 fn HTMLElement::to_html_input_element(Self) -> @js.Nullable[HTMLInputElement]
 fn HTMLElement::to_html_select_element(Self) -> @js.Nullable[HTMLSelectElement]
+
+type HTMLImageElement
+fn HTMLImageElement::get_alt(Self) -> String
+fn HTMLImageElement::get_complete(Self) -> Bool
+fn HTMLImageElement::get_cross_origin(Self) -> String
+fn HTMLImageElement::get_current_src(Self) -> String
+fn HTMLImageElement::get_decoding(Self) -> String
+fn HTMLImageElement::get_height(Self) -> Double
+fn HTMLImageElement::get_is_map(Self) -> Bool
+fn HTMLImageElement::get_loading(Self) -> String
+fn HTMLImageElement::get_natural_height(Self) -> Double
+fn HTMLImageElement::get_natural_width(Self) -> Double
+fn HTMLImageElement::get_referrer_policy(Self) -> String
+fn HTMLImageElement::get_sizes(Self) -> String
+fn HTMLImageElement::get_src(Self) -> String
+fn HTMLImageElement::get_srcset(Self) -> String
+fn HTMLImageElement::get_use_map(Self) -> String
+fn HTMLImageElement::get_width(Self) -> Double
+fn HTMLImageElement::get_x(Self) -> Double
+fn HTMLImageElement::get_y(Self) -> Double
+fn HTMLImageElement::new() -> Self
+fn HTMLImageElement::new_with_size(Double, Double) -> Self
+fn HTMLImageElement::set_alt(Self, String) -> Unit
+fn HTMLImageElement::set_cross_origin(Self, String) -> Unit
+fn HTMLImageElement::set_decoding(Self, String) -> Unit
+fn HTMLImageElement::set_height(Self, Double) -> Unit
+fn HTMLImageElement::set_is_map(Self, Bool) -> Unit
+fn HTMLImageElement::set_loading(Self, String) -> Unit
+fn HTMLImageElement::set_natural_height(Self, Double) -> Unit
+fn HTMLImageElement::set_natural_width(Self, Double) -> Unit
+fn HTMLImageElement::set_referrer_policy(Self, String) -> Unit
+fn HTMLImageElement::set_sizes(Self, String) -> Unit
+fn HTMLImageElement::set_src(Self, String) -> Unit
+fn HTMLImageElement::set_srcset(Self, String) -> Unit
+fn HTMLImageElement::set_use_map(Self, String) -> Unit
+fn HTMLImageElement::set_width(Self, Double) -> Unit
 
 type HTMLInputElement
 fn HTMLInputElement::value(Self) -> String
 
 type HTMLSelectElement
 fn HTMLSelectElement::value(Self) -> String
+
+type HTMLVideoElement
+
+type ImageBitmap
 
 type ImageBitmapRenderingContext
 
@@ -271,9 +323,17 @@ fn Node::to_element(Self) -> @js.Nullable[Element]
 fn Node::to_event_target(Self) -> EventTarget
 fn Node::to_text(Self) -> @js.Nullable[Text]
 
+type NodeList
+fn NodeList::get_length(Self) -> Double
+fn NodeList::item(Self, Double) -> @js.Nullable[Node]
+
+type OffscreenCanvas
+
 type Path2D
 fn Path2D::add_path(Self, Self, transform~ : @js.Optional[DOMMatrix2DInit] = ..) -> Unit
 fn Path2D::new(path~ : @js.Optional[@js.Union2[Self, String]] = ..) -> Self
+
+type SVGImageElement
 
 type Text
 fn Text::to_node(Self) -> Node
@@ -287,12 +347,15 @@ fn UIEvent::to_mouse_event(Self) -> @js.Nullable[MouseEvent]
 
 type Uint8ClampedArray
 
+type VideoFrame
+
 type WebGL2RenderingContext
 
 type WebGLRenderingContext
 
 type Window
 fn Window::alert(Self, String) -> Unit
+fn Window::cancel_animination_frame(Self, Double) -> Unit
 fn Window::confirm(Self, String) -> Bool
 fn Window::current_url(Self) -> String
 fn Window::history_go_back(Self) -> Unit
@@ -302,7 +365,7 @@ fn Window::navigator(Self) -> Navigator
 fn Window::push_url(Self, String) -> Unit
 fn Window::reload_url(Self) -> Unit
 fn Window::replace_url(Self, String) -> Unit
-fn Window::request_animination_frame(Self, () -> Unit) -> Unit
+fn Window::request_animination_frame(Self, (Double) -> Unit) -> Double
 fn Window::scroll_by(Self, Int, Int) -> Unit
 fn Window::scroll_to(Self, Int, Int) -> Unit
 fn Window::scroll_to_bottom(Self) -> Unit
@@ -310,6 +373,8 @@ fn Window::scroll_to_top(Self) -> Unit
 fn Window::to_event_target(Self) -> EventTarget
 
 // Type aliases
+pub typealias @js.Union7[HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame] as ImageUnion
+
 pub typealias (Event) -> Unit as Listener
 
 pub typealias String as PredefinedColorSpace

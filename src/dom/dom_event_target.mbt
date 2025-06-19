@@ -8,6 +8,7 @@
 ///                            +-- Element <-- HTMLElement <--+-- HTMLCanvasElement
 ///                                                           +-- HTMLInputElement
 ///                                                           +-- HTMLDialogElement
+///                                                           +-- HTMLImageElement
 /// ```
 #external
 type EventTarget

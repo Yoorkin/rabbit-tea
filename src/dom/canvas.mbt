@@ -356,25 +356,39 @@ pub extern "js" fn CanvasRenderingContext2D::stroke_text(
 
 // TODO: add ConvasText.measureText
 
-///|
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+pub typealias @js.Union7[
+  HTMLImageElement,
+  SVGImageElement,
+  HTMLVideoElement,
+  HTMLCanvasElement,
+  ImageBitmap,
+  OffscreenCanvas,
+  VideoFrame,
+] as ImageUnion
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image(
   self : CanvasRenderingContext2D,
+  image : ImageUnion,
   dx : Double,
   dy : Double
 ) = "(self,image,dx,dy) => self.drawImage(image,dx,dy)"
 
-///|
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_size(
   self : CanvasRenderingContext2D,
+  image : ImageUnion,
   dx : Double,
   dy : Double,
   dw : Double,
   dh : Double
 ) = "(self,image,dx,dy,dw,dh) => self.drawImage(image,dx,dy,dw,dh)"
 
-///|
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(
   self : CanvasRenderingContext2D,
+  image : ImageUnion,
   sx : Double,
   sy : Double,
   sw : Double,

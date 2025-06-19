@@ -129,6 +129,12 @@ pub extern "js" fn HTMLElement::to_html_dialog_element(
   #| (x) => x instanceof HTMLDialogElement ? x : null
 
 ///|
+pub extern "js" fn HTMLElement::to_html_image_element(
+  self : Self
+) -> @js.Nullable[HTMLImageElement] =
+  #| (x) => x instanceof HTMLImageElement ? x : null
+
+///|
 pub extern "js" fn HTMLElement::set_style(
   self : HTMLElement,
   key : String,
@@ -183,3 +189,23 @@ pub extern "js" fn HTMLDialogElement::show(self : HTMLDialogElement) = "(self) =
 
 ///|
 pub extern "js" fn HTMLDialogElement::show_modal(self : HTMLDialogElement) = "(self) => self.showModal()"
+
+///|
+#external
+type SVGImageElement
+
+///|
+#external
+type HTMLVideoElement
+
+///|
+#external
+type ImageBitmap
+
+///|
+#external
+type OffscreenCanvas
+
+///|
+#external
+type VideoFrame
