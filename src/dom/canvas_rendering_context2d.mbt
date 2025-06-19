@@ -1,36 +1,5 @@
 ///|
 #external
-type HTMLCanvasElement
-
-///|
-pub extern "js" fn HTMLCanvasElement::to_html_element(
-  self : HTMLCanvasElement
-) -> HTMLElement = "(x) => x"
-
-///|
-pub extern "js" fn HTMLCanvasElement::get_width(
-  self : HTMLCanvasElement
-) -> Int = "(x) => x.width"
-
-///|
-pub extern "js" fn HTMLCanvasElement::get_height(
-  self : HTMLCanvasElement
-) -> Int = "(x) => x.height"
-
-///|
-pub extern "js" fn HTMLCanvasElement::get_context(
-  self : HTMLCanvasElement,
-  context_id : String
-) -> @js.Union5[
-  CanvasRenderingContext2D,
-  ImageBitmapRenderingContext,
-  WebGLRenderingContext,
-  WebGL2RenderingContext,
-  GPUCanvasContext,
-] = "(x, id) => x.getContext(id)"
-
-///|
-#external
 type CanvasRenderingContext2D
 
 ///|
@@ -50,64 +19,42 @@ pub impl @js.Cast for CanvasRenderingContext2D with from(value) {
 }
 
 ///|
-#external
-type ImageBitmapRenderingContext
+pub extern "js" fn CanvasRenderingContext2D::save(self : Self) = "(x) => x.save()"
 
 ///|
-#external
-type WebGLRenderingContext
+pub extern "js" fn CanvasRenderingContext2D::restore(self : Self) = "(x) => x.restore()"
 
 ///|
-#external
-type WebGL2RenderingContext
-
-///|
-#external
-type GPUCanvasContext
-
-///|
-pub extern "js" fn CanvasRenderingContext2D::save(
-  self : CanvasRenderingContext2D
-) = "(x) => x.save()"
-
-///|
-pub extern "js" fn CanvasRenderingContext2D::restore(
-  self : CanvasRenderingContext2D
-) = "(x) => x.restore()"
-
-///|
-pub extern "js" fn CanvasRenderingContext2D::reset(
-  self : CanvasRenderingContext2D
-) = "(x) => x.reset()"
+pub extern "js" fn CanvasRenderingContext2D::reset(self : Self) = "(x) => x.reset()"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::is_context_lost(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> Bool = "() => x.isContextLost()"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::scale(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double
 ) = "(x,y) => x.scale(x,y)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::rotate(
-  self : CanvasRenderingContext2D,
+  self : Self,
   angle : Double
 ) = "(x,angle) => x.rotate(angle)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::translate(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double
 ) = "(x,y) => x.translate(x,y)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::transform(
-  self : CanvasRenderingContext2D,
+  self : Self,
   a : Double,
   b : Double,
   c : Double,
@@ -118,7 +65,7 @@ pub extern "js" fn CanvasRenderingContext2D::transform(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::set_transform(
-  self : CanvasRenderingContext2D,
+  self : Self,
   a : Double,
   b : Double,
   c : Double,
@@ -128,89 +75,55 @@ pub extern "js" fn CanvasRenderingContext2D::set_transform(
 ) = "(x,a,b,c,d,e,f) => x.setTransform(a,b,c,d,e,f)"
 
 ///|
-pub extern "js" fn CanvasRenderingContext2D::reset_transform(
-  self : CanvasRenderingContext2D
-) = "(x) => x.resetTransform()"
+pub extern "js" fn CanvasRenderingContext2D::reset_transform(self : Self) = "(x) => x.resetTransform()"
 
 // TODO: add interface CanvasCompositing
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::image_smoothing_enabled(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> Bool = "(x) => x.imageSmoothingEnabled"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_image_smoothing_quality(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> String = "(x) => x.imageSmoothingQuality"
 
 ///| Possible values are "low", "medium", and "high".
 pub extern "js" fn CanvasRenderingContext2D::set_image_smoothing_quality(
-  self : CanvasRenderingContext2D,
+  self : Self,
   value : String
 ) = "(x,value) => x.imageSmoothingQuality = value"
 
 ///|
-extern "js" fn checked_to_canvas_gradient(
-  value : @js.Value
-) -> @js.Nullable[CanvasGradient] =
-  #| (value) => value instanceof CanvasGradient ? value : null
-
-///|
-pub impl @js.Cast for CanvasGradient with into(value) {
-  checked_to_canvas_gradient(value).to_option()
-}
-
-///|
-pub impl @js.Cast for CanvasGradient with from(value) {
-  @js.Value::cast_from(value)
-}
-
-///|
-extern "js" fn checked_to_canvas_pattern(
-  value : @js.Value
-) -> @js.Nullable[CanvasPattern] =
-  #| (value) => value instanceof CanvasPattern ? value : null
-
-///|
-pub impl @js.Cast for CanvasPattern with into(value) {
-  checked_to_canvas_pattern(value).to_option()
-}
-
-///|
-pub impl @js.Cast for CanvasPattern with from(value) {
-  @js.Value::cast_from(value)
-}
-
-///|
 pub extern "js" fn CanvasRenderingContext2D::get_stroke_style(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> @js.Union3[String, CanvasGradient, CanvasPattern] =
   #| (x) => x.strokeStyle
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::set_stroke_style(
-  self : CanvasRenderingContext2D,
+  self : Self,
   value : @js.Union3[String, CanvasGradient, CanvasPattern]
 ) =
   #| (x,value) => x.strokeStyle = value
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_fill_style(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> @js.Union3[String, CanvasGradient, CanvasPattern] =
   #| (x) => x.fillStyle
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::set_fill_style(
-  self : CanvasRenderingContext2D,
+  self : Self,
   value : @js.Union3[String, CanvasGradient, CanvasPattern]
 ) =
   #| (x,value) => x.fillStyle = value
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::create_linear_gradient(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x0 : Double,
   y0 : Double,
   x1 : Double,
@@ -219,7 +132,7 @@ pub extern "js" fn CanvasRenderingContext2D::create_linear_gradient(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::create_radial_gradient(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x0 : Double,
   y0 : Double,
   r0 : Double,
@@ -233,7 +146,7 @@ pub extern "js" fn CanvasRenderingContext2D::create_radial_gradient(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::clear_rect(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   w : Double,
@@ -242,7 +155,7 @@ pub extern "js" fn CanvasRenderingContext2D::clear_rect(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::fill_rect(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   w : Double,
@@ -251,7 +164,7 @@ pub extern "js" fn CanvasRenderingContext2D::fill_rect(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::stroke_rect(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   w : Double,
@@ -261,50 +174,46 @@ pub extern "js" fn CanvasRenderingContext2D::stroke_rect(
 // TODO: add interface CanvasDrawPath
 
 ///|
-pub extern "js" fn CanvasRenderingContext2D::begin_path(
-  self : CanvasRenderingContext2D
-) = "(self) => self.beginPath()"
+pub extern "js" fn CanvasRenderingContext2D::begin_path(self : Self) = "(self) => self.beginPath()"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::fill(
-  self : CanvasRenderingContext2D,
+  self : Self,
   fill_rule~ : String = "nonzero"
 ) = "(self, fillRule) => self.fill(fillRule)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::fill_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   path : Path2D,
   fill_rule~ : String = "nonzero"
 ) = "(self,path,fillRule) => self.stroke(path,fillRule)"
 
 ///|
-pub extern "js" fn CanvasRenderingContext2D::stroke(
-  self : CanvasRenderingContext2D
-) = "(self) => self.stroke()"
+pub extern "js" fn CanvasRenderingContext2D::stroke(self : Self) = "(self) => self.stroke()"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::stroke_with_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   path : Path2D
 ) = "(self,path) => self.stroke(path)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::clip(
-  self : CanvasRenderingContext2D,
+  self : Self,
   fill_rule~ : String = "nonzero"
 ) = "(self, fillRule) => self.clip(fillRule)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::clip_with_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   path : Path2D,
   fill_rule~ : String = "nonzero"
 ) = "(self,path,fillRule) => self.clip(path,fillRule)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::is_point_in_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   fill_rule~ : String = "nonzero"
@@ -312,7 +221,7 @@ pub extern "js" fn CanvasRenderingContext2D::is_point_in_path(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::is_point_in_path_with_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   path : Path2D,
   x : Double,
   y : Double,
@@ -321,14 +230,14 @@ pub extern "js" fn CanvasRenderingContext2D::is_point_in_path_with_path(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::is_point_in_stroke(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double
 ) -> Bool = "(self,x,y) => self.isPointInStroke(x,y)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::is_point_in_stroke_with_path(
-  self : CanvasRenderingContext2D,
+  self : Self,
   path : Path2D,
   x : Double,
   y : Double
@@ -338,7 +247,7 @@ pub extern "js" fn CanvasRenderingContext2D::is_point_in_stroke_with_path(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::fill_text(
-  self : CanvasRenderingContext2D,
+  self : Self,
   text : String,
   x : Double,
   y : Double,
@@ -347,14 +256,12 @@ pub extern "js" fn CanvasRenderingContext2D::fill_text(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::stroke_text(
-  self : CanvasRenderingContext2D,
+  self : Self,
   text : String,
   x : Double,
   y : Double,
   max_width~ : @js.Optional[Double] = @js.Optional::undefined()
 ) = "(self,text,x,y,maxWidth) => self.stroke_text(text,x,y,maxWidth)"
-
-// TODO: add ConvasText.measureText
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub typealias @js.Union7[
@@ -369,7 +276,7 @@ pub typealias @js.Union7[
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image(
-  self : CanvasRenderingContext2D,
+  self : Self,
   image : ImageUnion,
   dx : Double,
   dy : Double
@@ -377,7 +284,7 @@ pub extern "js" fn CanvasRenderingContext2D::draw_image(
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_size(
-  self : CanvasRenderingContext2D,
+  self : Self,
   image : ImageUnion,
   dx : Double,
   dy : Double,
@@ -387,7 +294,7 @@ pub extern "js" fn CanvasRenderingContext2D::draw_image_with_size(
 
 ///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(
-  self : CanvasRenderingContext2D,
+  self : Self,
   image : ImageUnion,
   sx : Double,
   sy : Double,
@@ -401,7 +308,7 @@ pub extern "js" fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::create_image_data(
-  self : CanvasRenderingContext2D,
+  self : Self,
   sw : Double,
   sh : Double,
   settings~ : @js.Optional[ImageDataSettings] = @js.Optional::undefined()
@@ -409,13 +316,13 @@ pub extern "js" fn CanvasRenderingContext2D::create_image_data(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::create_image_data_with_data(
-  self : CanvasRenderingContext2D,
+  self : Self,
   data : ImageData
 ) -> ImageData = "(self,data) => self.createImageData(data)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_image_data(
-  self : CanvasRenderingContext2D,
+  self : Self,
   sx : Double,
   sy : Double,
   sw : Double,
@@ -425,7 +332,7 @@ pub extern "js" fn CanvasRenderingContext2D::get_image_data(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::put_image_data(
-  self : CanvasRenderingContext2D,
+  self : Self,
   image_data : ImageData,
   dx : Int,
   dy : Int
@@ -433,7 +340,7 @@ pub extern "js" fn CanvasRenderingContext2D::put_image_data(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::put_image_data_with_dirty(
-  self : CanvasRenderingContext2D,
+  self : Self,
   image_data : ImageData,
   dx : Int,
   dy : Int,
@@ -447,37 +354,29 @@ pub extern "js" fn CanvasRenderingContext2D::put_image_data_with_dirty(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_line_with(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> Double = "(self) => self.lineWidth"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::set_line_width(
-  self : CanvasRenderingContext2D,
+  self : Self,
   value : Double
 ) = "(self,value) => self.lineWidth = value"
 
 ///|
-#external
-type CanvasLineCap
-
-///|
-#external
-type CanvasLineJoin
-
-///|
 pub extern "js" fn CanvasRenderingContext2D::get_line_cap(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> CanvasLineCap = "(self) => self.lineCap"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::set_line_cap(
-  self : CanvasRenderingContext2D,
+  self : Self,
   value : CanvasLineCap
 ) = "(self,value) => self.lineCap = value"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::get_line_join(
-  self : CanvasRenderingContext2D
+  self : Self
 ) -> CanvasLineJoin = "(self) => self.lineJoin"
 
 ///|
@@ -490,27 +389,25 @@ pub extern "js" fn CanvasRenderingContext2D::set_line_join(
 // TODO: add CanvasTextDrawingStyles
 
 ///|
-pub extern "js" fn CanvasRenderingContext2D::close_path(
-  self : CanvasRenderingContext2D
-) = "(self) => self.closePath()"
+pub extern "js" fn CanvasRenderingContext2D::close_path(self : Self) = "(self) => self.closePath()"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::move_to(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double
 ) = "(self,x,y) => self.moveTo(x,y)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::line_to(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double
 ) = "(self,x,y) => self.lineTo(x,y)"
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::quardratic_curve_to(
-  self : CanvasRenderingContext2D,
+  self : Self,
   cpx : Double,
   cpy : Double,
   x : Double,
@@ -519,7 +416,7 @@ pub extern "js" fn CanvasRenderingContext2D::quardratic_curve_to(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::bezier_curve_to(
-  self : CanvasRenderingContext2D,
+  self : Self,
   cp1x : Double,
   cp1y : Double,
   cp2x : Double,
@@ -530,7 +427,7 @@ pub extern "js" fn CanvasRenderingContext2D::bezier_curve_to(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::arc_to(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x1 : Double,
   y1 : Double,
   x2 : Double,
@@ -540,7 +437,7 @@ pub extern "js" fn CanvasRenderingContext2D::arc_to(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::rect(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   w : Double,
@@ -549,7 +446,7 @@ pub extern "js" fn CanvasRenderingContext2D::rect(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::round_rect(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   w : Double,
@@ -560,7 +457,7 @@ pub extern "js" fn CanvasRenderingContext2D::round_rect(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::arc(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   radius : Double,
@@ -571,7 +468,7 @@ pub extern "js" fn CanvasRenderingContext2D::arc(
 
 ///|
 pub extern "js" fn CanvasRenderingContext2D::ellipse(
-  self : CanvasRenderingContext2D,
+  self : Self,
   x : Double,
   y : Double,
   radius_x : Double,
@@ -581,97 +478,3 @@ pub extern "js" fn CanvasRenderingContext2D::ellipse(
   end_angle : Double,
   anticlockwise~ : Bool = false
 ) = "(self,x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise) => self.ellipse(x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise)"
-
-///|
-#external
-type CanvasGradient
-
-///|
-pub extern "js" fn CanvasGradient::add_color_stop(
-  self : CanvasGradient,
-  offset : Double,
-  color : String
-) = "(self,offset,color) => self.addColorStop(offset,color)"
-
-///|
-#external
-type CanvasPattern
-
-///|
-pub extern "js" fn CanvasPattern::set_transform(
-  self : CanvasPattern,
-  transform : @js.Optional[DOMMatrix2DInit]
-) = "(self,transform) => self.setTransform(transform)"
-
-///|
-#external
-type DOMMatrix2DInit
-
-// TODO: add TextMetrics
-
-///|
-#external
-type ImageDataSettings
-
-///| Possible values are "srgb" and "display-p3".
-pub typealias String as PredefinedColorSpace
-
-///|
-pub extern "js" fn ImageDataSettings::new(
-  color_space : PredefinedColorSpace
-) -> ImageDataSettings = "(colorSpace) => ({colorSpace: colorSpace})"
-
-///|
-#external
-type ImageData
-
-///|
-pub extern "js" fn ImageData::new(
-  sw : Int,
-  sh : Int,
-  settings : @js.Optional[ImageDataSettings]
-) -> ImageData = "(sw,sh,settings) => new ImageData(sw,sh,settings)"
-
-///|
-pub extern "js" fn ImageData::new_with_data(
-  data : Uint8ClampedArray,
-  sw : Int,
-  sh : Int,
-  settings~ : @js.Optional[ImageDataSettings] = @js.Optional::undefined()
-) -> ImageData = "(data,sw,sh,settings) => new ImageData(data,sw,sh,settings)"
-
-///|
-pub extern "js" fn ImageData::get_width(self : ImageData) -> Int = "(self) => self.width"
-
-///|
-pub extern "js" fn ImageData::get_height(self : ImageData) -> Int = "(self) => self.height"
-
-///|
-pub extern "js" fn ImageData::get_data(self : ImageData) -> Uint8ClampedArray = "(self) => self.data"
-
-// TODO: support ImageData.data
-
-///|
-pub extern "js" fn ImageData::get_color_space(
-  self : ImageData
-) -> PredefinedColorSpace = "(self) => self.colorSpace"
-
-///|
-#external
-type Path2D
-
-///|
-pub extern "js" fn Path2D::new(
-  path~ : @js.Optional[@js.Union2[Path2D, String]] = @js.Optional::undefined()
-) -> Path2D = "(path) => new Path2D(path)"
-
-///|
-pub extern "js" fn Path2D::add_path(
-  self : Path2D,
-  path : Path2D,
-  transform~ : @js.Optional[DOMMatrix2DInit] = @js.Optional::undefined()
-) = "(self,path,transform) => self.addPath(path,transform)"
-
-///|
-#external
-type Uint8ClampedArray
