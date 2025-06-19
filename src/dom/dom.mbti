@@ -52,6 +52,7 @@ fn CanvasRenderingContext2D::fill_path(Self, Path2D, fill_rule~ : String = ..) -
 fn CanvasRenderingContext2D::fill_rect(Self, Double, Double, Double, Double) -> Unit
 fn CanvasRenderingContext2D::fill_text(Self, String, Double, Double, max_width~ : @js.Optional[Double] = ..) -> Unit
 fn CanvasRenderingContext2D::get_fill_style(Self) -> @js.Union3[String, CanvasGradient, CanvasPattern]
+fn CanvasRenderingContext2D::get_font(Self) -> String
 fn CanvasRenderingContext2D::get_image_data(Self, Double, Double, Double, Double, settings~ : @js.Optional[ImageDataSettings] = ..) -> ImageData
 fn CanvasRenderingContext2D::get_image_smoothing_quality(Self) -> String
 fn CanvasRenderingContext2D::get_line_cap(Self) -> CanvasLineCap
@@ -78,6 +79,7 @@ fn CanvasRenderingContext2D::round_rect(Self, Double, Double, Double, Double, Do
 fn CanvasRenderingContext2D::save(Self) -> Unit
 fn CanvasRenderingContext2D::scale(Self, Double, Double) -> Unit
 fn CanvasRenderingContext2D::set_fill_style(Self, @js.Union3[String, CanvasGradient, CanvasPattern]) -> Unit
+fn CanvasRenderingContext2D::set_font(Self, String) -> Unit
 fn CanvasRenderingContext2D::set_image_smoothing_quality(Self, String) -> Unit
 fn CanvasRenderingContext2D::set_line_cap(Self, CanvasLineCap) -> Unit
 fn CanvasRenderingContext2D::set_line_join(Self, CanvasLineJoin) -> Unit

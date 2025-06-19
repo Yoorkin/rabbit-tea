@@ -478,3 +478,12 @@ pub extern "js" fn CanvasRenderingContext2D::ellipse(
   end_angle : Double,
   anticlockwise~ : Bool = false
 ) = "(self,x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise) => self.ellipse(x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise)"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font 
+pub extern "js" fn CanvasRenderingContext2D::get_font(self : Self) -> String = "(self) => self.font"
+
+///| https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+pub extern "js" fn CanvasRenderingContext2D::set_font(
+  self : Self,
+  value : String
+) = "(self,value) => self.font = value"
